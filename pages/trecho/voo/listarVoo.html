@@ -23,23 +23,24 @@
             <img src="../../assets/img/LogoBranco.svg" alt="Logo">
             <ul>
                 <li><a href="../aeroporto/listarAeroporto.html">Aeroportos</a></li>
-                <li><a href="../voo/listarVoo.html">Voos</a></li>
+                <li><a href="listarVoo.html">Voos</a></li>
                 <li><a href="../aeronave/listarAeronave.html">Aeronaves</a></li>
-                <li><a href="listarTrecho.html">Trechos</a></li>
+                <li><a href="../trecho/listarTrecho.html">Trechos</a></li>
             </ul>
         </div>
         <div id="titlePage">
-            <h1>Listar Trecho (Qtde)</h1>
+            <h1>Listar Voo (Qtde)</h1>
         </div>
         <div id="contentTable" method="post">
+            
         </div>
         <div id="addButton">
-            <button id="redirectTrecho" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
+            <button id="redirectVoo" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
         </div>
     </div>
     <script>
-        document.getElementById('redirectTrecho').addEventListener('click', function() {
-            window.location.href = 'addTrecho.html';
+        document.getElementById('redirectVoo').addEventListener('click', function() {
+            window.location.href = 'addVoo.html';
         });
     </script>
 </body>
