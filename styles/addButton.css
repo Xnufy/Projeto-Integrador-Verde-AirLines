@@ -1,0 +1,26 @@
+#addButton {
+    text-align: right;
+    width: 100%;
+}
+
+#addButton > button {
+    font-size: 64px;
+    padding: 30px;
+    
+    border: none;
+    background: none;
+
+    cursor: pointer;
+}
+
+#addButton > button > i {
+    transition: color 0.5s;
+}
+
+.fa-solid {
+    color: #16731c;
+}
+
+.fa-solid:hover {
+    color:#2aa732;
+}
