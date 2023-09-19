@@ -1,0 +1,84 @@
+.content {
+    padding-top: 200px;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-image: url(../assets/img/mapa.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: scroll;
+    background-size: 1100px 1000px;
+}
+
+
+#form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.campo {
+    position: relative;
+}
+
+.campo > input {
+    padding-left: 60px;
+    width: 540px;
+    height: 50px;
+    font-size: 32px;
+    border: 0px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.campo input::-webkit-input-placeholder {
+    vertical-align: middle;
+}
+
+.campo > label > i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 30px;
+    color: #000000;
+}
+
+.campoButton {
+    position: relative;
+}
+
+.campoButton > i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    font-size: 30px;
+    color: #000000;
+}
+
+.campoButton > button {
+    width: 600px;
+    height: 70px;
+    font-size: 32px;
+
+    margin-top: 30px;
+
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    background-color: #16731C;
+    color: white;
+
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+.campoButton > button:hover {
+    background-color: #2aa732;
+}
