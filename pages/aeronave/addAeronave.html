@@ -26,20 +26,25 @@
         <div id="contentCadastro" method="post">
             <form id="form">
                 <div class="campo">
+                    <label for="num_identificacao"><i class="fa-solid fa-lock" style="color: #000000;"></i></label>
+                    <input type="number" id="num_identificacao" placeholder="Digite o número de identificação">
+                </div>
+                <div class="campo">
                     <label for="modelo"><i class="fa-solid fa-plane" style="color: #000000;"></i></label>
                     <input type="text" id="modelo" placeholder="Digite o modelo do avião">
                 </div>
                 <div class="campo">
                     <label for="fabricante"><i class="fa-solid fa-wrench" style="color: #000000;"></i></label>
-                    <input type="text" id="fabricante" placeholder="Digite o nome do fabricante">
+                    <select name="fabricante" id="selectFabricante">
+                        <option selected hidden value="0" id="optionPadrao">-- Selecione o Fabricante --</option>
+                        <option value="">Airbus</option>
+                        <option value="">EMBRAER</option>
+                        <option value="">Boeing</option>
+                    </select>
                 </div>
                 <div class="campo">
-                    <label for="num_identificacao"><i class="fa-solid fa-lock" style="color: #000000;"></i></label>
-                    <input type="number" id="num_identificacao" placeholder="Digite o número de identificação">
-                </div>
-                <div class="campo">
-                    <label for="fabricao"><i class="fa-solid fa-calendar-day" style="color: #000000;"></i></label>
-                    <input type="text" id="fabricao" placeholder="Digite o ano de fabricação">
+                    <label for="fabricacao"><i class="fa-solid fa-calendar-day" style="color: #000000;"></i></label>
+                    <input type="text" id="fabricacao" placeholder="Digite o ano de fabricação" minlength="4" maxlength="4">
                 </div>
                 <div class="campo">
                     <label for="num_linha"><i class="fa-solid fa-grip-lines" style="color: #000000;"></i></label>
@@ -56,5 +61,17 @@
             </form>
         </div>
     </div>
+    <script>
+            let selectFabricante = document.querySelector('#selectFabricante');
+            selectFabricante.style.color = 'rgb(117, 117, 117)';
+
+            selectFabricante.addEventListener('change', function() {
+                if (selectFabricante.value === '0') {
+                    selectFabricante.style.color = 'rgb(117, 117, 117)';
+                } else {
+                    selectFabricante.style.color = 'black';
+                }
+            });
+    </script>
 </body>
 </html>

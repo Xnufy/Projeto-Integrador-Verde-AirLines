@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'HelveticaNowText-ExtraBold';
+    src: url('../assets/fonts/HelveticaNowText-ExtraBold.ttf');
+}
+
 #contentHome {
     padding-top: 200px;
     width: 100%;
@@ -12,4 +17,17 @@
     background-position: center;
     background-attachment: scroll;
     background-size: 1100px 1000px;
+}
+
+#contentHome h1 {
+    font-size: 128px;
+    color: #0D0D0D;
+    text-align: center;
+}
+
+#contentHome p {
+    font-size: 64px;
+    font-weight: bolder;
+    color: #0D0D0D;
+    text-align: center;
 }

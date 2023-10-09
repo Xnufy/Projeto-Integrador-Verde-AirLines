@@ -30,18 +30,77 @@
             </ul>
         </div>
         <div id="titlePage">
-            <h1>Listar Aeroporto (Qtde)</h1>
+            <h1>Listar Aeronave(Qtde)</h1>
         </div>
-        <div id="contentTable" method="post">
+        <div class="contentTable">
+            <table>
+                <thead>
+                    <tr id="cabecalhoTabela">
+                    </tr>
+                </thead>
+                <tbody id="aeroportos-list"></tbody>
+            </table>
         </div>
         <div id="addButton">
-            <button id="redirectAeroporto" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
+            <button id="redirectAeronave" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
         </div>
     </div>
     <script>
-        document.getElementById('redirectAeroporto').addEventListener('click', function() {
+        document.getElementById('redirectAeronave').addEventListener('click', function() {
             window.location.href = 'addAeroporto.html';
         });
     </script>
+
+    <script>
+		var rowCabecalho = document.querySelector('#cabecalhoTabela');
+		var linha = document.querySelector("#aeroportos-list");
+		
+
+		fetch("http://localhost:3000/listarAeroportos")
+			.then(function (response) {
+				if (!response.ok) {
+					throw new Error("Erro ao obter os dados.");
+				}
+				return response.json(); // Parse a resposta como JSON
+			})
+			.then(function (data) {
+
+				numeroAeroportos = data.length;
+				document.getElementById("titlePage").innerHTML = `<h1>Listar Aeroporto(Qtde:${numeroAeroportos})</h1>`;
+
+				if (numeroAeroportos > 0) {
+					// Inserção dos títulos do cabeçalho após recuperar os dados da requisição
+					rowCabecalho.innerHTML += "<th>Sigla</th>";
+					rowCabecalho.innerHTML += "<th>Nome do aeroporto</th>";
+				}
+				
+				// Agora 'data' contém os dados retornados pelo servidor
+				// Limpe a tabela de aeroporto antes de preenchê-la
+				linha.innerHTML = '';
+
+				// Itere sobre os dados e crie as linhas da tabela
+				data.forEach(function (aeroporto) {
+					var row = document.createElement("tr");
+
+					// Crie as células da tabela com os dados do aeroporto
+					var sigla = document.createElement("td");
+					sigla.textContent = aeroporto[0];
+
+					var nomeAeroportoCell = document.createElement("td");
+					nomeAeroportoCell.textContent = aeroporto[1];
+
+					// Adicione as células à linha da tabela
+					row.appendChild(sigla);
+					row.appendChild(nomeAeroportoCell);
+
+					// Adicione a linha à tabela
+					linha.appendChild(row);
+				});
+			})
+			.catch(function (error) {
+				console.error(error);
+			});
+	</script>
+
 </body>
 </html>
