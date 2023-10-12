@@ -128,3 +128,11 @@ input:focus {
     top: 0;
     width: auto;
 }
+
+.statusError {
+    color:red;
+}
+
+.statusSuccess {
+    color:blue;
+}

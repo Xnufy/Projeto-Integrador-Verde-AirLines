@@ -13,32 +13,44 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,700&display=swap" rel="stylesheet">
-
+    
     <title>Airlines</title>
 </head>
 <body>
     <div id="app">
         <div id="header">
-            <img src="../../assets/img/LogoBranco.svg" alt="Logo">
-            <h1>Trechos</h1>
-            <a href="listarTrecho.html"><p>Voltar</p></a>
+            <a href="../home.html"><img src="../../assets/img/LogoBranco.svg" alt="Logo"></a>
+            <h1>Aeroportos</h1>
+            <a href="listarAeroporto.html"><p>Voltar</p></a>
         </div>
         <div id="contentCadastro" method="post">
             <form id="form">
                 <div class="campo">
-                    <label for="origem"><i class="fa-solid fa-plane-departure" style="color: #000000;"></i></label>
-                    <input type="text" id="origem" placeholder="Digite Aeroporto(origem) do trecho">
+                    <label for="modelo"><i class="fa-solid fa-house" style="color: #000000;"></i></label>
+                    <input type="text" id="nomeAeroporto" placeholder="Digite o nome do Aeroporto">
                 </div>
                 <div class="campo">
-                    <label for="destino"><i class="fa-solid fa-plane-arrival" style="color: #000000;"></i></label>
-                    <input type="text" id="destino" placeholder="Digite Aeroporto(destino) do trecho">
+                    <label for="sigla"><i class="fa-solid fa-house-lock" style="color: #000000;"></i></label>
+                    <input type="text" id="sigla" placeholder="Digite a sigla do Aeroporto" maxlength="3" minlength="3">
                 </div>
+                <div class="campo">
+                    <label for="cidade"><i class="fa-solid fa-city" style="color: #000000;"></i></label>
+                    <input type="text" id="cidade" placeholder="Digite o nome da cidade">
+                </div>
+                <p id="status" class="statusError"></p>
                 <div class="campoButton">
                     <i class="fa-solid fa-plus" style="color: #fff;"></i>
-                    <button title="Adicionar" type="submit">Adicionar</button>
+                    <button 
+                    title="Adicionar" 
+                    type="button" 
+                    onclick="inserirAeroporto();"
+                    id="btnCadastrar">Alterar
+                    </button>
                 </div>
             </form>
         </div>
     </div>
+    <script src="funcionalidades/cadastroAeroporto.js"></script>
+    <script src="funcionalidades/alterarAeroporto.js"></script>
 </body>
 </html>

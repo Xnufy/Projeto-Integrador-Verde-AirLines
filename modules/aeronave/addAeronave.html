@@ -7,44 +7,54 @@
     <link rel="stylesheet" href="../../styles/app.css">
     <link rel="stylesheet" href="../../styles/header.css">
     <link rel="stylesheet" href="../../styles/contentCadastro.css">
-
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,700&display=swap" rel="stylesheet">
-
+    
     <title>Airlines</title>
 </head>
 <body>
     <div id="app">
         <div id="header">
-            <img src="../../assets/img/LogoBranco.svg" alt="Logo">
+            <a href="../home.html"><img src="../../assets/img/LogoBranco.svg" alt="Logo"></a>
             <h1>Aeronaves</h1>
             <a href="listarAeronave.html"><p>Voltar</p></a>
         </div>
         <div id="contentCadastro" method="post">
             <form id="form">
                 <div class="campo">
-                    <label for="num_identificacao"><i class="fa-solid fa-lock" style="color: #000000;"></i></label>
-                    <input type="number" id="num_identificacao" placeholder="Digite o número de identificação">
+                    <label for="idAeronave"><i class="fa-solid fa-lock" style="color: #000000;"></i></label>
+                    <input type="text" id="idAeronave" placeholder="Digite o ID da aeronave">
                 </div>
                 <div class="campo">
                     <label for="modelo"><i class="fa-solid fa-plane" style="color: #000000;"></i></label>
                     <input type="text" id="modelo" placeholder="Digite o modelo do avião">
                 </div>
                 <div class="campo">
-                    <label for="fabricante"><i class="fa-solid fa-wrench" style="color: #000000;"></i></label>
-                    <select name="fabricante" id="selectFabricante">
+                    <label for="comboFabricantes"><i class="fa-solid fa-wrench" style="color: #000000;"></i></label>
+                    <select name="comboFabricantes" id="comboFabricantes">
                         <option selected hidden value="0" id="optionPadrao">-- Selecione o Fabricante --</option>
-                        <option value="">Airbus</option>
-                        <option value="">EMBRAER</option>
-                        <option value="">Boeing</option>
+                        <option value="Airbus">Airbus</option>
+                        <option value="EMBRAER">EMBRAER</option>
+                        <option value="Boeing">Boeing</option>
                     </select>
                 </div>
                 <div class="campo">
-                    <label for="fabricacao"><i class="fa-solid fa-calendar-day" style="color: #000000;"></i></label>
-                    <input type="text" id="fabricacao" placeholder="Digite o ano de fabricação" minlength="4" maxlength="4">
+                    <label for="registro"><i class="fa-solid fa-lock" style="color: #000000;"></i></label>
+                    <input type="text" id="registro" placeholder="Digite o número de registro">
+                </div>
+                <div class="campo">
+                    <label for="comboSigla"><i class="fa-solid fa-list-ol" style="color: #000000;"></i></label>
+                    <select name="comboSigla" id="comboSigla">
+                        <option selected hidden value="0" id="optionPadrao">-- Selecione o Aeroporto --</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="anoFabricacao"><i class="fa-solid fa-calendar-day" style="color: #000000;"></i></label>
+                    <input type="text" id="anoFabricacao" placeholder="Digite o ano de fabricação" minlength="4" maxlength="4">
                 </div>
                 <div class="campo">
                     <label for="num_linha"><i class="fa-solid fa-grip-lines" style="color: #000000;"></i></label>
@@ -54,24 +64,19 @@
                     <label for="num_coluna"><i class="fa-solid fa-grip-lines-vertical" style="color: #000000;"></i></label>
                     <input type="number" id="num_coluna" placeholder="Digite o número de colunas">
                 </div>
+                <p id="status" class="statusError"></p>
                 <div class="campoButton">
                     <i class="fa-solid fa-plus" style="color: #fff;"></i>
-                    <button title="Adicionar" type="submit">Adicionar</button>
+                    <button 
+                    title="Adicionar" 
+                    type="button"
+                    onclick="inserirAeronave();"
+                    id="btnCadastrar">Adicionar</button>
                 </div>
             </form>
         </div>
     </div>
-    <script>
-            let selectFabricante = document.querySelector('#selectFabricante');
-            selectFabricante.style.color = 'rgb(117, 117, 117)';
-
-            selectFabricante.addEventListener('change', function() {
-                if (selectFabricante.value === '0') {
-                    selectFabricante.style.color = 'rgb(117, 117, 117)';
-                } else {
-                    selectFabricante.style.color = 'black';
-                }
-            });
-    </script>
+    <script src="funcionalidades/cadastroAeronave.js"></script>
+    <script src="funcionalidades/comboBox.js"></script>
 </body>
 </html>

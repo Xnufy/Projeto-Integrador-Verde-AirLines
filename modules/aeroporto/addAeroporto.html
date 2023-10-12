@@ -13,44 +13,42 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,700&display=swap" rel="stylesheet">
-
+    
     <title>Airlines</title>
 </head>
 <body>
     <div id="app">
         <div id="header">
-            <img src="../../assets/img/LogoBranco.svg" alt="Logo">
-            <h1>Voos</h1>
-            <a href="listarVoo.html"><p>Voltar</p></a>
+            <a href="../home.html"><img src="../../assets/img/LogoBranco.svg" alt="Logo"></a>
+            <h1>Aeroportos</h1>
+            <a href="listarAeroporto.html"><p>Voltar</p></a>
         </div>
         <div id="contentCadastro" method="post">
             <form id="form">
                 <div class="campo">
-                    <label for="numVoo"><i class="fa-solid fa-ticket-simple" style="color: #000000;"></i></label>
-                    <input type="text" id="numVoo" placeholder="Digite o número do voo">
+                    <label for="modelo"><i class="fa-solid fa-house" style="color: #000000;"></i></label>
+                    <input type="text" id="nomeAeroporto" placeholder="Digite o nome do Aeroporto">
                 </div>
                 <div class="campo">
-                    <label for="origem"><i class="fa-solid fa-plane-departure" style="color: #000000;"></i></label>
-                    <input type="text" id="origem" placeholder="Digite o Aeroporto de origem">
+                    <label for="sigla"><i class="fa-solid fa-house-lock" style="color: #000000;"></i></label>
+                    <input type="text" id="sigla" placeholder="Digite a sigla do Aeroporto" maxlength="3" minlength="3">
                 </div>
                 <div class="campo">
-                    <label for="destino"><i class="fa-solid fa-plane-arrival" style="color: #000000;"></i></label>
-                    <input type="text" id="destino" placeholder="Digite o Aeroporto de destino">
+                    <label for="cidade"><i class="fa-solid fa-city" style="color: #000000;"></i></label>
+                    <input type="text" id="cidade" placeholder="Digite o nome da cidade">
                 </div>
-                <div class="campo">
-                    <label for="data"><i class="fa-solid fa-calendar-days" style="color: #000000;"></i></label>
-                    <input type="date" id="data" placeholder="Digite a data do voo">
-                </div>
-                <div class="campo">
-                    <label for="preco"><i class="fa-solid fa-money-check-dollar" style="color: #000000;"></i></label>
-                    <input type="number" step="0.01" id="preco" placeholder="Digite o valor da passagem" min="0">
-                </div>
+                <p id="status" class="statusError"></p>
                 <div class="campoButton">
                     <i class="fa-solid fa-plus" style="color: #fff;"></i>
-                    <button title="Adicionar" type="submit">Adicionar</button>
+                    <button 
+                    title="Adicionar" 
+                    type="button" 
+                    onclick="inserirAeroporto();"
+                    id="btnCadastrar">Adicionar</button>
                 </div>
             </form>
         </div>
     </div>
+    <script src="funcionalidades/cadastroAeroporto.js"></script>
 </body>
 </html>

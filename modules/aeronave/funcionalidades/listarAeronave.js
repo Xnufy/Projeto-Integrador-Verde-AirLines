@@ -1,58 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="../../styles/app.css">
-    <link rel="stylesheet" href="../../styles/header.css">
-    <link rel="stylesheet" href="../../styles/contentTable.css">
-    <link rel="stylesheet" href="../../styles/addButton.css">
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,700&display=swap" rel="stylesheet">
-
-    <title>Airlines</title>
-</head>
-<body>
-    <div id="app">
-        <div id="header">
-            <img src="../../assets/img/LogoBranco.svg" alt="Logo">
-            <ul>
-                <li><a href="../aeroporto/listarAeroporto.html">Aeroportos</a></li>
-                <li><a href="../voo/listarVoo.html">Voos</a></li>
-                <li><a href="listarAeronave.html">Aeronaves</a></li>
-                <li><a href="../trecho/listarTrecho.html">Trechos</a></li>
-            </ul>
-        </div>
-        <div id="titlePage">
-            <h1>Listar Aeronave(Qtde)</h1>
-        </div>
-        <div class="contentTable">
-            <table>
-                <thead>
-                    <tr id="cabecalhoTabela">
-                    </tr>
-                </thead>
-                <tbody id="aeronaves-list"></tbody>
-            </table>
-        </div>
-        <div id="addButton">
-            <button id="redirectAeronave" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
-        </div>
-    </div>
-    <script>
-        document.getElementById('redirectAeronave').addEventListener('click', function() {
-            window.location.href = 'addAeronave.html';
-        });
-    </script>
-
-    <script>
-        var rowCabecalho = document.querySelector('#cabecalhoTabela');
+var rowCabecalho = document.querySelector('#cabecalhoTabela');
         var linha = document.querySelector("#aeronaves-list");
         
 
@@ -72,7 +18,7 @@
 
                 if (numeroAeronaves > 0) {
                     // Inserção dos títulos do cabeçalho após recuperar os dados da requisição
-                    rowCabecalho.innerHTML += "<th>Número de identificação</th>";
+                    rowCabecalho.innerHTML += "<th>ID Aeronave</th>";
                     rowCabecalho.innerHTML += "<th>Modelo</th>";
                     rowCabecalho.innerHTML += "<th>Fabricante</th>";
                     rowCabecalho.innerHTML += "<th>Ano de Fabricação</th>";
@@ -118,15 +64,9 @@
 
                     // Adicione a linha à tabela
                     linha.appendChild(row);
-                });
-
-                
+                });           
 
             })
             .catch(function (error) {
                 console.error(error);
             });
-    </script>
-
-</body>
-</html>

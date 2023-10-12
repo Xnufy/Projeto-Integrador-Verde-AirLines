@@ -1,9 +1,9 @@
-#addButton {
+.addButton {
     text-align: right;
     width: 100%;
 }
 
-#addButton > button {
+.addButton > button {
     font-size: 64px;
     padding: 30px;
     
@@ -13,7 +13,7 @@
     cursor: pointer;
 }
 
-#addButton > button > i {
+.addButton > button > i {
     transition: color 0.5s;
 }
 

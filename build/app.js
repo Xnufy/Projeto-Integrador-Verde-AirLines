@@ -14,101 +14,139 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const oracledb_1 = __importDefault(require("oracledb"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
+const conexaoOracle_1 = require("./conexaoOracle");
+const Conversores_1 = require("./Conversores");
+const Validadores_1 = require("./Validadores");
 const app = (0, express_1.default)();
 const port = 3000;
 app.use(express_1.default.json());
-app.use((0, cors_1.default)({ origin: 'http://127.0.0.1:5500' }));
+app.use((0, cors_1.default)()); // { origin: 'http://127.0.0.1:5500' }
+oracledb_1.default.outFormat = oracledb_1.default.OUT_FORMAT_OBJECT;
+//
+//    REQUISIÇÕES AERONAVE
+//
 // o código fornecido será ingênuo. 
-app.get("/listarAeronaves", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // inicalizando o dotenv
-    dotenv_1.default.config();
-    // o resultado pode ser a lista de aeronaves ou erro.
-    let result;
-    let dadosAeronaves;
-    // primeiro: construir o objeto de CONEXAO.
-    const connection = yield oracledb_1.default.getConnection({
-        user: process.env.NODE_ORACLEDB_USER,
-        password: process.env.NODE_ORACLEDB_PASSWORD,
-        connectionString: process.env.NODE_ORACLEDB_CONNECTIONSTRING,
-    });
-    console.log("Listando aeronaves...");
-    try {
-        // tentando obter os dados...
-        result = yield connection.execute("SELECT * FROM AERONAVES");
-        dadosAeronaves = result.rows;
-    }
-    catch (erro) {
-        if (erro instanceof Error) {
-            console.log(`O detalhamento do erro é: ${erro.message}`);
-        }
-        else {
-            console.log("Erro desconhecido.");
-        }
-        result = {
-            error: "Erro ao obter aeronaves.",
-        };
-    }
-    finally {
-        if (connection) {
-            try {
-                yield connection.close();
-            }
-            catch (err) {
-                console.error(err);
-            }
-        }
-        res.send(dadosAeronaves);
-    }
-}));
-app.put("/incluirAeronave", (req, res) => {
-    // incluir aeronave no Oracle.
-});
+app.get("/listarAeronaves", (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
+app.put("/inserirAeronave", (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
 app.delete("/excluirAeronave", (req, res) => {
     // excluir aeronave no Oracle.
 });
+//
+//    SERVIÇOS AEROPORTO
+//
+app.get("/listarAeroportos", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    let connection;
+    try {
+        connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+        let resultadoConsulta = yield connection.execute(`SELECT * FROM AEROPORTO`);
+        cr.status = "SUCCESS";
+        cr.messagem = "Dados obtidos";
+        cr.payload = ((0, Conversores_1.rowsToAeroportos)(resultadoConsulta.rows));
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            cr.messagem = e.message;
+            console.log(e.message);
+        }
+        else
+            cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+    }
+    finally {
+        if (connection !== undefined)
+            yield connection.close();
+        res.send(cr);
+    }
+}));
+app.put("/inserirAeroporto", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    const aeroporto = req.body;
+    console.log(aeroporto);
+    let [valida, mensagem] = (0, Validadores_1.aeroportoValida)(aeroporto);
+    if (!valida) {
+        cr.messagem = mensagem;
+        res.send(cr);
+    }
+    else {
+        let connection;
+        try {
+            const inserirAeroporto = `INSERT INTO AEROPORTO
+      (ID_AEROPORTO, SIGLA, NOME_AEROPORTO, NOME_COMPANHIA, NOME_CIDADE)
+      VALUES
+      (SEQ_AEROPORTOS.NEXTVAL, :1, :2, 'Verde Airlines', :3)`;
+            const dados = [aeroporto.sigla, aeroporto.nomeAeroporto, aeroporto.nomeCidade];
+            connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+            let resInsert = yield connection.execute(inserirAeroporto, dados);
+            // COMMIT DA INSERÇÃO DE DADOS
+            yield connection.commit();
+            const rowsInserted = resInsert.rowsAffected;
+            if (rowsInserted !== undefined && rowsInserted === 1) {
+                cr.status = "SUCCESS";
+                cr.messagem = "Aeroporto Inserido";
+            }
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                cr.messagem = e.message;
+                console.log(e.message);
+            }
+            else
+                cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+        }
+        finally {
+            if (connection !== undefined)
+                yield connection.close();
+            res.send(cr);
+        }
+    }
+}));
+app.delete("/excluirAeroporto", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const idAeroporto = req.body.idAeroporto;
+    console.log("Id do Aeroporto recebido: " + idAeroporto);
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    let connection;
+    try {
+        connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+        const deletarAeroporto = `DELETE AEROPORTO WHERE ID_AEROPORTO = :1`;
+        const dados = [idAeroporto];
+        let resDelete = yield connection.execute(deletarAeroporto, dados);
+        // COMMIT DA DELEÇÃO DE DADOS
+        yield connection.commit();
+        const rowsDeleted = resDelete.rowsAffected;
+        if (rowsDeleted !== undefined && rowsDeleted === 1) {
+            cr.status = "SUCCESS";
+            cr.messagem = "Aeroporto excluído.";
+        }
+        else
+            cr.messagem = "Aeroporto não excluído. Verifique se o ID do aeroporto está correto";
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            cr.messagem = e.message;
+            console.log(e.message);
+        }
+        else
+            cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+    }
+    finally {
+        if (connection !== undefined)
+            yield connection.close();
+        res.send(cr);
+    }
+}));
 app.listen(port, () => {
     console.log("Servidor HTTP rodando...");
 });
-app.get("/listarAeroportos", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // inicalizando o dotenv
-    dotenv_1.default.config();
-    // o resultado pode ser a lista de aeronaves ou erro.
-    let result;
-    let dadosAeroporto;
-    // primeiro: construir o objeto de CONEXAO.
-    const connection = yield oracledb_1.default.getConnection({
-        user: process.env.NODE_ORACLEDB_USER,
-        password: process.env.NODE_ORACLEDB_PASSWORD,
-        connectionString: process.env.NODE_ORACLEDB_CONNECTIONSTRING,
-    });
-    console.log("Listando aeroportos...");
-    try {
-        // tentando obter os dados...
-        result = yield connection.execute("SELECT * FROM AEROPORTO");
-        dadosAeroporto = result.rows;
-    }
-    catch (erro) {
-        if (erro instanceof Error) {
-            console.log(`O detalhamento do erro é: ${erro.message}`);
-        }
-        else {
-            console.log("Erro desconhecido.");
-        }
-        result = {
-            error: "Erro ao obter aeroportos.",
-        };
-    }
-    finally {
-        if (connection) {
-            try {
-                yield connection.close();
-            }
-            catch (err) {
-                console.error(err);
-            }
-        }
-        res.send(dadosAeroporto);
-    }
-}));

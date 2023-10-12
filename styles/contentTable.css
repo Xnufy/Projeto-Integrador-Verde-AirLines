@@ -26,3 +26,19 @@
     padding: 10px;
     border: 3px solid black;
 }
+
+.oddRow {
+    background-color: #bdffb5;
+}
+
+.evenRow {
+    background-color: #ffffff;
+}
+
+.deletarIcon {
+    cursor: pointer;
+}
+
+.alterarIcon {
+    cursor: pointer;
+}
