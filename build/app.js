@@ -147,6 +147,91 @@ app.delete("/excluirAeroporto", (req, res) => __awaiter(void 0, void 0, void 0, 
         res.send(cr);
     }
 }));
+app.get("/listarAeroporto/:idAeroporto", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    let connection;
+    try {
+        connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+        // Parametro recebido na URL
+        const idAeroporto = req.params.idAeroporto;
+        let resultadoConsulta = yield connection.execute(`SELECT * FROM AEROPORTO WHERE ID_AEROPORTO = ${idAeroporto}`);
+        const rowFetched = (0, Conversores_1.rowsToAeroportos)(resultadoConsulta.rows);
+        if (rowFetched !== undefined && rowFetched.length === 1) {
+            cr.status = "SUCCESS";
+            cr.messagem = "Aeroporto encontrado";
+            cr.payload = (0, Conversores_1.rowsToAeroportos)(resultadoConsulta.rows);
+        }
+        else
+            cr.messagem = "Aeroporto não encontrado. Verifique se o ID do aeroporto está correto";
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            cr.messagem = e.message;
+            console.log(e.message);
+        }
+        else {
+            cr.messagem = "Erro ao conectar ao Oracle. Sem detalhes";
+        }
+    }
+    finally {
+        if (connection !== undefined)
+            yield connection.close();
+        res.send(cr);
+    }
+}));
+app.put("/alterarAeroporto/:idAeroporto", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const idAeroporto = req.params.idAeroporto;
+    console.log("Id do Aeroporto recebido: " + idAeroporto);
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    const aeroporto = req.body;
+    console.log(aeroporto);
+    let [valida, mensagem] = (0, Validadores_1.aeroportoValida)(aeroporto);
+    if (!valida) {
+        cr.messagem = mensagem;
+        res.send(cr);
+    }
+    else {
+        let connection;
+        try {
+            connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+            const alterarAeroporto = `UPDATE AEROPORTO SET SIGLA = :1, NOME_AEROPORTO = :2, NOME_CIDADE = :3
+      WHERE ID_AEROPORTO = ${idAeroporto}`;
+            const dados = [aeroporto.sigla, aeroporto.nomeAeroporto, aeroporto.nomeCidade];
+            let resUpdate = yield connection.execute(alterarAeroporto, dados);
+            // COMMIT DA ATUALIZAÇÃO DE DADOS
+            yield connection.commit();
+            const rowsUpdated = resUpdate.rowsAffected;
+            if (rowsUpdated !== undefined && rowsUpdated === 1) {
+                cr.status = "SUCCESS";
+                cr.messagem = "Aeroporto alterado.";
+                console.log("Aeroporto atualizado.");
+            }
+            else
+                cr.messagem = "Aeroporto não alterado. Verifique se o ID do aeroporto está correto";
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                cr.messagem = e.message;
+                console.log(e.message);
+            }
+            else
+                cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+        }
+        finally {
+            if (connection !== undefined)
+                yield connection.close();
+            res.send(cr);
+        }
+    }
+}));
 app.listen(port, () => {
     console.log("Servidor HTTP rodando...");
 });

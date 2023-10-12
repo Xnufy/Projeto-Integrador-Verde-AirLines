@@ -45,7 +45,11 @@
             <button id="redirectAeronave" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
         </div>
     </div>
-    <script src="redirecionaParaCadastro.js"></script>
+    <script>
+        document.getElementById('redirectAeronave').addEventListener('click', function() {
+            window.location.href = 'addAeronave.html';
+        });
+    </script>
     <script src="funcionalidades/listarAeronave.js"></script>
 </body>
 </html>
