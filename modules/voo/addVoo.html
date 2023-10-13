@@ -27,7 +27,7 @@
             <form id="form">
                 <div class="campo">
                     <label for="numVoo"><i class="fa-solid fa-ticket-simple" style="color: #000000;"></i></label>
-                    <input type="text" id="numVoo" placeholder="Digite o número do voo">
+                    <input type="text" id="numVoo" placeholder="Carregando id do voo..." disabled>
                 </div>
                 <div class="campo">
                     <label for="origem"><i class="fa-solid fa-plane-departure" style="color: #000000;"></i></label>
@@ -45,12 +45,14 @@
                     <label for="preco"><i class="fa-solid fa-money-check-dollar" style="color: #000000;"></i></label>
                     <input type="number" step="0.01" id="preco" placeholder="Digite o valor da passagem" min="0">
                 </div>
+                <p id="status" class="statusError"></p>
                 <div class="campoButton">
                     <i class="fa-solid fa-plus" style="color: #fff;"></i>
-                    <button title="Adicionar" type="submit">Adicionar</button>
+                    <button title="Adicionar" type="button" onclick="inserirVoo();">Adicionar</button>
                 </div>
             </form>
         </div>
     </div>
+    <script src="funcionalidades/cadastroVoo.js"></script>
 </body>
 </html>

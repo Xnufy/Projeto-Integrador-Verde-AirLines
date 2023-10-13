@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rowsToAeroportos = exports.rowsToAeronaves = void 0;
+exports.rowsToVoos = exports.rowsToAeroportos = exports.rowsToAeronaves = void 0;
 function rowsToAeronaves(oracleRows) {
     let aeronaves = [];
     let aeronave;
@@ -25,6 +25,7 @@ exports.rowsToAeronaves = rowsToAeronaves;
 function rowsToAeroportos(oracleRows) {
     // vamos converter um array any (resultados do oracle)
     // em um array de Aeroporto
+    console.log(oracleRows);
     let aeroportos = [];
     let aeroporto;
     if (oracleRows !== undefined) {
@@ -43,3 +44,24 @@ function rowsToAeroportos(oracleRows) {
     return aeroportos;
 }
 exports.rowsToAeroportos = rowsToAeroportos;
+function rowsToVoos(oracleRows) {
+    // vamos converter um array any (resultados do oracle)
+    // em um array de Aeroporto
+    let voos = [];
+    let voo;
+    if (oracleRows !== undefined) {
+        oracleRows.forEach((registro) => {
+            voo = {
+                idVoo: registro.ID_VOO,
+                saidaVoo: registro.SAIDA_VOO,
+                chegadaVoo: registro.CHEGADA_VOO,
+                data: registro.DATA,
+                valor: registro.VALOR,
+            };
+            // inserindo o novo Array convertido.
+            voos.push(voo);
+        });
+    }
+    return voos;
+}
+exports.rowsToVoos = rowsToVoos;

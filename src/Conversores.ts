@@ -1,5 +1,6 @@
 import { Aeroporto } from "./Aeroporto";
 import { Aeronave } from "./Aeronave";
+import { Voo } from "./Voo";
 
 export function rowsToAeronaves(oracleRows: unknown[] | undefined) : Array<Aeronave> {
     let aeronaves: Array <Aeronave> = [];
@@ -26,6 +27,7 @@ export function rowsToAeronaves(oracleRows: unknown[] | undefined) : Array<Aeron
 export function rowsToAeroportos(oracleRows: unknown[] | undefined) : Array<Aeroporto> {
     // vamos converter um array any (resultados do oracle)
     // em um array de Aeroporto
+    console.log(oracleRows)
     let aeroportos: Array<Aeroporto> = [];
     let aeroporto;
     if (oracleRows !== undefined){
@@ -43,4 +45,27 @@ export function rowsToAeroportos(oracleRows: unknown[] | undefined) : Array<Aero
         })
     }
   return aeroportos;
+}
+
+export function rowsToVoos(oracleRows: unknown[] | undefined) : Array<Voo> {
+    // vamos converter um array any (resultados do oracle)
+    // em um array de Aeroporto
+    let voos: Array<Voo> = [];
+    let voo;
+    if (oracleRows !== undefined){
+        oracleRows.forEach((registro: any) => {
+        voo = {
+            idVoo: registro.ID_VOO,
+            saidaVoo: registro.SAIDA_VOO,
+            chegadaVoo: registro.CHEGADA_VOO,
+            data: registro.DATA,
+            valor: registro.VALOR,
+        } as Voo;
+
+        // inserindo o novo Array convertido.
+        voos.push(voo);
+        })
+    }
+
+    return voos;
 }

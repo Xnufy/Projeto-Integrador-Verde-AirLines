@@ -24,7 +24,7 @@
             <a href="../home.html"><img src="../../assets/img/LogoBranco.svg" alt="Logo"></a>
             <ul>
                 <li><a href="../aeroporto/listarAeroporto.html">Aeroportos</a></li>
-                <li><a href="listarVoo.html">Voos</a></li>
+                <li><a href="../voo/listarVoo.html">Voos</a></li>
                 <li><a href="../aeronave/listarAeronave.html">Aeronaves</a></li>
                 <li><a href="../trecho/listarTrecho.html">Trechos</a></li>
             </ul>
@@ -32,15 +32,24 @@
         <div id="titlePage">
             <h1>Listar Voo(Qtde)</h1>
         </div>
-        <div id="contentTable" method="post"></div>
+        <div class="contentTable">
+            <table>
+                <thead>
+                    <tr id="cabecalhoTabela">
+                    </tr>
+                </thead>
+                <tbody id="voos-list"></tbody>
+            </table>
+        </div>
         <div class="addButton">
-            <button id="redirectVoo" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
+            <button id="redirectAeronave" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
         </div>
     </div>
     <script>
-        document.getElementById('redirectVoo').addEventListener('click', function() {
+        document.getElementById('redirectAeronave').addEventListener('click', function() {
             window.location.href = 'addVoo.html';
         });
     </script>
+    <script src="funcionalidades/listarVoos.js"></script>
 </body>
 </html>

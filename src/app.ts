@@ -2,6 +2,7 @@ import express from "express";
 import oracledb from "oracledb";
 import dotenv from "dotenv";
 import cors from "cors";
+import moment from 'moment';
 
 import { CustomResponse } from "./CustomResponse";
 import { Aeroporto } from "./Aeroporto";
@@ -9,10 +10,11 @@ import { Aeronave } from "./Aeronave";
 
 import { oraConnAttribs } from "./conexaoOracle";
 
-import { rowsToAeronaves, rowsToAeroportos } from "./Conversores";
+import { rowsToAeronaves, rowsToAeroportos, rowsToVoos } from "./Conversores";
 
-import { aeroportoValida } from "./Validadores";
+import { aeroportoValida, aeroportoVoo } from "./Validadores";
 import { aeronaveValida } from "./Validadores";
+import { Voo } from "./Voo";
 
 const app = express();
 const port = 3000;
@@ -490,6 +492,176 @@ app.put("/alterarAeroporto/:idAeroporto", async (req, res) => {
       res.send(cr);
     }
   }
+});
+
+///VOOS
+
+app.put("/inserirVoo", async(req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  const voo: Voo = req.body as Voo;
+  console.log(voo);
+
+  let[valida, mensagem] = aeroportoVoo(voo);
+  if(!valida) {
+    cr.messagem = mensagem;
+    res.send(cr);
+  } 
+  else {
+    let connection;
+    try {
+      const inserirVoo = 
+      `INSERT INTO VOOS
+      (ID_VOO, SAIDA_VOO, CHEGADA_VOO, DATA, VALOR)
+      VALUES
+      (:1,:2,:3,:4,:5)`;
+
+      //Formata o tipo da data.
+      const new_date = moment(voo.data, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      
+      const dados = [voo.idVoo, voo.saidaVoo, voo.chegadaVoo, new_date, voo.valor?.toFixed(2)];
+
+      connection = await oracledb.getConnection(oraConnAttribs);
+      let resInsert = await connection.execute(inserirVoo, dados);
+      
+      // COMMIT DA INSERÇÃO DE DADOS
+      await connection.commit();
+
+      const rowsInserted = resInsert.rowsAffected;
+      if(rowsInserted !== undefined && rowsInserted === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Voo Inserido";
+      }
+    }
+    catch(e) {
+      if(e instanceof Error) {
+        cr.messagem = e.message;
+        console.log(e.message);
+      } else
+        cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+    }
+    finally {
+      if(connection !== undefined)
+        await connection.close();
+      res.send(cr);
+    }
+  }
+});
+
+app.get("/listarVoos", async(req, res)=> {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+
+    let resultadoConsulta = await connection.execute(`SELECT * FROM VOOS`);
+
+    cr.status = "SUCCESS";
+    cr.messagem = "Dados obtidos";
+    cr.payload = (rowsToVoos(resultadoConsulta.rows));
+  }
+  catch(e) {
+    if(e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else
+      cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+  } 
+  finally {
+    if(connection !== undefined)
+      await connection.close();
+
+    res.send(cr);
+  }
+});
+
+app.get("/lastIdVoo", async(req, res)=> {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+  
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+    
+    let resultadoConsulta = await connection.execute(`SELECT * FROM VOOS`);
+    
+    cr.status = "SUCCESS";
+    cr.messagem = "Dados obtidos";
+    let arrayVoos = (rowsToVoos(resultadoConsulta.rows));
+
+    let lastIdVoo = arrayVoos.length;
+    cr.payload = lastIdVoo;
+  }
+  catch(e) {
+    if(e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else
+      cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+  } 
+  finally {
+    if(connection !== undefined)
+      await connection.close();
+
+    res.send(cr);
+  }
+});
+
+app.delete("/excluirVoo", async(req, res) => {
+  const idVoo = req.body.idVoo as number;
+
+  console.log("Id do Aeroporto recebido: " + idVoo);
+
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+    const deletarAeroporto = `DELETE VOOS WHERE ID_VOO = :1`
+    const dados = [idVoo];
+
+    let resDelete = await connection.execute(deletarAeroporto, dados);
+
+    // COMMIT DA DELEÇÃO DE DADOS
+    await connection.commit();
+
+    const rowsDeleted = resDelete.rowsAffected;
+    if(rowsDeleted !== undefined && rowsDeleted === 1) {
+      cr.status = "SUCCESS";
+      cr.messagem = "Voo excluído.";
+    } else
+      cr.messagem = "Voo não excluído. Verifique se o ID do voo está correto";
+  }
+  catch(e) {
+    if(e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else
+      cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+  }
+  finally {
+    if (connection !== undefined)
+      await connection.close();
+
+    res.send(cr);
+  }
+  
 });
 
 app.listen(port, () => {
