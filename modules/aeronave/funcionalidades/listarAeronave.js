@@ -39,6 +39,12 @@ function excluirAeronave(idAeronave) {
         })
 }
 
+function redirecionaParaAlterar(idAeronave) {
+    const alterarAeronaveHTML = `alterarAeronave.html?idAeronave=${idAeronave}`;
+
+    window.location.href = alterarAeronaveHTML;
+}
+
 function preencherTabela(aeronaves) {
     var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
@@ -51,6 +57,7 @@ function preencherTabela(aeronaves) {
         rowCabecalho.innerHTML += "<th>Fabricante</th>";
         rowCabecalho.innerHTML += "<th>Ano de Fabricação</th>";
         rowCabecalho.innerHTML += "<th>Registro</th>";
+        rowCabecalho.innerHTML += "<th>Total de assentos</th>";
         rowCabecalho.innerHTML += "<th>Excluir</th>";
         rowCabecalho.innerHTML += "<th>Alterar</th>";
     }
@@ -77,6 +84,7 @@ function preencherTabela(aeronaves) {
             <td>${aeronave.fabricante}</td>
             <td>${aeronave.anoFabricacao}</td>
             <td>${aeronave.registro}</td>
+            <td>${aeronave.linhasAssentos * aeronave.colunasAssentos}</td>
             <td>
                 <img 
                     src="../../assets/img/delete_icon.png" 
@@ -101,10 +109,7 @@ function exibirAeronave() {
         // obteve resposta, vamos simplesmente exibir como mensagem:
         if(customResponse.status === "SUCCESS"){
             // vamos obter o que está no payload e chamar a função .
-            console.log("Deu certo a busca de aeroportos");
-            // agora chamar a função de exibição dos dados em tabela... 
-            // no payload voltou o Array com as aeroportos. 
-            // DEVEMOS antes, conferir se o ARRAY não está vazio. Faça essa mudança.
+            console.log("Deu certo a busca de aeronaves");
             console.log('Payload:' + JSON.stringify(customResponse.payload));
             console.log(customResponse.payload);
             preencherTabela(JSON.parse(JSON.stringify(customResponse.payload)))

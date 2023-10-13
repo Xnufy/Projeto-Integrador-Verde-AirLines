@@ -10,9 +10,10 @@ function rowsToAeronaves(oracleRows) {
                 idAeronave: registro.ID_AERONAVE,
                 modelo: registro.MODELO,
                 fabricante: registro.FABRICANTE,
-                anoFabricacao: registro.FABRICANTE,
-                linhasAssentos: registro.LINHAS_ASSENTOS,
-                colunasAssentos: registro.COLUNAS_ASSENTOS,
+                anoFabricacao: registro.ANO_FABRICACAO,
+                idAeroportoAeronave: registro.ID_AEROPORTO_AERONAVE,
+                linhasAssentos: registro.LINHAS_ASSENTO,
+                colunasAssentos: registro.COLUNAS_ASSENTO,
                 registro: registro.REGISTRO
             };
             aeronaves.push(aeronave);
@@ -32,7 +33,8 @@ function rowsToAeroportos(oracleRows) {
                 idAeroporto: registro.ID_AEROPORTO,
                 sigla: registro.SIGLA,
                 nomeAeroporto: registro.NOME_AEROPORTO,
-                nomeCidade: registro.NOME_CIDADE
+                nomeCidade: registro.NOME_CIDADE,
+                uf: registro.UF
             };
             // inserindo o novo Array convertido.
             aeroportos.push(aeroporto);

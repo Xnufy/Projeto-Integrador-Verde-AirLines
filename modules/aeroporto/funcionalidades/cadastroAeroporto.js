@@ -28,6 +28,16 @@ function preencheuCidade() {
     return resultado;
 }
 
+function preencheuUf() {
+    resultado = false;
+    var uf = document.getElementById('uf').value;
+
+    if(uf.length === 2)
+        resultado = true;
+
+    return resultado;
+}
+
 function showStatusMessage(msg, error) {
     var pStatus = document.getElementById("status");
     if (error === true)
@@ -67,14 +77,22 @@ function inserirAeroporto() {
     } else
         showStatusMessage("", false);
 
+    if(!preencheuUf()) {
+        showStatusMessage("Preencha o nome da UF cidade...", true);
+        return;
+    } else
+        showStatusMessage("", false);
+
     const sigla = document.getElementById("sigla").value;
     const nomeAeroporto = document.getElementById("nomeAeroporto").value;
     const cidade = document.getElementById("cidade").value;
+    const uf = document.getElementById("uf").value;
 
     fetchInserir({
         sigla: sigla,
         nomeAeroporto: nomeAeroporto,
-        nomeCidade: cidade
+        nomeCidade: cidade,
+        uf: uf
     })
     .then(resultado => {
         if(resultado.status === "SUCCESS")

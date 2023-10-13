@@ -24,7 +24,7 @@
             <a href="listarAeronave.html"><p>Voltar</p></a>
         </div>
         <div id="contentCadastro">
-            <form id="form" method="put">
+            <form id="form">
                 <div class="campo">
                     <label for="modelo"><i class="fa-solid fa-plane" style="color: #000000;"></i></label>
                     <input type="text" id="modelo" placeholder="Digite o modelo do avião">
@@ -32,7 +32,6 @@
                 <div class="campo">
                     <label for="comboFabricantes"><i class="fa-solid fa-wrench" style="color: #000000;"></i></label>
                     <select name="comboFabricantes" id="comboFabricantes">
-                        <option selected hidden value="0" id="optionPadrao">-- Selecione o Fabricante --</option>
                         <option value="Airbus">Airbus</option>
                         <option value="EMBRAER">EMBRAER</option>
                         <option value="Boeing">Boeing</option>
@@ -66,14 +65,14 @@
                     <button 
                     title="Adicionar" 
                     type="button"
-                    onclick="inserirAeronave();"
-                    id="btnCadastrar">Adicionar</button>
+                    onclick="alterarAeronave();"
+                    id="btnCadastrar">Alterar</button>
                 </div>
             </form>
         </div>
     </div>
     <script src="funcionalidades/cadastroAeronave.js"></script>
-    <script src="funcionalidades/comboBox.js"></script>
     <script src="funcionalidades/listarAeroportosComboBox.js"></script>
+    <script src="funcionalidades/alterarAeronave.js"></script>
 </body>
 </html>

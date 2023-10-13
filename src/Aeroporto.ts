@@ -2,5 +2,6 @@ export type Aeroporto = {
     idAeroporto?: number, 
     sigla?: string, 
     nomeAeroporto?: string,
-    nomeCidade?: string 
+    nomeCidade?: string,
+    uf?: string
 }

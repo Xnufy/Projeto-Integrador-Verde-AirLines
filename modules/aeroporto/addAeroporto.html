@@ -23,7 +23,7 @@
             <h1>Aeroportos</h1>
             <a href="listarAeroporto.html"><p>Voltar</p></a>
         </div>
-        <div id="contentCadastro" method="post">
+        <div id="contentCadastro">
             <form id="form">
                 <div class="campo">
                     <label for="modelo"><i class="fa-solid fa-house" style="color: #000000;"></i></label>
@@ -36,6 +36,10 @@
                 <div class="campo">
                     <label for="cidade"><i class="fa-solid fa-city" style="color: #000000;"></i></label>
                     <input type="text" id="cidade" placeholder="Digite o nome da cidade">
+                </div>
+                <div class="campo">
+                    <label for="uf"><i class="fa-solid fa-location-dot" style="color: #000000;"></i></label>
+                    <input type="text" id="uf" placeholder="Digite o UF da cidade" minlength="2" maxlength="2">
                 </div>
                 <p id="status" class="statusError"></p>
                 <div class="campoButton">

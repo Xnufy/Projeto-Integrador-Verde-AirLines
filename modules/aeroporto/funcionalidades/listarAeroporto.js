@@ -56,6 +56,7 @@ function preencherTabela(aeroportos) {
         rowCabecalho.innerHTML += "<th>Sigla</th>";
         rowCabecalho.innerHTML += "<th>Nome do Aeroporto</th>";
         rowCabecalho.innerHTML += "<th>Cidade</th>";
+        rowCabecalho.innerHTML += "<th>UF</th>";
         rowCabecalho.innerHTML += "<th>Excluir</th>";
         rowCabecalho.innerHTML += "<th>Alterar</th>";
     }
@@ -81,6 +82,7 @@ function preencherTabela(aeroportos) {
             <td>${aeroporto.sigla}</td>
             <td>${aeroporto.nomeAeroporto}</td>
             <td>${aeroporto.nomeCidade}</td>
+            <td>${aeroporto.uf}</td>
             <td>
                 <img 
                     src="../../assets/img/delete_icon.png" 

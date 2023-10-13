@@ -10,9 +10,10 @@ export function rowsToAeronaves(oracleRows: unknown[] | undefined) : Array<Aeron
             idAeronave: registro.ID_AERONAVE,
             modelo: registro.MODELO,
             fabricante: registro.FABRICANTE,
-            anoFabricacao: registro.FABRICANTE,
-            linhasAssentos: registro.LINHAS_ASSENTOS,
-            colunasAssentos: registro.COLUNAS_ASSENTOS,
+            anoFabricacao: registro.ANO_FABRICACAO,
+            idAeroportoAeronave: registro.ID_AEROPORTO_AERONAVE,
+            linhasAssentos: registro.LINHAS_ASSENTO,
+            colunasAssentos: registro.COLUNAS_ASSENTO,
             registro: registro.REGISTRO
         } as Aeronave;
 
@@ -33,7 +34,8 @@ export function rowsToAeroportos(oracleRows: unknown[] | undefined) : Array<Aero
             idAeroporto: registro.ID_AEROPORTO,
             sigla: registro.SIGLA,
             nomeAeroporto: registro.NOME_AEROPORTO,
-            nomeCidade: registro.NOME_CIDADE
+            nomeCidade: registro.NOME_CIDADE,
+            uf: registro.UF
         } as Aeroporto;
 
         // inserindo o novo Array convertido.

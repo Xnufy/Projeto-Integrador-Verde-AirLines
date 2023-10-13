@@ -73,6 +73,10 @@ export function aeroportoValida(aeroporto: Aeroporto ) {
     if(aeroporto.nomeCidade === undefined){
       mensagem = "Nome da cidade do aeroporto não fornecida.";
     }
+
+    if(aeroporto.uf === undefined){
+      mensagem = "UF da cidade do aeroporto não fornecida.";
+    }
   
     // se passou em toda a validação.
     if(mensagem === ""){
