@@ -1,5 +1,6 @@
 import { Aeronave } from "./Aeronave";
 import { Aeroporto } from "./Aeroporto";
+import { Voo } from "./Voo";
 
 // neste arquivo colocaremos TODAS as funções de validação para todo tipo de objeto. 
 
@@ -80,4 +81,20 @@ export function aeroportoValida(aeroporto: Aeroporto ) {
     }
   
     return [valida, mensagem] as const;
+}
+
+export function aeroportoVoo(voo: Voo){
+  let valida = false;
+  let mensagem = "";
+
+  if(voo.saidaVoo === voo.chegadaVoo){
+    mensagem = "O aeroporto de chegada não pode ser o mesmo de saída.";
+  }
+
+  // se passou em toda a validação.
+  if(mensagem === ""){
+    valida = true;
+  }
+
+  return [valida, mensagem] as const;
 }
