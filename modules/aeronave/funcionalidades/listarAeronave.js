@@ -27,7 +27,7 @@ function requestExcluirAeronave(body) {
 
 function excluirAeronave(idAeronave) {
     console.log('Clicou no excluir aeronave: ' + idAeronave);
-    requestExcluirAeroporto({idAeronave: idAeronave})
+    requestExcluirAeronave({idAeronave: idAeronave})
         .then(customResponse => {
             if(customResponse.status === "SUCCESS") {
                 location.reload();
@@ -39,12 +39,6 @@ function excluirAeronave(idAeronave) {
         })
 }
 
-function redirecionaParaAlterar(idAeroporto) {
-    const alterarAeroportoHTML = `alterarAeroporto.html?idAeroporto=${idAeroporto}`;
-
-    window.location.href = alterarAeroportoHTML;
-}
-
 function preencherTabela(aeronaves) {
     var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
@@ -54,20 +48,21 @@ function preencherTabela(aeronaves) {
     if(numeroAeronaves > 0) {
         rowCabecalho.innerHTML += "<th>ID Aeronave</th>";
         rowCabecalho.innerHTML += "<th>Modelo</th>";
-        rowCabecalho.innerHTML += "<th>Nome do Aeroporto</th>";
-        rowCabecalho.innerHTML += "<th>Cidade</th>";
+        rowCabecalho.innerHTML += "<th>Fabricante</th>";
+        rowCabecalho.innerHTML += "<th>Ano de Fabricação</th>";
+        rowCabecalho.innerHTML += "<th>Registro</th>";
         rowCabecalho.innerHTML += "<th>Excluir</th>";
         rowCabecalho.innerHTML += "<th>Alterar</th>";
     }
     // acessando a referencia pelo id do tbody
-    const tblBody = document.getElementById("aeroportos-list");
+    const tblBody = document.getElementById("aeronaves-list");
 
-    let aeroporto = "";
+    let aeronave = "";
     // creating all cells
-    for (let i = 0; i < aeroportos.length; i++) {
+    for (let i = 0; i < aeronaves.length; i++) {
 
-        aeroporto = aeroportos[i];
-        console.log("Dados do aeroporto: " + aeroporto);
+        aeronave = aeronaves[i];
+        console.log("Dados da aeronave: " + aeronave);
         // row representa a linha da tabela (um novo tr)
         const row = document.createElement("tr");
 
@@ -77,20 +72,21 @@ function preencherTabela(aeronaves) {
             row.className = "oddRow";
 
         row.innerHTML = 
-            `<td>${aeroporto.idAeroporto}</td>
-            <td>${aeroporto.sigla}</td>
-            <td>${aeroporto.nomeAeroporto}</td>
-            <td>${aeroporto.nomeCidade}</td>
+            `<td>${aeronave.idAeronave}</td>
+            <td>${aeronave.modelo}</td>
+            <td>${aeronave.fabricante}</td>
+            <td>${aeronave.anoFabricacao}</td>
+            <td>${aeronave.registro}</td>
             <td>
                 <img 
                     src="../../assets/img/delete_icon.png" 
                     class="deletarIcon"
-                    onclick="excluirAeroporto(${aeroporto.idAeroporto});"/>
+                    onclick="excluirAeronave(${aeronave.idAeronave});"/>
             </td>
             <td>
                 <img src="../../assets/img/alterar_icon.svg" 
                     class="alterarIcon"
-                    onclick="redirecionaParaAlterar(${aeroporto.idAeroporto});"/>
+                    onclick="redirecionaParaAlterar(${aeronave.idAeronave});"/>
             </td>`
     
         // adicionando a linha que representa o aeroporto. 
@@ -98,9 +94,9 @@ function preencherTabela(aeronaves) {
     }
 }
 
-function exibirAeroporto() {
+function exibirAeronave() {
     console.log('Entrou no exibir...')
-    requestListaDeAeroportos()
+    requestListaDeAeronaves()
     .then(customResponse => {
         // obteve resposta, vamos simplesmente exibir como mensagem:
         if(customResponse.status === "SUCCESS"){
@@ -123,4 +119,4 @@ function exibirAeroporto() {
     });
 }
 
-exibirAeroporto();
+exibirAeronave();

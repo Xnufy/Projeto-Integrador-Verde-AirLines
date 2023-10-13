@@ -9,13 +9,13 @@ comboFabricantes.addEventListener('change', function() {
     }
 });
 
-let comboSigla = document.querySelector('#comboSigla');
-comboSigla.style.color = 'rgb(117, 117, 117)';
+let comboAeroportos = document.querySelector('#comboAeroportos');
+comboAeroportos.style.color = 'rgb(117, 117, 117)';
 
-comboSigla.addEventListener('change', function() {
-    if (comboSigla.value === '0') {
-        comboSigla.style.color = 'rgb(117, 117, 117)';
+comboAeroportos.addEventListener('change', function() {
+    if (comboAeroportos.value === '0') {
+        comboAeroportos.style.color = 'rgb(117, 117, 117)';
     } else {
-        comboSigla.style.color = 'black';
+        comboAeroportos.style.color = 'black';
     }
 });

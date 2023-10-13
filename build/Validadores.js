@@ -18,10 +18,14 @@ function aeronaveValida(aero) {
     if (aero.modelo === undefined) {
         mensagem = "Modelo não informado.";
     }
-    if (aero.totalAssentos === undefined) {
-        mensagem = "Total de assentos não informado";
+    if (aero.linhasAssentos === undefined) {
+        mensagem = "Linhas de poltronas não informada";
     }
-    if ((aero.totalAssentos !== undefined) && (aero.totalAssentos < 100 || aero.totalAssentos > 1000)) {
+    if (aero.colunasAssentos === undefined) {
+        mensagem = "Colunas de poltronas não informada";
+    }
+    if ((aero.linhasAssentos && aero.colunasAssentos !== undefined)
+        && (aero.linhasAssentos * aero.colunasAssentos < 100 || aero.linhasAssentos * aero.colunasAssentos > 1000)) {
         mensagem = "Total de assentos é inválido";
     }
     if (aero.anoFabricacao === undefined) {
@@ -30,7 +34,7 @@ function aeronaveValida(aero) {
     if ((aero.anoFabricacao !== undefined) && (aero.anoFabricacao < 1990 || aero.anoFabricacao > 2026)) {
         mensagem = "Ano de fabricação deve ser entre 1990 e 2026";
     }
-    if (aero.referencia === undefined) {
+    if (aero.registro === undefined) {
         mensagem = "Referência da aeronave não fornecida.";
     }
     // se passou em toda a validação.

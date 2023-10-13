@@ -1,8 +1,10 @@
 export type Aeronave = {
-    codigo?: number, 
-    fabricante?: string, 
+    idAeronave?: number, 
     modelo?: string,
-    anoFabricacao?: number, 
-    totalAssentos?: number,
-    referencia?: string
-  }
+    fabricante?: string, 
+    anoFabricacao?: number,
+    idAeroportoAeronave?: number, 
+    linhasAssentos?: number,
+    colunasAssentos?: number,
+    registro?: string
+}

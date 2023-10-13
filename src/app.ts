@@ -5,12 +5,14 @@ import cors from "cors";
 
 import { CustomResponse } from "./CustomResponse";
 import { Aeroporto } from "./Aeroporto";
+import { Aeronave } from "./Aeronave";
 
 import { oraConnAttribs } from "./conexaoOracle";
 
-import { rowsToAeroportos } from "./Conversores";
+import { rowsToAeronaves, rowsToAeroportos } from "./Conversores";
 
 import { aeroportoValida } from "./Validadores";
+import { aeronaveValida } from "./Validadores";
 
 const app = express();
 const port = 3000;
@@ -24,10 +26,94 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 //    REQUISIÇÕES AERONAVE
 //
 
-// o código fornecido será ingênuo. 
-app.get("/listarAeronaves", async(req, res)=>{});
+// LISTAR AERONAVES
+app.get("/listarAeronaves", async(req, res)=>{
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
 
-app.put("/inserirAeronave", async (req, res)=>{});
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+
+    let resultadoConsulta = await connection.execute(`SELECT * FROM AERONAVES`);
+
+    cr.status = "SUCCESS";
+    cr.messagem = "Dados obtidos";
+    cr.payload = (rowsToAeronaves(resultadoConsulta.rows));
+  }
+  catch(e) {
+    if(e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else
+      cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+  } 
+  finally {
+    if(connection !== undefined)
+      await connection.close();
+
+    res.send(cr);
+  }
+});
+
+// CADASTRAR AERONAVES
+app.put("/inserirAeronave", async (req, res)=>{
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  const aeronave: Aeronave = req.body as Aeronave;
+  console.log(aeronave);
+
+  let[valida, mensagem] = aeronaveValida(aeronave);
+  if(!valida) {
+    cr.messagem = mensagem;
+    res.send(cr);
+  } 
+  else {
+    let connection;
+    try {
+      const inserirAeronave = 
+      `INSERT INTO AERONAVES
+      (ID_AERONAVE, MODELO, FABRICANTE, ANO_FABRICACAO, ID_AEROPORTO_AERONAVE, LINHAS_ASSENTO, COLUNAS_ASSENTO, REGISTRO)
+      VALUES
+      (SEQ_AERONAVES.NEXTVAL, :1, :2, :3, :4, :5, :6, :7)`;
+
+      const dados = 
+      [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao,
+      aeronave.idAeroportoAeronave, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
+
+      connection = await oracledb.getConnection(oraConnAttribs);
+      let resInsert = await connection.execute(inserirAeronave, dados);
+      
+      // COMMIT DA INSERÇÃO DE DADOS
+      await connection.commit();
+
+      const rowsInserted = resInsert.rowsAffected;
+      if(rowsInserted !== undefined && rowsInserted === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Aeronave Inserida";
+      }
+    }
+    catch(e) {
+      if(e instanceof Error) {
+        cr.messagem = e.message;
+        console.log(e.message);
+      } else
+        cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+    }
+    finally {
+      if(connection !== undefined)
+        await connection.close();
+      res.send(cr);
+    }
+  }
+});
 
 app.delete("/excluirAeronave", (req, res)=>{
   // excluir aeronave no Oracle.
@@ -68,7 +154,6 @@ app.get("/listarAeroportos", async(req, res)=> {
 
     res.send(cr);
   }
-
 });
 
 app.put("/inserirAeroporto", async(req, res) => {

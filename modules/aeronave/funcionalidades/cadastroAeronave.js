@@ -1,14 +1,3 @@
-function preencheuID(){
-    let resultado = false;
-    // obter o texto preenchido no campo anoFab
-    var strId = document.getElementById("idAeronave").value;
-    const id = parseInt(strId);
-    if (id !== null && id > 0){
-        resultado = true;
-    }
-    return resultado; 
-}
-
 // funcao que verifica se preencheu o modelo.
 function preencheuModelo(){
     let resultado = false;
@@ -33,14 +22,27 @@ function selecionouFabricante(){
 }
 
 // funcao para verificar se preencheu o registro de referencia. 
-// function preencheuRegistro(){
-//     let resultado = false;
-//     const registro = document.getElementById("registro").value;
-//     if(registro.length > 0){
-//         resultado = true;
-//     }
-//     return resultado;
-// }
+function preencheuRegistro(){
+    let resultado = false;
+    const registro = document.getElementById("registro").value;
+    if(registro.length > 0){
+        resultado = true;
+    }
+    return resultado;
+}
+
+// funcao que verifica se selecionou ou não o fabricante.
+function selecionouFabricante(){
+    let resultado = false; 
+    var listaAeroportos = document.getElementById("comboAeroportos");
+    var valorSelecionado = listaAeroportos.value;
+    // se quiséssemos obter o TEXTO selecionado. 
+    // var text = listaFabricantes.options[listaFabricantes.selectedIndex].text;
+    if (valorSelecionado !== "0"){
+        resultado = true;
+    }
+    return resultado;
+}
 
 // verifica se o ano é valido
 function anoFabricacaoValido(){
@@ -55,7 +57,7 @@ function anoFabricacaoValido(){
     return resultado; 
 }
 
-// verifica se o campo total de assentos é numerico e válido
+// verifica se o campo linhas assentos é numerico e válido
 function assentoLinhaValido(){
     let resultado = false;
     const strNumLinha = document.getElementById("num_linha").value;
@@ -66,6 +68,7 @@ function assentoLinhaValido(){
     return resultado; 
 }
 
+// verifica se o campo colunas assentos é numérico e válido
 function assentoColunaValido(){
     let resultado = false;
     const strNumColuna = document.getElementById("num_coluna").value;
@@ -101,61 +104,66 @@ function fetchInserir(body) {
 
   
 function inserirAeronave(){
-    if(!preencheuID()){
-        showStatusMessage("Preencha o ID...", true);
-        return;
-    }
-
     if(!preencheuModelo()){
-    showStatusMessage("Preencha o modelo...", true);
-    return;
-    }
+        showStatusMessage("Preencha o modelo...", true);
+        return;
+    } else
+    showStatusMessage("", false);
 
     if(!selecionouFabricante()){
       showStatusMessage("Selecione o fabricante...", true);  
       return;
-    }
+    } else
+    showStatusMessage("", false);
 
-    // if(!preencheuRegistro()){
-    //   showStatusMessage("Preencha o registro da aeronave...", true);
-    //   return;
-    // }
+    if(!preencheuRegistro()){
+       showStatusMessage("Preencha o registro da aeronave...", true);
+       return;
+    } else
+    showStatusMessage("", false);
+
+    if(!selecionouFabricante()) {
+        showStatusMessage("Selecione o aeroporto...", true);
+        return
+    } else
+        showStatusMessage("", false);
 
     if(!anoFabricacaoValido()){
       showStatusMessage("Ano deve de 1990 até 2026...", true);
       return;
-    }
+    } else
+    showStatusMessage("", false);
 
     if(!assentoLinhaValido()){
         showStatusMessage("Preencha corretamente o número de linhas.", true);
         return;
-      }
+    } else
+    showStatusMessage("", false);
 
     if(!assentoColunaValido()){
       showStatusMessage("Preencha corretamente o número de colunas.", true);
       return;
-    }
+    } else
+    showStatusMessage("", false);
 
     // se chegou até aqui a execução do código, vamos cadastrar a aeronave. 
     // obtendo os dados: 
-    const idAeronave = document.getElementById("idAeronave").value;
     const modelo = document.getElementById("modelo").value;
     const fabricante = document.getElementById("comboFabricantes").value;
-    // const registro = document.getElementById("registro").value;
+    const registro = document.getElementById("registro").value;
     const anoFabricacao = document.getElementById("anoFabricacao").value;
     const assentosLinha = document.getElementById("num_linha").value;
     const assentosColuna = document.getElementById("num_coluna").value;
 
     // ESTUDAR O CONCEITO DE PROMISES.
     fetchInserir({
-        idAeronave: idAeronave,
         modelo: modelo, 
         fabricante: fabricante, 
-        // registro: registro,
+        registro: registro,
         anoFabricacao: anoFabricacao,
         siglaAeroporto: 'VCP',
         assentosLinha: assentosLinha,
-        assentosColuna: assentosColuna,
+        assentosColuna: assentosColuna
     })
         .then(resultado => {
           // obteve resposta, vamos simplesmente exibir como mensagem: 
