@@ -1,6 +1,8 @@
 import { Aeronave } from "./Aeronave";
 import { Aeroporto } from "./Aeroporto";
 import { Voo } from "./Voo";
+import { Trecho } from "./Trecho";
+
 
 // neste arquivo colocaremos TODAS as funções de validação para todo tipo de objeto. 
 
@@ -87,6 +89,7 @@ export function aeroportoValida(aeroporto: Aeroporto ) {
     return [valida, mensagem] as const;
 }
 
+
 export function aeroportoVoo(voo: Voo){
   let valida = false;
   let mensagem = "";
@@ -101,4 +104,22 @@ export function aeroportoVoo(voo: Voo){
   }
 
   return [valida, mensagem] as const;
+}
+export function trechoValido(trecho: Trecho ) {
+    let valida = false;
+    let mensagem = "";
+  
+    if(trecho.origem === undefined){
+      mensagem = "Origem não informada";
+    }
+  
+    if(trecho.destino === undefined){
+      mensagem = "Destino não informado";
+    }
+    // se passou em toda a validação.
+    if(mensagem === ""){
+      valida = true;
+    }
+  
+    return [valida, mensagem] as const;
 }

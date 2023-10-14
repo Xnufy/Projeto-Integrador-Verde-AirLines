@@ -7,12 +7,13 @@ import moment from 'moment';
 import { CustomResponse } from "./CustomResponse";
 import { Aeroporto } from "./Aeroporto";
 import { Aeronave } from "./Aeronave";
+import { Trecho } from "./Trecho";
 
 import { oraConnAttribs } from "./conexaoOracle";
 
 import { rowsToAeronaves, rowsToAeroportos, rowsToVoos } from "./Conversores";
 
-import { aeroportoValida, aeroportoVoo } from "./Validadores";
+import { aeroportoValida, aeroportoVoo, trechoValido } from "./Validadores";
 import { aeronaveValida } from "./Validadores";
 import { Voo } from "./Voo";
 
@@ -666,4 +667,91 @@ app.delete("/excluirVoo", async(req, res) => {
 
 app.listen(port, () => {
   console.log("Servidor HTTP rodando...");
+});
+
+
+
+app.get("/listarTrecho", async(req, res)=> {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+
+    let resultadoConsulta = await connection.execute(`SELECT * FROM TRECHO`);
+
+    cr.status = "SUCCESS";
+    cr.messagem = "Dados obtidos";
+    cr.payload = (rowsToAeroportos(resultadoConsulta.rows));
+  }
+  catch(e) {
+    if(e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else
+      cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+  } 
+  finally {
+    if(connection !== undefined)
+      await connection.close();
+
+    res.send(cr);
+  }
+});
+
+app.put("/inserirTrecho", async(req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  const trecho: Trecho = req.body as Trecho;
+  console.log(trecho);
+
+  let[valida, mensagem] = trechoValido(trecho);
+  if(!valida) {
+    cr.messagem = mensagem;
+    res.send(cr);
+  } 
+  else {
+    let connection;
+    try {
+      const inserirTrecho = 
+      `INSERT INTO TRECHO
+      (ID_TRECHO, LOCAL_CHEGADA, LOCAL_PARTIDA)
+      VALUES
+      (SEQ_TRECHO.NEXTVAL, :2, :1)`;
+      
+      const dados = [trecho.idTrecho, trecho.destino, trecho.origem];
+
+      connection = await oracledb.getConnection(oraConnAttribs);
+      let resInsert = await connection.execute(inserirTrecho, dados);
+      
+      // COMMIT DA INSERÇÃO DE DADOS
+      await connection.commit();
+
+      const rowsInserted = resInsert.rowsAffected;
+      if(rowsInserted !== undefined && rowsInserted === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Trecho Inserido";
+      }
+    }
+    catch(e) {
+      if(e instanceof Error) {
+        cr.messagem = e.message;
+        console.log(e.message);
+      } else
+        cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+    }
+    finally {
+      if(connection !== undefined)
+        await connection.close();
+      res.send(cr);
+    }
+  }
 });

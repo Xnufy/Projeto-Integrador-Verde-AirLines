@@ -1,6 +1,7 @@
 import { Aeroporto } from "./Aeroporto";
 import { Aeronave } from "./Aeronave";
 import { Voo } from "./Voo";
+import { Trecho } from "./Trecho"
 
 export function rowsToAeronaves(oracleRows: unknown[] | undefined) : Array<Aeronave> {
     let aeronaves: Array <Aeronave> = [];
@@ -68,4 +69,20 @@ export function rowsToVoos(oracleRows: unknown[] | undefined) : Array<Voo> {
     }
 
     return voos;
+}
+export function rowsToTrecho(oracleRows: unknown[] | undefined) : Array<Trecho> {
+    let trechos: Array <Trecho> = [];
+    let trecho;
+    if(oracleRows !== undefined) {
+        oracleRows.forEach((registro: any) => {
+        trecho = {
+            idTrecho: registro.ID_TRECHO,
+            origem: registro.LOCAL_PARTIDA,
+            destino: registro.LOCAL_CHEGADA
+        } as Trecho;
+
+        trechos.push(trecho);
+        });
+    }
+    return trechos;
 }

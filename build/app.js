@@ -105,6 +105,7 @@ app.put("/inserirAeronave", (req, res) => __awaiter(void 0, void 0, void 0, func
         }
     }
 }));
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 app.delete("/excluirAeronave", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const idAeronave = req.body.idAeronave;
@@ -230,6 +231,8 @@ app.put("/alterarAeronave/:idAeronave", (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 =======
+=======
+>>>>>>> Stashed changes
 app.delete("/excluirAeronave", (req, res) => {
     // excluir aeronave no Oracle.
 });
@@ -583,3 +586,77 @@ app.delete("/excluirVoo", (req, res) => __awaiter(void 0, void 0, void 0, functi
 app.listen(port, () => {
     console.log("Servidor HTTP rodando...");
 });
+app.get("/listarTrecho", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    let connection;
+    try {
+        connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+        let resultadoConsulta = yield connection.execute(`SELECT * FROM TRECHO`);
+        cr.status = "SUCCESS";
+        cr.messagem = "Dados obtidos";
+        cr.payload = ((0, Conversores_1.rowsToAeroportos)(resultadoConsulta.rows));
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            cr.messagem = e.message;
+            console.log(e.message);
+        }
+        else
+            cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+    }
+    finally {
+        if (connection !== undefined)
+            yield connection.close();
+        res.send(cr);
+    }
+}));
+app.put("/inserirTrecho", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    const trecho = req.body;
+    console.log(trecho);
+    let [valida, mensagem] = (0, Validadores_1.trechoValido)(trecho);
+    if (!valida) {
+        cr.messagem = mensagem;
+        res.send(cr);
+    }
+    else {
+        let connection;
+        try {
+            const inserirTrecho = `INSERT INTO TRECHO
+      (ID_TRECHO, LOCAL_CHEGADA, LOCAL_PARTIDA)
+      VALUES
+      (SEQ_TRECHO.NEXTVAL, :2, :1)`;
+            const dados = [trecho.ID_TRECHO, trecho.LOCAL_CHEGADA, trecho.LOCAL_PARTIDA];
+            connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+            let resInsert = yield connection.execute(inserirTrecho, dados);
+            // COMMIT DA INSERÇÃO DE DADOS
+            yield connection.commit();
+            const rowsInserted = resInsert.rowsAffected;
+            if (rowsInserted !== undefined && rowsInserted === 1) {
+                cr.status = "SUCCESS";
+                cr.messagem = "Trecho Inserido";
+            }
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                cr.messagem = e.message;
+                console.log(e.message);
+            }
+            else
+                cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+        }
+        finally {
+            if (connection !== undefined)
+                yield connection.close();
+            res.send(cr);
+        }
+    }
+}));

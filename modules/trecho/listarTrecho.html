@@ -31,7 +31,14 @@
         <div id="titlePage">
             <h1>Listar Trecho (Qtde)</h1>
         </div>
-        <div id="contentTable" method="post">
+        <div id="contentTable">
+            <table>
+                <thead>
+                    <tr id="cabecalhoTabela">
+                    </tr>
+                </thead>
+                <tbody id="trecho-list"></tbody>
+            </table>
         </div>
         <div class="addButton">
             <button id="redirectTrecho" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
@@ -42,5 +49,8 @@
             window.location.href = 'addTrecho.html';
         });
     </script>
+
+    <script src="funcionalidades/listarTrecho.js"></script>
+
 </body>
 </html>

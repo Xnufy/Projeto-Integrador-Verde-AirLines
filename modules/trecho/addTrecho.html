@@ -26,12 +26,16 @@
         <div id="contentCadastro" method="post">
             <form id="form">
                 <div class="campo">
-                    <label for="origem"><i class="fa-solid fa-plane-departure" style="color: #000000;"></i></label>
-                    <input type="text" id="origem" placeholder="Digite Aeroporto(origem) do trecho">
+                    <label for="comboAeroportos"><i class="fa-solid fa-plane-departure" style="color: #000000;"></i></label>
+                    <select name="comboAeroportos" id="comboAeroportos">
+                        <option selected hidden value="0" id="optionPadraoOrigem">-- Selecione Aeroporto(origem) --</option>
+                    </select>
                 </div>
                 <div class="campo">
-                    <label for="destino"><i class="fa-solid fa-plane-arrival" style="color: #000000;"></i></label>
-                    <input type="text" id="destino" placeholder="Digite Aeroporto(destino) do trecho">
+                    <label for="comboAeroportosDestino"><i class="fa-solid fa-plane-arrival" style="color: #000000;"></i></label>
+                    <select name="comboAeroportosDestino" id="comboAeroportosDestino">
+                        <option selected hidden value="0" id="optionPadraoDestino">-- Selecione Aeroporto(destino) --</option>
+                    </select>
                 </div>
                 <div class="campoButton">
                     <i class="fa-solid fa-plus" style="color: #fff;"></i>
@@ -40,5 +44,8 @@
             </form>
         </div>
     </div>
+    <script src="funcionalidades/cadastroTrecho.js"></script>
+    <script src="funcionalidades/comboBox.js"></script>
+    <script src="funcionalidades/listarAeroportosComboBox.js"></script>
 </body>
 </html>
