@@ -105,8 +105,6 @@ app.put("/inserirAeronave", (req, res) => __awaiter(void 0, void 0, void 0, func
         }
     }
 }));
-<<<<<<< Updated upstream
-<<<<<<< HEAD
 app.delete("/excluirAeronave", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const idAeronave = req.body.idAeronave;
     console.log("Id da Aeronave recebido: " + idAeronave);
@@ -230,13 +228,6 @@ app.put("/alterarAeronave/:idAeronave", (req, res) => __awaiter(void 0, void 0, 
         }
     }
 }));
-=======
-=======
->>>>>>> Stashed changes
-app.delete("/excluirAeronave", (req, res) => {
-    // excluir aeronave no Oracle.
-});
->>>>>>> 6a7f6c936f25b5c3e72014a91827d843da01ec44
 //
 //    SERVIÇOS AEROPORTO
 //
@@ -634,7 +625,7 @@ app.put("/inserirTrecho", (req, res) => __awaiter(void 0, void 0, void 0, functi
       (ID_TRECHO, LOCAL_CHEGADA, LOCAL_PARTIDA)
       VALUES
       (SEQ_TRECHO.NEXTVAL, :2, :1)`;
-            const dados = [trecho.ID_TRECHO, trecho.LOCAL_CHEGADA, trecho.LOCAL_PARTIDA];
+            const dados = [trecho.idTrecho, trecho.destino, trecho.origem];
             connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
             let resInsert = yield connection.execute(inserirTrecho, dados);
             // COMMIT DA INSERÇÃO DE DADOS

@@ -58,6 +58,7 @@ function preencherTabela(aeronaves) {
         rowCabecalho.innerHTML += "<th>Ano de Fabricação</th>";
         rowCabecalho.innerHTML += "<th>Registro</th>";
         rowCabecalho.innerHTML += "<th>Total de assentos</th>";
+        rowCabecalho.innerHTML += "<th>ID Aeroporto Responsável</th>";
         rowCabecalho.innerHTML += "<th>Excluir</th>";
         rowCabecalho.innerHTML += "<th>Alterar</th>";
     }
@@ -85,6 +86,7 @@ function preencherTabela(aeronaves) {
             <td>${aeronave.anoFabricacao}</td>
             <td>${aeronave.registro}</td>
             <td>${aeronave.linhasAssentos * aeronave.colunasAssentos}</td>
+            <td>${aeronave.idAeroportoAeronave}</td>
             <td>
                 <img 
                     src="../../assets/img/delete_icon.png" 

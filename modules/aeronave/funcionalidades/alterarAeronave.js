@@ -1,52 +1,3 @@
-function requestListaDeAeronaves() {
-    const url = new URL(window.location.href);
-    const idAeronave = url.searchParams.get("idAeronave");
-    console.log("Valor de idAeronave: " + idAeronave);
-    
-    const requestOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-    };
-    return fetch(`http://localhost:3000/listarAeronave/${idAeronave}`, requestOptions)
-    .then(response => response.json());
-}
-
-async function preencherInput(aeronaves) {
-    if (aeronaves.length > 0) {
-        var inputModelo = document.getElementById("modelo");
-        var selectFabricante = document.getElementById("comboFabricantes");
-        var inputRegistro = document.getElementById("registro");
-        var selectAeroportos = document.getElementById("comboAeroportos");
-        var inputAnoFabricacao = document.getElementById("anoFabricacao");
-        var inputNumLinha = document.getElementById("num_linha");
-        var inputNumColuna = document.getElementById("num_coluna");
-
-        const primeiraAeronave = aeronaves[0];
-
-        inputModelo.value = primeiraAeronave.modelo;
-        selectFabricante.value = primeiraAeronave.fabricante;
-        inputRegistro.value = primeiraAeronave.registro;
-        selectAeroportos.value = primeiraAeronave.idAeroportoAeronave;
-        inputAnoFabricacao.value = primeiraAeronave.anoFabricacao;
-        inputNumLinha.value = primeiraAeronave.linhasAssentos;
-        inputNumColuna.value = primeiraAeronave.colunasAssentos;
-    }
-}
-
-function exibirAeronave() {
-    requestListaDeAeronaves()
-    .then(customResponse => {
-        if (customResponse.status === "SUCCESS") {
-            preencherInput(customResponse.payload);
-        } else {
-            console.log(customResponse.message);
-        }
-    })
-    .catch((e) => {
-        console.log("Não foi possível exibir: " + e);
-    });
-}
-
 // funcao que verifica se preencheu o modelo.
 function preencheuModelo(){
     let resultado = false;
@@ -218,8 +169,8 @@ function alterarAeronave() {
         if (resultado.status === "SUCCESS") {
             showStatusMessage("Aeronave atualizada com sucesso.", false);
         } else {
-            showStatusMessage("Erro ao atualizar a aeronave: " + resultado.message, true);
-            console.log(resultado.message);
+            showStatusMessage("Erro ao atualizar a aeronave: " + resultado.messagem, true);
+            console.log(resultado.messagem);
         }
     })
     .catch(() => {
@@ -227,5 +178,3 @@ function alterarAeronave() {
         console.log("Falha grave ao atualizar a aeronave");
     });
 }
-
-exibirAeronave();

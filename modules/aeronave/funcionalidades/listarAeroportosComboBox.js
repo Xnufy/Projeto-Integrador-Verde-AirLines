@@ -21,7 +21,6 @@ function preencherComboBox(aeroportos) {
         const option = document.createElement("option");
         option.value = aeroporto.idAeroporto;
         option.text = aeroporto.nomeAeroporto;
-        console.log(aeroporto.idAeroporto);
     
         // adicionando a linha que representa o aeroporto. 
         comboBox.appendChild(option);
@@ -29,13 +28,13 @@ function preencherComboBox(aeroportos) {
 }
 
 function exibirAeroportos() {
-    console.log('Entrou no exibir...')
+    console.log('Entrou no exibir aeroportos combo box...')
     requestListaDeAeroportos()
     .then(customResponse => {
         // obteve resposta, vamos simplesmente exibir como mensagem:
         if(customResponse.status === "SUCCESS"){
             // vamos obter o que está no payload e chamar a função .
-            console.log("Deu certo a busca de aeroportos");
+            console.log("Combo box será preenchido com os aeroportos!");
             // agora chamar a função de exibição dos dados em tabela... 
             // no payload voltou o Array com as aeroportos. 
             // DEVEMOS antes, conferir se o ARRAY não está vazio. Faça essa mudança.
