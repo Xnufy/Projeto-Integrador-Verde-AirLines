@@ -170,8 +170,8 @@ function inserirAeronave(){
           if(resultado.status === "SUCCESS"){
             showStatusMessage("Aeronave cadastrada... ", false);
           }else{
-            showStatusMessage("Erro ao cadastrar aeronave...: " + resultado.message, true);
-            console.log(resultado.message);
+            showStatusMessage("Erro ao cadastrar aeronave...: " + resultado.messagem, true);
+            console.log(resultado.messagem);
           }
         })
         .catch(()=>{
