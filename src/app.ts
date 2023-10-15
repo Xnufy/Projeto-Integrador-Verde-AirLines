@@ -8,14 +8,14 @@ import { CustomResponse } from "./CustomResponse";
 import { Aeroporto } from "./Aeroporto";
 import { Aeronave } from "./Aeronave";
 import { Trecho } from "./Trecho";
-import { Voo } from "./Voo";
 
 import { oraConnAttribs } from "./conexaoOracle";
 
-import { rowsToAeronaves, rowsToAeroportos, rowsToVoos, rowsToTrecho, rowsToListarTrecho} from "./Conversores";
+import { rowsToAeronaves, rowsToAeroportos, rowsToTrecho, rowsToListarTrecho, rowsToListarVoos} from "./Conversores";
 
 import { aeroportoValida, aeroportoVoo, trechoValido } from "./Validadores";
 import { aeronaveValida } from "./Validadores";
+import { ListarVoo } from "./ListarVoos";
 
 
 const app = express();
@@ -505,7 +505,7 @@ app.put("/inserirVoo", async(req, res) => {
     payload: undefined
   };
 
-  const voo: Voo = req.body as Voo;
+  const voo: ListarVoo = req.body as ListarVoo;
   console.log(voo);
 
   let[valida, mensagem] = aeroportoVoo(voo);
@@ -518,14 +518,14 @@ app.put("/inserirVoo", async(req, res) => {
     try {
       const inserirVoo = 
       `INSERT INTO VOOS
-      (ID_VOO, SAIDA_VOO, CHEGADA_VOO, DATA, VALOR)
+      (ID_VOO, DATA, VALOR, ID_TRECHO)
       VALUES
-      (:1,:2,:3,:4,:5)`;
+      (:1,:2,:3,:4)`;
 
       //Formata o tipo da data.
       const new_date = moment(voo.data, 'YYYY-MM-DD').format('DD/MM/YYYY');
       
-      const dados = [voo.idVoo, voo.saidaVoo, voo.chegadaVoo, new_date, voo.valor?.toFixed(2)];
+      const dados = [voo.idVoo, new_date, voo.valor?.toFixed(2), voo.trecho];
 
       connection = await oracledb.getConnection(oraConnAttribs);
       let resInsert = await connection.execute(inserirVoo, dados);
@@ -554,6 +554,104 @@ app.put("/inserirVoo", async(req, res) => {
   }
 });
 
+app.put("/alterarVoo/:idVoo", async(req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  const idVoo = req.params.idVoo;
+
+  const voo: ListarVoo = req.body as ListarVoo;
+  console.log("VOO",voo);
+  console.log("IDVOO",idVoo)
+
+  let[valida, mensagem] = aeroportoVoo(voo);
+  if(!valida) {
+    cr.messagem = mensagem;
+    res.send(cr);
+  } 
+  else {
+    let connection;
+    try {
+      const inserirVoo = 
+      `UPDATE VOOS SET ID_VOO = :1, DATA = :2, VALOR = :3, ID_TRECHO = :4 WHERE ID_VOO = ${idVoo}`;
+    
+      
+
+      //Formata o tipo da data.
+      const new_date = moment(voo.data, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      
+      const dados = [voo.idVoo, new_date, voo.valor?.toFixed(2), voo.trecho];
+
+      connection = await oracledb.getConnection(oraConnAttribs);
+      let resInsert = await connection.execute(inserirVoo, dados);
+      
+      // COMMIT DA INSERÇÃO DE DADOS
+      await connection.commit();
+
+      const rowsInserted = resInsert.rowsAffected;
+      if(rowsInserted !== undefined && rowsInserted === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Voo Inserido";
+      }
+    }
+    catch(e) {
+      if(e instanceof Error) {
+        cr.messagem = e.message;
+        console.log(e.message);
+      } else
+        cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+    }
+    finally {
+      if(connection !== undefined)
+        await connection.close();
+      res.send(cr);
+    }
+  }
+});
+
+app.get("/listarVoos/:idVoo", async (req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  let connection;
+  try {
+      connection = await oracledb.getConnection(oraConnAttribs);
+
+      // Parametro recebido na URL
+      const idVoo = req.params.idVoo;
+
+      let resultadoConsulta = await connection.execute(`SELECT * FROM VOOS WHERE ID_VOO = ${idVoo}`);
+      
+      const rowFetched = rowsToListarVoos(resultadoConsulta.rows);
+      if(rowFetched !== undefined && rowFetched.length === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Trecho encontrado";
+        cr.payload = rowsToListarVoos(resultadoConsulta.rows);
+      } else
+        cr.messagem = "Trecho não encontrado. Verifique se o ID do trecho está correto";
+      
+  }
+  catch (e) {
+    if (e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else {
+        cr.messagem = "Erro ao conectar ao Oracle. Sem detalhes";
+    }
+  } 
+  finally {
+    if (connection !== undefined) await connection.close();
+
+    res.send(cr);
+  }
+});
+
 app.get("/listarVoos", async(req, res)=> {
   let cr: CustomResponse = {
     status: "ERROR",
@@ -565,11 +663,27 @@ app.get("/listarVoos", async(req, res)=> {
   try {
     connection = await oracledb.getConnection(oraConnAttribs);
 
-    let resultadoConsulta = await connection.execute(`SELECT * FROM VOOS`);
+    let resultadoConsulta = await connection.execute(`
+    SELECT
+      v.id_voo,
+      t.id_trecho,
+      a_partida.nome_aeroporto AS nome_aeroporto_partida,
+      a_chegada.nome_aeroporto AS nome_aeroporto_chegada,
+      v.data,
+      v.valor
+    FROM
+      voos v
+    INNER JOIN
+      trecho t ON v.id_trecho = t.id_trecho
+    INNER JOIN
+      aeroporto a_partida ON t.id_local_partida = a_partida.id_aeroporto
+    INNER JOIN
+      aeroporto a_chegada ON t.id_local_chegada = a_chegada.id_aeroporto
+    `);
 
     cr.status = "SUCCESS";
     cr.messagem = "Dados obtidos";
-    cr.payload = (rowsToVoos(resultadoConsulta.rows));
+    cr.payload = (rowsToListarVoos(resultadoConsulta.rows));
   }
   catch(e) {
     if(e instanceof Error) {
@@ -601,7 +715,7 @@ app.get("/lastIdVoo", async(req, res)=> {
     
     cr.status = "SUCCESS";
     cr.messagem = "Dados obtidos";
-    let arrayVoos = (rowsToVoos(resultadoConsulta.rows));
+    let arrayVoos = (rowsToListarVoos(resultadoConsulta.rows));
 
     let lastIdVoo = arrayVoos.length;
     cr.payload = lastIdVoo;

@@ -44,24 +44,23 @@ function showStatusMessage(msg, error){
 }
 
 function fetchInserir(body) {
-  const requestOptions = 
-  {
+  const url = new URL(window.location.href);
+  const idVoo = url.searchParams.get("idVoo");
+
+  const requestOptions = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
   };
 
-  return fetch('http://localhost:3000/inserirVoo', requestOptions)
-  .then(request => request.json())
+  return fetch(`http://localhost:3000/alterarVoo/${idVoo}`, requestOptions)
+  .then(response => response.json());
 }
 
-
-function inserirVoo(){
-  console.log("Entrou na função.")
-
+function alterarVoo() {
   if(!preencheuIdTrecho()){
-     showStatusMessage("Preencha o Trecho...", true);
-     return;
+    showStatusMessage("Preencha o Trecho...", true);
+    return;
   } else
   showStatusMessage("", false);
 
@@ -91,48 +90,16 @@ function inserirVoo(){
       data: data,
       valor: Number(preco),
   })
-      .then(resultado => {
-        // obteve resposta, vamos simplesmente exibir como mensagem: 
-        if(resultado.status === "SUCCESS"){
-          showStatusMessage("Aeronave cadastrada... ", false);
-        }else{
-          showStatusMessage("Erro ao cadastrar aeronave...: " + message, true);
-          console.log(resultado.message);
-        }
-      })
-      .catch(()=>{
-        showStatusMessage("Erro técnico ao cadastrar... Contate o suporte.", true);
-        console.log("Falha grave ao cadastrar.")
-      });
-}
-
-function requestIdVoo() {
-  const requestOptions = {
-  method: 'GET',
-  headers: { 'Content-Type': 'application/json' },
-  };
-  return fetch('http://localhost:3000/lastIdVoo', requestOptions)
-  .then(T => T.json())
-}
-
-function getIdVoo(){
-  requestIdVoo()
-  .then(customResponse => {
-      // obteve resposta, vamos simplesmente exibir como mensagem:
-      if(customResponse.status === "SUCCESS"){
-
-          let idVoo = customResponse.payload + 1;
-
-          document.getElementById("numVoo").value = String(idVoo);
-      }else{
-          // tratar corretamente o erro... (melhorar...)
-          console.log(customResponse.messagem);
+  .then(resultado => {
+      if (resultado.status === "SUCCESS") {
+          showStatusMessage("Aeronave atualizada com sucesso.", false);
+      } else {
+          showStatusMessage("Erro ao atualizar: " + resultado.messagem, true);
+          console.log(resultado.messagem);
       }
-      })
-  .catch((e)=>{
-  // FAZER O TRATAMENTO...
-  console.log("Não foi possível exibir." + e);
+  })
+  .catch(() => {
+      showStatusMessage("Erro técnico ao atualizar a aeronave. Contate o suporte.", true);
+      console.log("Falha grave ao atualizar a aeronave");
   });
 }
-
-getIdVoo();

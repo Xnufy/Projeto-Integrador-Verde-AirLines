@@ -1,6 +1,6 @@
 import { Aeronave } from "./Aeronave";
 import { Aeroporto } from "./Aeroporto";
-import { Voo } from "./Voo";
+import { ListarVoo } from "./ListarVoos";
 import { Trecho } from "./Trecho";
 
 
@@ -90,13 +90,9 @@ export function aeroportoValida(aeroporto: Aeroporto ) {
 }
 
 
-export function aeroportoVoo(voo: Voo){
+export function aeroportoVoo(voo: ListarVoo){
   let valida = false;
   let mensagem = "";
-
-  if(voo.saidaVoo === voo.chegadaVoo){
-    mensagem = "O aeroporto de chegada não pode ser o mesmo de saída.";
-  }
 
   // se passou em toda a validação.
   if(mensagem === ""){

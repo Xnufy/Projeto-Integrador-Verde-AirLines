@@ -39,6 +39,12 @@ function excluirVoo(idVoo) {
       })
 }
 
+function redirecionaParaAlterar(idVoo) {
+    const alterarVooHTML = `alterarVoo.html?idVoo=${idVoo}`;
+
+    window.location.href = alterarVooHTML;
+}
+
 function preencherTabela(voos) {
   var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
@@ -60,7 +66,7 @@ function preencherTabela(voos) {
   let voo = "";
   // creating all cells
   for (let i = 0; i < voos.length; i++) {
-
+        console.log(voos[i])
       voo = voos[i];
       console.log("Dados da aeronave: " + voo);
       // row representa a linha da tabela (um novo tr)
@@ -75,8 +81,8 @@ function preencherTabela(voos) {
 
       row.innerHTML = 
           `<td>${voo.idVoo}</td>
-          <td>${voo.chegadaVoo}</td>
-          <td>${voo.saidaVoo}</td>
+          <td>${voo.nomeChegadaVoo}</td>
+          <td>${voo.nomeSaidaVoo}</td>
           <td>${voo.data}</td>
           <td>${number_formatted}</td>
           <td>
