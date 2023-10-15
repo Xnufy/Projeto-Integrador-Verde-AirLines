@@ -44,7 +44,7 @@ function preencherComboBox(aeroportos) {
     comboBox.appendChild(option);
   }
 }
-function preencherComboBoxDestino(aeroportos, idComboOrigem) {
+function preencherComboBoxDestino(aeroportos, idAeroportoOrigem) {
   var comboBoxDestino = document.querySelector("#comboAeroportosDestino");
   comboBoxDestino.innerHTML = "";
 
@@ -52,7 +52,7 @@ function preencherComboBoxDestino(aeroportos, idComboOrigem) {
   // creating all cells
   for (let i = 0; i < aeroportos.length; i++) {
     aeroporto = aeroportos[i];
-    if (aeroporto.idAeroporto != idComboOrigem) {
+    if (aeroporto.idAeroporto != idAeroportoOrigem) {
       const option = document.createElement("option");
       option.value = aeroporto.idAeroporto;
       option.text = aeroporto.nomeAeroporto;
@@ -78,7 +78,6 @@ function exibirAeroportos() {
         console.log("Payload:" + JSON.stringify(customResponse.payload));
         console.log(customResponse.payload);
         preencherComboBox(JSON.parse(JSON.stringify(customResponse.payload)));
-        /*preencherComboBoxDestino(JSON.parse(JSON.stringify(customResponse.payload)))*/
         responseAeroportos = customResponse.payload;
       } else {
         // tratar corretamente o erro... (melhorar...)
