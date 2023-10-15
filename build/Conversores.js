@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rowsToVoos = exports.rowsToAeroportos = exports.rowsToAeronaves = void 0;
+exports.rowsToListarTrecho = exports.rowsToTrecho = exports.rowsToVoos = exports.rowsToAeroportos = exports.rowsToAeronaves = void 0;
 function rowsToAeronaves(oracleRows) {
     let aeronaves = [];
     let aeronave;
@@ -65,3 +65,35 @@ function rowsToVoos(oracleRows) {
     return voos;
 }
 exports.rowsToVoos = rowsToVoos;
+function rowsToTrecho(oracleRows) {
+    let trechos = [];
+    let trecho;
+    if (oracleRows !== undefined) {
+        oracleRows.forEach((registro) => {
+            trecho = {
+                idTrecho: registro.ID_TRECHO,
+                origem: registro.ID_LOCAL_PARTIDA,
+                destino: registro.ID_LOCAL_CHEGADA
+            };
+            trechos.push(trecho);
+        });
+    }
+    return trechos;
+}
+exports.rowsToTrecho = rowsToTrecho;
+function rowsToListarTrecho(oracleRows) {
+    let listaTrechos = [];
+    let listaTrecho;
+    if (oracleRows !== undefined) {
+        oracleRows.forEach((registro) => {
+            listaTrecho = {
+                idTrecho: registro.ID_TRECHO,
+                nomeAeroportoOrigem: registro.NOME_PARTIDA,
+                nomeAeroportoDestino: registro.NOME_CHEGADA,
+            };
+            listaTrechos.push(listaTrecho);
+        });
+    }
+    return listaTrechos;
+}
+exports.rowsToListarTrecho = rowsToListarTrecho;

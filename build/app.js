@@ -105,8 +105,6 @@ app.put("/inserirAeronave", (req, res) => __awaiter(void 0, void 0, void 0, func
         }
     }
 }));
-<<<<<<< Updated upstream
-<<<<<<< HEAD
 app.delete("/excluirAeronave", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const idAeronave = req.body.idAeronave;
     console.log("Id da Aeronave recebido: " + idAeronave);
@@ -230,13 +228,6 @@ app.put("/alterarAeronave/:idAeronave", (req, res) => __awaiter(void 0, void 0, 
         }
     }
 }));
-=======
-=======
->>>>>>> Stashed changes
-app.delete("/excluirAeronave", (req, res) => {
-    // excluir aeronave no Oracle.
-});
->>>>>>> 6a7f6c936f25b5c3e72014a91827d843da01ec44
 //
 //    SERVIÇOS AEROPORTO
 //
@@ -595,10 +586,22 @@ app.get("/listarTrecho", (req, res) => __awaiter(void 0, void 0, void 0, functio
     let connection;
     try {
         connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
-        let resultadoConsulta = yield connection.execute(`SELECT * FROM TRECHO`);
+        let resultadoBusca = yield connection.execute(`SELECT
+    t.id_trecho,
+    partida.nome_aeroporto AS nome_partida,
+    chegada.nome_aeroporto AS nome_chegada
+FROM
+    trecho t
+JOIN
+    aeroporto partida
+    ON t.id_local_partida = partida.id_aeroporto
+JOIN
+    aeroporto chegada
+    ON t.id_local_chegada = chegada.id_aeroporto
+`);
         cr.status = "SUCCESS";
         cr.messagem = "Dados obtidos";
-        cr.payload = ((0, Conversores_1.rowsToAeroportos)(resultadoConsulta.rows));
+        cr.payload = ((0, Conversores_1.rowsToListarTrecho)(resultadoBusca.rows));
     }
     catch (e) {
         if (e instanceof Error) {
@@ -607,6 +610,42 @@ app.get("/listarTrecho", (req, res) => __awaiter(void 0, void 0, void 0, functio
         }
         else
             cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+    }
+    finally {
+        if (connection !== undefined)
+            yield connection.close();
+        res.send(cr);
+    }
+}));
+app.get("/listarTrechos/:idTrecho", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    let connection;
+    try {
+        connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+        // Parametro recebido na URL
+        const idTrecho = req.params.idTrecho;
+        let resultadoConsulta = yield connection.execute(`SELECT * FROM TRECHO WHERE ID_TRECHO = ${idTrecho}`);
+        const rowFetched = (0, Conversores_1.rowsToTrecho)(resultadoConsulta.rows);
+        if (rowFetched !== undefined && rowFetched.length === 1) {
+            cr.status = "SUCCESS";
+            cr.messagem = "Trecho encontrado";
+            cr.payload = (0, Conversores_1.rowsToTrecho)(resultadoConsulta.rows);
+        }
+        else
+            cr.messagem = "Trecho não encontrado. Verifique se o ID do trecho está correto";
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            cr.messagem = e.message;
+            console.log(e.message);
+        }
+        else {
+            cr.messagem = "Erro ao conectar ao Oracle. Sem detalhes";
+        }
     }
     finally {
         if (connection !== undefined)
@@ -631,10 +670,10 @@ app.put("/inserirTrecho", (req, res) => __awaiter(void 0, void 0, void 0, functi
         let connection;
         try {
             const inserirTrecho = `INSERT INTO TRECHO
-      (ID_TRECHO, LOCAL_CHEGADA, LOCAL_PARTIDA)
+      (ID_TRECHO, ID_LOCAL_CHEGADA, ID_LOCAL_PARTIDA)
       VALUES
-      (SEQ_TRECHO.NEXTVAL, :2, :1)`;
-            const dados = [trecho.ID_TRECHO, trecho.LOCAL_CHEGADA, trecho.LOCAL_PARTIDA];
+      (SEQ_TRECHO.NEXTVAL, :1, :2)`;
+            const dados = [trecho.destino, trecho.origem];
             connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
             let resInsert = yield connection.execute(inserirTrecho, dados);
             // COMMIT DA INSERÇÃO DE DADOS
@@ -652,6 +691,92 @@ app.put("/inserirTrecho", (req, res) => __awaiter(void 0, void 0, void 0, functi
             }
             else
                 cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+        }
+        finally {
+            if (connection !== undefined)
+                yield connection.close();
+            res.send(cr);
+        }
+    }
+}));
+app.delete("/excluirTrecho", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const idTrecho = req.body.idTrecho;
+    console.log("Id da Trecho recebido: " + idTrecho);
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    let connection;
+    try {
+        connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+        const deletarTrecho = `DELETE TRECHO WHERE ID_TRECHO = :1`;
+        const dados = [idTrecho];
+        let resDelete = yield connection.execute(deletarTrecho, dados);
+        // COMMIT DA DELEÇÃO DE DADOS
+        yield connection.commit();
+        const rowsDeleted = resDelete.rowsAffected;
+        if (rowsDeleted !== undefined && rowsDeleted === 1) {
+            cr.status = "SUCCESS";
+            cr.messagem = "Trecho excluído.";
+        }
+        else
+            cr.messagem = "Trecho não excluído. Verifique se o ID do Trecho está correto";
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            cr.messagem = e.message;
+            console.log(e.message);
+        }
+        else
+            cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+    }
+    finally {
+        if (connection !== undefined)
+            yield connection.close();
+        res.send(cr);
+    }
+}));
+app.put("/alterarTrecho/:idTrecho", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const idTrecho = req.params.idTrecho;
+    console.log("Id do Trecho recebido: " + idTrecho);
+    let cr = {
+        status: "ERROR",
+        messagem: "",
+        payload: undefined
+    };
+    const trecho = req.body;
+    console.log(trecho);
+    let [valida, mensagem] = (0, Validadores_1.trechoValido)(trecho);
+    if (!valida) {
+        cr.messagem = mensagem;
+        res.send(cr);
+    }
+    else {
+        let connection;
+        try {
+            connection = yield oracledb_1.default.getConnection(conexaoOracle_1.oraConnAttribs);
+            const alterarTrecho = `UPDATE TRECHO SET ID_LOCAL_CHEGADA = :1, ID_LOCAL_PARTIDA = :2 WHERE ID_TRECHO = ${idTrecho}`;
+            const dados = [trecho.destino, trecho.origem];
+            let resUpdate = yield connection.execute(alterarTrecho, dados);
+            // COMMIT DA ATUALIZAÇÃO DE DADOS
+            yield connection.commit();
+            const rowsUpdated = resUpdate.rowsAffected;
+            if (rowsUpdated !== undefined && rowsUpdated === 1) {
+                cr.status = "SUCCESS";
+                cr.messagem = "Trecho alterado.";
+                console.log("Trecho atualizado.");
+            }
+            else
+                cr.messagem = "Trecho não alterado. Verifique se o ID do trecho está correto";
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                cr.messagem = e.message;
+                console.log(e.message);
+            }
+            else
+                cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
         }
         finally {
             if (connection !== undefined)

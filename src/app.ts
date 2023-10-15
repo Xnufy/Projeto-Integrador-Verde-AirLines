@@ -8,14 +8,15 @@ import { CustomResponse } from "./CustomResponse";
 import { Aeroporto } from "./Aeroporto";
 import { Aeronave } from "./Aeronave";
 import { Trecho } from "./Trecho";
+import { Voo } from "./Voo";
 
 import { oraConnAttribs } from "./conexaoOracle";
 
-import { rowsToAeronaves, rowsToAeroportos, rowsToVoos } from "./Conversores";
+import { rowsToAeronaves, rowsToAeroportos, rowsToVoos, rowsToTrecho, rowsToListarTrecho} from "./Conversores";
 
 import { aeroportoValida, aeroportoVoo, trechoValido } from "./Validadores";
 import { aeronaveValida } from "./Validadores";
-import { Voo } from "./Voo";
+
 
 const app = express();
 const port = 3000;
@@ -682,11 +683,23 @@ app.get("/listarTrecho", async(req, res)=> {
   try {
     connection = await oracledb.getConnection(oraConnAttribs);
 
-    let resultadoConsulta = await connection.execute(`SELECT * FROM TRECHO`);
+    let resultadoBusca = await connection.execute(`SELECT
+    t.id_trecho,
+    partida.nome_aeroporto AS nome_partida,
+    chegada.nome_aeroporto AS nome_chegada
+FROM
+    trecho t
+JOIN
+    aeroporto partida
+    ON t.id_local_partida = partida.id_aeroporto
+JOIN
+    aeroporto chegada
+    ON t.id_local_chegada = chegada.id_aeroporto
+`);
 
     cr.status = "SUCCESS";
     cr.messagem = "Dados obtidos";
-    cr.payload = (rowsToAeroportos(resultadoConsulta.rows));
+    cr.payload = (rowsToListarTrecho(resultadoBusca.rows));
   }
   catch(e) {
     if(e instanceof Error) {
@@ -698,6 +711,47 @@ app.get("/listarTrecho", async(req, res)=> {
   finally {
     if(connection !== undefined)
       await connection.close();
+
+    res.send(cr);
+  }
+});
+
+app.get("/listarTrechos/:idTrecho", async (req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  let connection;
+  try {
+      connection = await oracledb.getConnection(oraConnAttribs);
+
+      // Parametro recebido na URL
+      const idTrecho = req.params.idTrecho;
+
+      let resultadoConsulta = await connection.execute(`SELECT * FROM TRECHO WHERE ID_TRECHO = ${idTrecho}`);
+      
+      const rowFetched = rowsToTrecho(resultadoConsulta.rows);
+      if(rowFetched !== undefined && rowFetched.length === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Trecho encontrado";
+        cr.payload = rowsToTrecho(resultadoConsulta.rows);
+
+      } else
+        cr.messagem = "Trecho não encontrado. Verifique se o ID do trecho está correto";
+      
+  }
+  catch (e) {
+    if (e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else {
+        cr.messagem = "Erro ao conectar ao Oracle. Sem detalhes";
+    }
+  } 
+  finally {
+    if (connection !== undefined) await connection.close();
 
     res.send(cr);
   }
@@ -723,11 +777,11 @@ app.put("/inserirTrecho", async(req, res) => {
     try {
       const inserirTrecho = 
       `INSERT INTO TRECHO
-      (ID_TRECHO, LOCAL_CHEGADA, LOCAL_PARTIDA)
+      (ID_TRECHO, ID_LOCAL_CHEGADA, ID_LOCAL_PARTIDA)
       VALUES
-      (SEQ_TRECHO.NEXTVAL, :2, :1)`;
+      (SEQ_TRECHO.NEXTVAL, :1, :2)`;
       
-      const dados = [trecho.idTrecho, trecho.destino, trecho.origem];
+      const dados = [trecho.destino, trecho.origem];
 
       connection = await oracledb.getConnection(oraConnAttribs);
       let resInsert = await connection.execute(inserirTrecho, dados);
@@ -751,6 +805,109 @@ app.put("/inserirTrecho", async(req, res) => {
     finally {
       if(connection !== undefined)
         await connection.close();
+      res.send(cr);
+    }
+  }
+});
+
+
+app.delete("/excluirTrecho", async (req, res)=> {
+  const idTrecho = req.body.idTrecho as number;
+
+  console.log("Id da Trecho recebido: " + idTrecho);
+
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+    const deletarTrecho = `DELETE TRECHO WHERE ID_TRECHO = :1`
+    const dados = [idTrecho];
+
+    let resDelete = await connection.execute(deletarTrecho, dados);
+
+    // COMMIT DA DELEÇÃO DE DADOS
+    await connection.commit();
+
+    const rowsDeleted = resDelete.rowsAffected;
+    if(rowsDeleted !== undefined && rowsDeleted === 1) {
+      cr.status = "SUCCESS";
+      cr.messagem = "Trecho excluído.";
+    } else
+      cr.messagem = "Trecho não excluído. Verifique se o ID do Trecho está correto";
+  }
+  catch(e) {
+    if(e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else
+      cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+  }
+  finally {
+    if (connection !== undefined)
+      await connection.close();
+
+    res.send(cr);
+  }
+});
+
+app.put("/alterarTrecho/:idTrecho", async (req, res) => {
+  const idTrecho = req.params.idTrecho;
+  console.log("Id do Trecho recebido: " + idTrecho);
+
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  const trecho: Trecho = req.body as Trecho;
+  console.log(trecho);
+
+  let[valida, mensagem] = trechoValido(trecho);
+  if(!valida) {
+    cr.messagem = mensagem;
+    res.send(cr);
+  } 
+  else {
+    let connection;
+
+    try {
+      connection = await oracledb.getConnection(oraConnAttribs);
+
+      const alterarTrecho = 
+      `UPDATE TRECHO SET ID_LOCAL_CHEGADA = :1, ID_LOCAL_PARTIDA = :2 WHERE ID_TRECHO = ${idTrecho}`;
+  
+      const dados = [trecho.destino, trecho.origem];
+  
+      let resUpdate = await connection.execute(alterarTrecho, dados);
+  
+      // COMMIT DA ATUALIZAÇÃO DE DADOS
+      await connection.commit();
+  
+      const rowsUpdated = resUpdate.rowsAffected;
+      if(rowsUpdated !== undefined && rowsUpdated === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Trecho alterado.";
+        console.log("Trecho atualizado.")
+      } else
+        cr.messagem = "Trecho não alterado. Verifique se o ID do trecho está correto";
+    }
+    catch(e) {
+      if(e instanceof Error) {
+        cr.messagem = e.message;
+        console.log(e.message);
+      } else
+        cr.messagem = "Erro ao conectar ao oracle. Sem detalhes";
+    }
+    finally {
+      if (connection !== undefined)
+        await connection.close();
+  
       res.send(cr);
     }
   }

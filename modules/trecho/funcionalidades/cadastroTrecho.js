@@ -55,8 +55,8 @@ function inserirTrecho() {
     } else
         showStatusMessage("", false);
 
-    const origem = document.getElementById("origem").value;
-    const destino = document.getElementById("destino").value;
+    const origem = document.getElementById("comboAeroportos").value;
+    const destino = document.getElementById("comboAeroportosDestino").value;
 
     fetchInserir({
         origem: origem,

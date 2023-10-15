@@ -10,6 +10,37 @@ function requestListaDeTrecho() {
     .then(T => T.json())
 }
 
+function requestExcluirTrecho(body) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    };
+    return fetch('http://localhost:3000/excluirTrecho', requestOptions)
+    .then(T => T.json())
+}
+
+
+function excluirTrecho(idTrecho) {
+    console.log('Clicou no excluir trecho: ' + idTrecho);
+    requestExcluirTrecho({idTrecho: idTrecho})
+        .then(customResponse => {
+            if(customResponse.status === "SUCCESS") {
+                location.reload();
+            } else
+                console.log(customResponse.messagem);
+        })
+        .catch((e) => {
+            console.log("Não foi possível excluir." + e);
+        })
+}
+
+function redirecionaParaAlterar(idTrecho) {
+    const alterarTrechoHTML = `alterarTrecho.html?idTrecho=${idTrecho}`;
+
+    window.location.href = alterarTrechoHTML;
+}
+
 function preencherTabela(trechos) {
     var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
@@ -20,6 +51,8 @@ function preencherTabela(trechos) {
         rowCabecalho.innerHTML += "<th>ID Trecho</th>";
         rowCabecalho.innerHTML += "<th>Origem</th>";
         rowCabecalho.innerHTML += "<th>Destino</th>";
+        rowCabecalho.innerHTML += "<th>Deletar</th>";
+        rowCabecalho.innerHTML += "<th>Alterar</th>";
     }
     // acessando a referencia pelo id do tbody
     const tblBody = document.getElementById("trecho-list");
@@ -40,8 +73,8 @@ function preencherTabela(trechos) {
 
         row.innerHTML = 
             `<td>${trecho.idTrecho}</td>
-            <td>${trecho.origem}</td>
-            <td>${trecho.destino}</td>
+            <td>${trecho.nomeAeroportoOrigem}</td>
+            <td>${trecho.nomeAeroportoDestino}</td>
             <td>
                 <img 
                     src="../../assets/img/delete_icon.png" 
@@ -66,7 +99,7 @@ function exibirTrecho() {
         // obteve resposta, vamos simplesmente exibir como mensagem:
         if(customResponse.status === "SUCCESS"){
             // vamos obter o que está no payload e chamar a função .
-            console.log("Deu certo a busca de aeroportos");
+            console.log("Deu certo a busca de trechos");
             // agora chamar a função de exibição dos dados em tabela... 
             // no payload voltou o Array com os trechos. 
             // DEVEMOS antes, conferir se o ARRAY não está vazio. Faça essa mudança.

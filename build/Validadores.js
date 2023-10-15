@@ -1,10 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-<<<<<<< Updated upstream
-exports.aeroportoVoo = exports.aeroportoValida = exports.aeronaveValida = void 0;
-=======
-exports.trechoValido = exports.aeroportoValida = exports.aeronaveValida = void 0;
->>>>>>> Stashed changes
+exports.trechoValido = exports.aeroportoVoo = exports.aeroportoValida = exports.aeronaveValida = void 0;
 // neste arquivo colocaremos TODAS as funções de validação para todo tipo de objeto. 
 // diferentemente de outras linguagens, podemos fazer uma função
 // que possa retornar ou um booleano, ou uma string ou um tipo não definido.
@@ -70,22 +66,11 @@ function aeroportoValida(aeroporto) {
     return [valida, mensagem];
 }
 exports.aeroportoValida = aeroportoValida;
-<<<<<<< Updated upstream
 function aeroportoVoo(voo) {
     let valida = false;
     let mensagem = "";
     if (voo.saidaVoo === voo.chegadaVoo) {
         mensagem = "O aeroporto de chegada não pode ser o mesmo de saída.";
-=======
-function trechoValido(trecho) {
-    let valida = false;
-    let mensagem = "";
-    if (trecho.LOCAL_PARTIDA === undefined) {
-        mensagem = "Origem não informada";
-    }
-    if (trecho.LOCAL_CHEGADA === undefined) {
-        mensagem = "Destino não informado";
->>>>>>> Stashed changes
     }
     // se passou em toda a validação.
     if (mensagem === "") {
@@ -93,8 +78,20 @@ function trechoValido(trecho) {
     }
     return [valida, mensagem];
 }
-<<<<<<< Updated upstream
 exports.aeroportoVoo = aeroportoVoo;
-=======
+function trechoValido(trecho) {
+    let valida = false;
+    let mensagem = "";
+    if (trecho.origem === undefined) {
+        mensagem = "Origem não informada";
+    }
+    if (trecho.destino === undefined) {
+        mensagem = "Destino não informado";
+    }
+    // se passou em toda a validação.
+    if (mensagem === "") {
+        valida = true;
+    }
+    return [valida, mensagem];
+}
 exports.trechoValido = trechoValido;
->>>>>>> Stashed changes

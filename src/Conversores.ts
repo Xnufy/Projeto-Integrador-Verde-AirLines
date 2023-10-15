@@ -2,6 +2,7 @@ import { Aeroporto } from "./Aeroporto";
 import { Aeronave } from "./Aeronave";
 import { Voo } from "./Voo";
 import { Trecho } from "./Trecho"
+import { ListarTrecho } from "./ListarTrecho"
 
 export function rowsToAeronaves(oracleRows: unknown[] | undefined) : Array<Aeronave> {
     let aeronaves: Array <Aeronave> = [];
@@ -77,12 +78,30 @@ export function rowsToTrecho(oracleRows: unknown[] | undefined) : Array<Trecho> 
         oracleRows.forEach((registro: any) => {
         trecho = {
             idTrecho: registro.ID_TRECHO,
-            origem: registro.LOCAL_PARTIDA,
-            destino: registro.LOCAL_CHEGADA
+            origem: registro.ID_LOCAL_PARTIDA,
+            destino: registro.ID_LOCAL_CHEGADA
         } as Trecho;
 
         trechos.push(trecho);
         });
     }
     return trechos;
+}
+
+
+export function rowsToListarTrecho(oracleRows: unknown[] | undefined) : Array<ListarTrecho> {
+    let listaTrechos: Array <ListarTrecho> = [];
+    let listaTrecho;
+    if(oracleRows !== undefined) {
+        oracleRows.forEach((registro: any) => {
+        listaTrecho = {
+            idTrecho: registro.ID_TRECHO,
+            nomeAeroportoOrigem: registro.NOME_PARTIDA,
+            nomeAeroportoDestino: registro.NOME_CHEGADA,
+        } as ListarTrecho;
+
+        listaTrechos.push(listaTrecho);
+        });
+    }
+    return listaTrechos;
 }
