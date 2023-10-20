@@ -1,8 +1,8 @@
 export type ListarVoo = {
-  idVoo?: number, 
+  idVoo?: number,
   nomeSaidaVoo?: string,
-  nomeChegadaVoo?: string, 
-  data?: Date,
+  nomeChegadaVoo?: string,
+  data?: string,
   valor?: number,
   trecho?: number
 }

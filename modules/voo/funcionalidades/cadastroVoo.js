@@ -79,14 +79,12 @@ function inserirVoo(){
 
   // se chegou até aqui a execução do código, vamos cadastrar a aeronave. 
   // obtendo os dados: 
-  const numVoo = document.getElementById("numVoo").value;
   const id_trecho = document.getElementById("comboTrecho").value;
   const data = document.getElementById("data").value;
   const preco = document.getElementById("preco").value;
 
   // ESTUDAR O CONCEITO DE PROMISES.
   fetchInserir({
-      idVoo: numVoo, 
       trecho: id_trecho,
       data: data,
       valor: Number(preco),
@@ -114,25 +112,3 @@ function requestIdVoo() {
   return fetch('http://localhost:3000/lastIdVoo', requestOptions)
   .then(T => T.json())
 }
-
-function getIdVoo(){
-  requestIdVoo()
-  .then(customResponse => {
-      // obteve resposta, vamos simplesmente exibir como mensagem:
-      if(customResponse.status === "SUCCESS"){
-
-          let idVoo = customResponse.payload + 1;
-
-          document.getElementById("numVoo").value = String(idVoo);
-      }else{
-          // tratar corretamente o erro... (melhorar...)
-          console.log(customResponse.messagem);
-      }
-      })
-  .catch((e)=>{
-  // FAZER O TRATAMENTO...
-  console.log("Não foi possível exibir." + e);
-  });
-}
-
-getIdVoo();
