@@ -1,0 +1,121 @@
+* {    
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.navbar {
+    margin-bottom: 50px;
+}
+
+.container-fluid {
+    background-color: #16731C;
+    margin-top: -10px;
+}
+
+.btn-menu-expanded {
+    color: white; 
+    font-size: 36px; 
+    padding: 0;
+}
+
+.btn-menu-expanded:active,
+.btn-menu-expanded:hover 
+{
+    background-color: #24872c;
+    border-radius: 10px;
+}
+
+nav .navbar-nav li a{
+    color: white;
+}
+
+nav .navbar-nav li a:hover
+{
+    background-color: #24872c;
+    border-radius: 10px;
+    color: white;
+    transition: 0.5s;
+}
+
+nav .navbar-nav li a:focus 
+{
+    color: white;
+}
+
+i {
+    padding-right: 10px;
+}
+
+.container-compra {
+    margin: 0 30px;
+    border: 1px solid rgba(0, 0, 0, 0.105);
+    border-radius: 2px;
+    background-color: white;
+    margin-bottom: 50px;
+}
+
+.header-form {
+    margin-bottom: 20px;
+}
+
+.container-compra form
+{
+    padding: 50px;
+}
+
+.col > img {
+    width: 80px;
+}
+
+.col > p {
+    font-size: .7rem;
+    margin: 0;
+}
+
+.container-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: auto;
+    padding: 10px;
+    width: 100%;
+}
+
+.col-sm-3 p {
+    margin: 0;
+}
+
+.container-tipo-voo {
+    padding-left: 12px;
+}
+
+.input-calendar {
+    padding: 40px;
+}
+
+.container-calendario {
+    display: none;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+.container-qtd-passageiros {
+    display: none;
+}

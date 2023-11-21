@@ -68,7 +68,7 @@ function preencherComboBox(aeroportos, idAeroportoDestino) {
 
 function preencherComboBoxDestino(aeroportos, idAeroportoOrigem) {
   var comboBoxDestino = document.querySelector("#comboAeroportosDestino");
-   var selectedOption = comboBoxDestino.options[comboBoxDestino.selectedIndex].value;
+  var selectedOption = comboBoxDestino.options[comboBoxDestino.selectedIndex].value;
   comboBoxDestino.innerHTML = "";
 
   let aeroporto = "";
