@@ -62,7 +62,7 @@ export function rowsToListarVoos(oracleRows: unknown[] | undefined): Array<Lista
                 trecho: registro.ID_TRECHO,
                 nomeSaidaVoo: registro.NOME_AEROPORTO_PARTIDA,
                 nomeChegadaVoo: registro.NOME_AEROPORTO_CHEGADA,
-                data_partida: registro.DATA_VOO,
+                data_partida: registro.DATA_VOO_PARTIDA,
                 data_chegada: registro.DATA_VOO_CHEGADA,
                 valor: registro.VALOR,
                 horaPartida: registro.HORARIO_PARTIDA,

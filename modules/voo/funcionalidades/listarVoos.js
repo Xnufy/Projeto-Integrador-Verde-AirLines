@@ -49,7 +49,7 @@ function preencherTabela(voos) {
   var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
   let numeroVoos = voos.length;
-  document.getElementById("titlePage").innerHTML = `<h1>Listar voos (Qtde:${numeroVoos})</h1>`;
+  document.getElementById("titlePage").innerHTML = `<h1>Listar Voos (Qtde:${numeroVoos})</h1>`;
 
   if(numeroVoos > 0) {
       rowCabecalho.innerHTML += "<th>ID Voo</th>";

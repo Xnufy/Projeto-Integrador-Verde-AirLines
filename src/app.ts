@@ -516,16 +516,16 @@ app.put("/inserirVoo", async (req, res) => {
   else {
     let connection;
     try {
-      const inserirVoo =
-        `INSERT INTO VOOS
-      (ID_VOO, DATA_VOO, VALOR, ID_TRECHO)
+      const inserirVoo = `INSERT INTO VOOS(ID_VOO, ID_TRECHO, DATA_VOO_PARTIDA, HORARIO_PARTIDA,
+      DATA_VOO_CHEGADA, HORARIO_CHEGADA, NUMERO_AVIAO, VALOR)
       VALUES
-      (SEQ_VOOS.NEXTVAL,:2,:3,:4)`;
+      (SEQ_VOOS.NEXTVAL,:2,:3,:4,:5,:6,:7,:8)`;
 
       //Formata o tipo da data.
-      const new_date = moment(voo.data_partida, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      const new_date_partida = moment(voo.data_partida, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      const new_date_chegada = moment(voo.data_chegada, 'YYYY-MM-DD').format('DD/MM/YYYY');
 
-      const dados = [new_date, voo.valor?.toFixed(2), voo.trecho];
+      const dados = [voo.trecho, new_date_partida, voo.horaPartida,new_date_chegada, voo.horaChegada, voo.idAeronave, voo.valor?.toFixed(2)];
 
       connection = await oracledb.getConnection(oraConnAttribs);
       let resInsert = await connection.execute(inserirVoo, dados);
@@ -669,7 +669,7 @@ app.get("/listarVoos", async (req, res) => {
       t.id_trecho,
       a_partida.nome_aeroporto AS nome_aeroporto_partida,
       a_chegada.nome_aeroporto AS nome_aeroporto_chegada,
-      v.data_VOO,
+      v.DATA_VOO_PARTIDA,
       v.data_voo_chegada,
       v.valor,
       v.horario_partida,
