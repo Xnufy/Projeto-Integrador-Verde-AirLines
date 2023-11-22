@@ -1,56 +1,43 @@
-
-
 /***
  * Função que busca os aeroportos chamando o serviço.
  */
-function requestListaDeAeroportos() {
+function requestListaDeAeronaves() {
   const requestOptions = {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   };
-  return fetch("http://localhost:3000/listarTrecho", requestOptions).then(
+  return fetch("http://localhost:3000/listarAeronaves", requestOptions).then(
     (T) => T.json()
   );
 }
 
-function preencherComboBox(aeroportos) {
-  var comboBox = document.querySelector("#comboTrecho");
+function preencherComboBoxAeronaves(aeronaves) {
+  var comboBox = document.querySelector("#comboAeronaves");
+  let aeronave = "";
 
-  let aeroporto = "";
-  let currentGroup = null;
-
-  for (let i = 0; i < aeroportos.length; i++) {
-    aeroporto = aeroportos[i];
-
-    if (currentGroup !== aeroporto.nomeAeroportoOrigem) {
-      currentGroup = aeroporto.nomeAeroportoOrigem;
-      const optgroup = document.createElement("optgroup");
-      optgroup.label = "Origem: " + currentGroup;
-      comboBox.appendChild(optgroup);
-    }
-
+  for (let i = 0; i < aeronaves.length; i++) {
+    aeronave = aeronaves[i];
     const option = document.createElement("option");
-    option.value = aeroporto.idTrecho;
-    option.text = "Chegada: " + aeroporto.nomeAeroportoDestino;
-    comboBox.lastChild.appendChild(option);
+    option.value = aeronave.idAeronave;
+    option.text = aeronave.registro;
+    comboBox.appendChild(option);
   }
 }
 
-function exibirAeroportos() {
+function exibirAeronaves() {
   console.log("Entrou no exibir...");
-  requestListaDeAeroportos()
+  requestListaDeAeronaves()
     .then((customResponse) => {
       // obteve resposta, vamos simplesmente exibir como mensagem:
       if (customResponse.status === "SUCCESS") {
         // vamos obter o que está no payload e chamar a função .
-        console.log("Deu certo a busca de aeroportos");
+        console.log("Deu certo a busca de aeronaves");
         // agora chamar a função de exibição dos dados em tabela...
         // no payload voltou o Array com as aeroportos.
         // DEVEMOS antes, conferir se o ARRAY não está vazio. Faça essa mudança.
         console.log("Payload:" + JSON.stringify(customResponse.payload));
         console.log(customResponse.payload);
-        preencherComboBox(JSON.parse(JSON.stringify(customResponse.payload)));
-        responseAeroportos = customResponse.payload;
+        preencherComboBoxAeronaves(JSON.parse(JSON.stringify(customResponse.payload)));
       } else {
         // tratar corretamente o erro... (melhorar...)
         console.log(customResponse.messagem);
@@ -62,4 +49,4 @@ function exibirAeroportos() {
     });
 }
 
-exibirAeroportos();
+exibirAeronaves();

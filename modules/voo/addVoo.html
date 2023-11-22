@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="../../styles/app.css">
     <link rel="stylesheet" href="../../styles/header.css">
     <link rel="stylesheet" href="../../styles/contentCadastro.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,14 +27,32 @@
         <div id="contentCadastro" method="post">
             <form id="form">
                 <div class="campo">
-                    <label for="comboTrecho"><i class="fa-solid fa-plane-departure" style="color: #000000;"></i></label>
+                    <label for="comboTrecho"><i class="bi bi-signpost-2-fill"></i></label>
                     <select name="comboTrecho" id="comboTrecho">
-                        <option selected hidden value="0" id="optionPadraoOrigem">-- Selecione o Trecho --</option>
+                        <option selected hidden value="0" id="optionPadraoTrecho">-- Selecione o Trecho --</option>
                     </select>
                 </div>
                 <div class="campo">
-                    <label for="data"><i class="fa-solid fa-calendar-days" style="color: #000000;"></i></label>
-                    <input type="date" id="data" placeholder="Digite a data do voo">
+                    <label for="dataPartida"><i class="fa-solid fa-calendar-days" style="color: #000000;"></i></label>
+                    <input type="date" id="dataPartida" placeholder="Selecione a data do voo">
+                </div>
+                <div class="campo">
+                    <label for="horaPartida"><i class="bi bi-clock-fill"></i></label>
+                    <input type="time" id="horaPartida" placeholder="Selecione o horario do voo">
+                </div>
+                <div class="campo">
+                    <label for="dataChegada"><i class="fa-solid fa-calendar-days" style="color: #000000;"></i></label>
+                    <input type="date" id="dataChegada" placeholder="Selecione a data de chegada do voo">
+                </div>
+                <div class="campo">
+                    <label for="horaChegada"><i class="bi bi-clock-fill"></i></label>
+                    <input type="time" id="horaChegada" placeholder="Selecione o horario de chegada do voo">
+                </div>
+                <div class="campo">
+                    <label for="comboAeronaves"><i class="bi bi-airplane-fill"></i></label>
+                    <select name="comboAeronaves" id="comboAeronaves">
+                        <option selected hidden value="0" id="optionPadraoAeronave">-- Registro Aeronave --</option>
+                    </select>
                 </div>
                 <div class="campo">
                     <label for="preco"><i class="fa-solid fa-money-check-dollar" style="color: #000000;"></i></label>
@@ -50,5 +69,6 @@
     <script src="funcionalidades/comboBox.js"></script>
     <script src="funcionalidades/cadastroVoo.js"></script>
     <script src="funcionalidades/listarTrecho.js"></script>
+    <script src="funcionalidades/listarComboAeronaves.js"></script>
 </body>
 </html>

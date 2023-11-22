@@ -55,7 +55,11 @@ function preencherTabela(voos) {
       rowCabecalho.innerHTML += "<th>ID Voo</th>";
       rowCabecalho.innerHTML += "<th>Saida</th>";
       rowCabecalho.innerHTML += "<th>Chegada</th>";
-      rowCabecalho.innerHTML += "<th>Data</th>";
+      rowCabecalho.innerHTML += "<th>Data Partida</th>";
+      rowCabecalho.innerHTML += "<th>Horario Partida</th>";
+      rowCabecalho.innerHTML += "<th>Data Chegada</th>";
+      rowCabecalho.innerHTML += "<th>Horario Chegada</th>";
+      rowCabecalho.innerHTML += "<th>Registro Aeronave</th>";
       rowCabecalho.innerHTML += "<th>Valor</th>";
       rowCabecalho.innerHTML += "<th>Excluir</th>";
       rowCabecalho.innerHTML += "<th>Alterar</th>";
@@ -68,7 +72,7 @@ function preencherTabela(voos) {
   for (let i = 0; i < voos.length; i++) {
         console.log(voos[i])
       voo = voos[i];
-      console.log("Dados da aeronave: " + voo);
+      console.log("Dados do voo: " + voo);
       // row representa a linha da tabela (um novo tr)
       const row = document.createElement("tr");
 
@@ -79,11 +83,14 @@ function preencherTabela(voos) {
       else
           row.className = "oddRow";
 
-      row.innerHTML = 
-          `<td>${voo.idVoo}</td>
-          <td>${voo.nomeChegadaVoo}</td>
+      row.innerHTML = `<td>${voo.idVoo}</td>
           <td>${voo.nomeSaidaVoo}</td>
-          <td>${voo.data}</td>
+          <td>${voo.nomeChegadaVoo}</td>
+          <td>${voo.data_partida}</td>
+          <td>${voo.horaPartida}</td>
+          <td>${voo.data_chegada}</td>
+          <td>${voo.horaChegada}</td>
+          <td>${voo.registro}</td>
           <td>${number_formatted}</td>
           <td>
               <img 
@@ -95,7 +102,7 @@ function preencherTabela(voos) {
               <img src="../../assets/img/alterar_icon.svg" 
                   class="alterarIcon"
                   onclick="redirecionaParaAlterar(${voo.idVoo});"/>
-          </td>`
+          </td>`;
   
       // adicionando a linha que representa o aeroporto. 
       tblBody.appendChild(row);
