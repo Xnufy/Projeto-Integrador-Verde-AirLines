@@ -10,10 +10,9 @@ selectElementComboOrigem.addEventListener("change", function () {
   preencherComboBoxDestino(
     JSON.parse(JSON.stringify(responseAeroportos)),
     selectedOption
-  );
-
-  
+  );  
 });
+
 /***
  * Função que busca os aeroportos chamando o serviço.
  */
@@ -42,21 +41,28 @@ function preencherComboBox(aeroportos) {
     comboBoxOrigem.appendChild(option);
   }
 }
+
 function preencherComboBoxDestino(aeroportos, idAeroportoOrigem) {
   var comboBoxDestino = document.querySelector("#selectDestino");
   comboBoxDestino.innerHTML = "";
 
+  // Adiciona a opção padrão "Selecione o Destino" ao HTML
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.text = "Selecione o Destino";
+  defaultOption.hidden = true;
+  comboBoxDestino.appendChild(defaultOption);
+
   let aeroporto = "";
-  // creating all cells
+  // Criando todas as opções dos destinos
   for (let i = 0; i < aeroportos.length; i++) {
     aeroporto = aeroportos[i];
     if (aeroporto.idAeroporto != idAeroportoOrigem) {
       const option = document.createElement("option");
       option.value = aeroporto.idAeroporto;
       option.text = aeroporto.nomeAeroporto;
-      console.log(aeroporto.idAeroporto);
 
-      // adicionando a linha que representa o aeroporto.
+      // Adicionando a opção que representa o aeroporto.
       comboBoxDestino.appendChild(option);
     }
   }

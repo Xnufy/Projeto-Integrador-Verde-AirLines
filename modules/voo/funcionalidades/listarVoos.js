@@ -81,8 +81,8 @@ function preencherTabela(voos) {
 
       row.innerHTML = 
           `<td>${voo.idVoo}</td>
-          <td>${voo.nomeChegadaVoo}</td>
           <td>${voo.nomeSaidaVoo}</td>
+          <td>${voo.nomeChegadaVoo}</td>
           <td>${voo.data}</td>
           <td>${number_formatted}</td>
           <td>

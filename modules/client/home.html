@@ -23,6 +23,7 @@
 
     <!-- estilização -->
     <link rel="stylesheet" href="styles/home.css" />
+    <link rel="stylesheet" href="styles/statusError.css" />
 
     <title>Verde - Linhas Aéreas</title>
   </head>
@@ -76,7 +77,7 @@
           <div class="col-6">
             <div class="form-floating">
               <select class="form-select" id="selectOrigem">
-                <option selected hidden value="0">Selecione a Origem</option>
+                <option selected hidden value="">Selecione a Origem</option>
               </select>
               <label for="selectOrigem"><i class="bi bi-circle"></i>Origem</label>
             </div>
@@ -87,7 +88,7 @@
           <div class="col-6">
             <div class="form-floating">
               <select class="form-select" id="selectDestino">
-                <option selected hidden value="0">Selecione o Destino</option>
+                <option selected hidden value="">Selecione o Destino</option>
               </select>
               <label for="selectDestino"><i class="bi bi-geo-alt-fill"></i
                 ></i>Destino</label>
@@ -107,14 +108,14 @@
         </div>
         <!--calendario da data de ida-->
         <div class="row mb-3 container-calendario">
-          <div class="col-3">
+          <div class="col-4">
             <div class="form-floating calendario-ida">
               <input class="form-control" type="date" name="dataIda" id="dataIda">
               <label for="dataIda"><i class="bi bi-calendar"></i>Data de Ida</label>
             </div>
           </div>
           <!--calendario da data de volta-->
-          <div class="col-3">
+          <div class="col-4">
             <div class="form-floating calendario-volta">
               <input class="form-control" type="date" name="dataVolta" id="dataVolta">
               <label for="dataVolta"><i class="bi bi-calendar"></i>Data de Volta</label>
@@ -132,7 +133,13 @@
           </div>
         </div>
         <!--Botão Submit-->
-        <button type="submit" class="btn btn-success">Confirmar</button>
+        <button 
+          type="button" 
+          class="btn btn-success mb-3" 
+          id="btn-submit"
+          onclick="confirmarBusca();">Confirmar</button>
+        <!--Mostra as mensagens tanto de erro quanto suceso-->
+        <p id="status" class="statusError"></p>
       </form>
     </div>
     <!--Roda pé-->
@@ -164,9 +171,11 @@
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous">
     </script>
-    <!--Javascript - Mostrar Calendários-->
+    <!--JavaScript - Mostrar Calendários-->
     <script src="js/showCalendar.js"></script>
-    <!--Javascript - Preencher Combo Box da Origem e Destino-->
+    <!--JavaScript - Preencher Combo Box da Origem e Destino-->
     <script src="js/comboBoxRota.js"></script>
+    <!--JavaScript - Buscar a passagem -->
+    <script src="js/procurarPassagem.js"></script>
   </body>
 </html>
