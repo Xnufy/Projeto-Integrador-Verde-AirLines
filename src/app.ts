@@ -84,13 +84,12 @@ app.put("/inserirAeronave", async (req, res) => {
     try {
       const inserirAeronave =
         `INSERT INTO AERONAVES
-      (ID_AERONAVE, MODELO, FABRICANTE, ANO_FABRICACAO, ID_AEROPORTO_AERONAVE, LINHAS_ASSENTO, COLUNAS_ASSENTO, REGISTRO)
+      (ID_AERONAVE, MODELO, FABRICANTE, ANO_FABRICACAO, LINHAS_ASSENTO, COLUNAS_ASSENTO, REGISTRO)
       VALUES
-      (SEQ_AERONAVES.NEXTVAL, :1, :2, :3, :4, :5, :6, :7)`;
+      (SEQ_AERONAVES.NEXTVAL, :1, :2, :3, :4, :5, :6)`;
 
       const dados =
-        [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao,
-        aeronave.idAeroportoAeronave, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
+        [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
 
       connection = await oracledb.getConnection(oraConnAttribs);
       let resInsert = await connection.execute(inserirAeronave, dados);
@@ -229,10 +228,10 @@ app.put("/alterarAeronave/:idAeronave", async (req, res) => {
       connection = await oracledb.getConnection(oraConnAttribs);
 
       const alterarAeronave =
-        `UPDATE AERONAVES SET MODELO = :1, FABRICANTE = :2, ANO_FABRICACAO = :3, ID_AEROPORTO_AERONAVE = :4, LINHAS_ASSENTO = :5, COLUNAS_ASSENTO = :6, REGISTRO = :7
+        `UPDATE AERONAVES SET MODELO = :1, FABRICANTE = :2, ANO_FABRICACAO = :3, LINHAS_ASSENTO = :4, COLUNAS_ASSENTO = :5, REGISTRO = :6
       WHERE ID_AERONAVE = ${idAeronave}`;
 
-      const dados = [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao, aeronave.idAeroportoAeronave, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
+      const dados = [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
 
       let resUpdate = await connection.execute(alterarAeronave, dados);
 
