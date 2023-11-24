@@ -84,13 +84,12 @@ app.put("/inserirAeronave", async (req, res) => {
     try {
       const inserirAeronave =
         `INSERT INTO AERONAVES
-      (ID_AERONAVE, MODELO, FABRICANTE, ANO_FABRICACAO, ID_AEROPORTO_AERONAVE, LINHAS_ASSENTO, COLUNAS_ASSENTO, REGISTRO)
+      (ID_AERONAVE, MODELO, FABRICANTE, ANO_FABRICACAO, LINHAS_ASSENTO, COLUNAS_ASSENTO, REGISTRO)
       VALUES
-      (SEQ_AERONAVES.NEXTVAL, :1, :2, :3, :4, :5, :6, :7)`;
+      (SEQ_AERONAVES.NEXTVAL, :1, :2, :3, :4, :5, :6)`;
 
       const dados =
-        [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao,
-        aeronave.idAeroportoAeronave, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
+        [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
 
       connection = await oracledb.getConnection(oraConnAttribs);
       let resInsert = await connection.execute(inserirAeronave, dados);
@@ -229,10 +228,10 @@ app.put("/alterarAeronave/:idAeronave", async (req, res) => {
       connection = await oracledb.getConnection(oraConnAttribs);
 
       const alterarAeronave =
-        `UPDATE AERONAVES SET MODELO = :1, FABRICANTE = :2, ANO_FABRICACAO = :3, ID_AEROPORTO_AERONAVE = :4, LINHAS_ASSENTO = :5, COLUNAS_ASSENTO = :6, REGISTRO = :7
+        `UPDATE AERONAVES SET MODELO = :1, FABRICANTE = :2, ANO_FABRICACAO = :3, LINHAS_ASSENTO = :4, COLUNAS_ASSENTO = :5, REGISTRO = :6
       WHERE ID_AERONAVE = ${idAeronave}`;
 
-      const dados = [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao, aeronave.idAeroportoAeronave, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
+      const dados = [aeronave.modelo, aeronave.fabricante, aeronave.anoFabricacao, aeronave.linhasAssentos, aeronave.colunasAssentos, aeronave.registro];
 
       let resUpdate = await connection.execute(alterarAeronave, dados);
 
@@ -575,15 +574,16 @@ app.put("/alterarVoo/:idVoo", async (req, res) => {
   else {
     let connection;
     try {
-      const inserirVoo =
-        `UPDATE VOOS SET ID_VOO = :1, DATA_VOO = :2, VALOR = :3, ID_TRECHO = :4 WHERE ID_VOO = ${idVoo}`;
+      const inserirVoo = `UPDATE VOOS SET ID_TRECHO = :1, DATA_VOO_PARTIDA = :2, HORARIO_PARTIDA = :3,
+      DATA_VOO_CHEGADA = :4, HORARIO_CHEGADA = :5, NUMERO_AVIAO = :6, VALOR = :7 WHERE ID_VOO = ${idVoo}`;
 
 
 
       //Formata o tipo da data.
-      const new_date = moment(voo.data_partida, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      const new_date_partida = moment(voo.data_partida, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      const new_date_chegada = moment(voo.data_chegada, 'YYYY-MM-DD').format('DD/MM/YYYY');
 
-      const dados = [voo.idVoo, new_date, voo.valor?.toFixed(2), voo.trecho];
+      const dados = [voo.trecho, new_date_partida, voo.horaPartida,new_date_chegada, voo.horaChegada, voo.idAeronave, voo.valor?.toFixed(2)];
 
       connection = await oracledb.getConnection(oraConnAttribs);
       let resInsert = await connection.execute(inserirVoo, dados);
@@ -626,15 +626,34 @@ app.get("/listarVoos/:idVoo", async (req, res) => {
     // Parametro recebido na URL
     const idVoo = req.params.idVoo;
 
-    let resultadoConsulta = await connection.execute(`SELECT * FROM VOOS WHERE ID_VOO = ${idVoo}`);
+    let resultadoConsulta = await connection.execute(`SELECT
+      v.id_voo,
+      t.id_trecho,
+      a_partida.nome_aeroporto AS nome_aeroporto_partida,
+      a_chegada.nome_aeroporto AS nome_aeroporto_chegada,
+      v.DATA_VOO_PARTIDA,
+      v.data_voo_chegada,
+      v.valor,
+      v.horario_partida,
+      v.horario_chegada,
+      aviao.registro,
+      aviao.id_aeronave FROM voos v
+    INNER JOIN
+      trecho t ON v.id_trecho = t.id_trecho
+    INNER JOIN
+      aeroporto a_partida ON t.id_local_partida = a_partida.id_aeroporto
+    INNER JOIN
+      aeroporto a_chegada ON t.id_local_chegada = a_chegada.id_aeroporto
+    JOIN 
+      aeronaves aviao on v.numero_aviao = aviao.id_aeronave WHERE ID_VOO = ${idVoo}`);
 
     const rowFetched = rowsToListarVoos(resultadoConsulta.rows);
     if (rowFetched !== undefined && rowFetched.length === 1) {
       cr.status = "SUCCESS";
-      cr.messagem = "Trecho encontrado";
+      cr.messagem = "Voo encontrado";
       cr.payload = rowsToListarVoos(resultadoConsulta.rows);
     } else
-      cr.messagem = "Trecho não encontrado. Verifique se o ID do trecho está correto";
+      cr.messagem = "Voo não encontrado. Verifique se o ID do voo está correto";
 
   }
   catch (e) {
