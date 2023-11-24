@@ -3,7 +3,7 @@
 /***
  * Função que busca os aeroportos chamando o serviço.
  */
-function requestListaDeAeroportos() {
+function requestListaDeTrechos() {
   const requestOptions = {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -13,32 +13,32 @@ function requestListaDeAeroportos() {
   );
 }
 
-function preencherComboBox(aeroportos) {
+function preencherComboBox(trechos) {
   var comboBox = document.querySelector("#comboTrecho");
 
-  let aeroporto = "";
+  let trecho = "";
   let currentGroup = null;
 
-  for (let i = 0; i < aeroportos.length; i++) {
-    aeroporto = aeroportos[i];
+  for (let i = 0; i < trechos.length; i++) {
+    trecho = trechos[i];
 
-    if (currentGroup !== aeroporto.nomeAeroportoOrigem) {
-      currentGroup = aeroporto.nomeAeroportoOrigem;
+    if (currentGroup !== trecho.nomeAeroportoOrigem) {
+      currentGroup = trecho.nomeAeroportoOrigem;
       const optgroup = document.createElement("optgroup");
       optgroup.label = "Origem: " + currentGroup;
       comboBox.appendChild(optgroup);
     }
 
     const option = document.createElement("option");
-    option.value = aeroporto.idTrecho;
-    option.text = "Chegada: " + aeroporto.nomeAeroportoDestino;
+    option.value = trecho.idTrecho;
+    option.text = "Chegada: " + trecho.nomeAeroportoDestino;
     comboBox.lastChild.appendChild(option);
   }
 }
 
-function exibirAeroportos() {
+function exibirTrechos() {
   console.log("Entrou no exibir...");
-  requestListaDeAeroportos()
+  requestListaDeTrechos()
     .then((customResponse) => {
       // obteve resposta, vamos simplesmente exibir como mensagem:
       if (customResponse.status === "SUCCESS") {
@@ -62,4 +62,4 @@ function exibirAeroportos() {
     });
 }
 
-exibirAeroportos();
+exibirTrechos();
