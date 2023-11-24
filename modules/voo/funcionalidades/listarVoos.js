@@ -87,7 +87,7 @@ function preencherTabela(voos) {
           `<td>${voo.idVoo}</td>
           <td>${voo.nomeSaidaVoo}</td>
           <td>${voo.nomeChegadaVoo}</td>
-          <td>${voo.data}</td>
+          <td>${voo.data_partida}</td>
           <td>${number_formatted}</td>
           <td>
               <img 

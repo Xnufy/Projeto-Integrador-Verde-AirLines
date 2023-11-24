@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- biblioteca icones bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <!-- biblioteca css bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <!-- biblitoeca css font-awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!--icone da pagina-->
+    <link
+      rel="shortcut icon"
+      href="../../assets/img/favicon.png"
+      type="image/x-icon"
+    />
+
+    <!-- estilização -->
+    <link rel="stylesheet" href="styles/home.css" />
+    <link rel="stylesheet" href="styles/listarPassagens.css" />
+    <link rel="stylesheet" href="styles/pagamento.css" />
+
+    <title>Pagamento</title>
+  </head>
+  <body>
+    <!--Menu de navegação-->
+    <nav class="navbar sticky-top navbar-expand-lg">
+      <div class="container-fluid container-header">
+        <a class="navbar-brand d-lg-none" href="#"
+          ><img src="../../assets/img/LogoBranco.svg" alt="" width="110" />
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <a class="navbar-brand d-none d-lg-block" href="#"
+              ><img src="../../assets/img/LogoBranco.svg" alt="" width="110"
+            /></a>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--Conteúdo Pagamento-->
+    <div class="container-sm container-md container-lg">
+      <div class="row d-flex flex-column flex-lg-row">
+        <div class="col-lg">
+          <form>
+            <h1 class="header-pagamento">
+              <i class="bi bi-1-circle"></i>Informações Pessoais
+            </h1>
+            <div class="row mb-3 g-3">
+              <div class="col-auto">
+                <label for="cpfInput" class="col-form-label">CPF:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="cpfInput"
+                  aria-describedby="cpfHelpLine"
+                />
+                <div id="cpfHelpLine" class="form-text">
+                  Deve conter apenas 11 dígitos.
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3 g-3 align-items-center">
+              <div class="col-auto">
+                <label for="nomeCompletoInput" class="col-form-label"
+                  >Nome Completo:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nomeCompletoInput"
+                />
+              </div>
+            </div>
+            <div class="row mb-3 g-3 align-items-center">
+              <div class="col-auto">
+                <label for="emailInput" class="col-form-label">Email:</label>
+                <input type="email" class="form-control" id="emailInput" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <hr class="mt-4 mt-lg-0 d-lg-none" />
+        <div class="col-lg">
+          <form>
+            <h1 class="mb-3 header-pagamento">
+              <i class="bi bi-2-circle"></i>Forma de Pagamento
+            </h1>
+            <div class="container-forma-pagamento">
+              <div class="forma-pagamento mb-1" id="container-pix">
+                <span
+                  ><i class="fa-brands fa-pix" style="color: #000000"></i>
+                  Pix</span
+                >
+              </div>
+              <div class="forma-pagamento mb-1" id="container-credito">
+                <span><i class="bi bi-credit-card"></i> Cartão de Crédito</span>
+              </div>
+            </div>
+          </form>
+        </div>
+        <hr class="d-lg-none mt-4" />
+        <div class="col-lg">
+          <div class="container-resumo-pedido mb-3">
+            <h1 class="header-pagamento">Resumo do Pagamento</h1>
+            <span
+              >Total a Pagar:
+              <strong>R$00,00</strong>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!--Botão Submit-->
+      <button 
+      type="button" 
+      class="btn btn-success mb-3" 
+      id="btn-submit"
+      onclick="confirmarBusca();">Confirmar</button>
+    </div>
+    <!--Roda pé-->
+    <footer class="container-footer">
+      <hr />
+      <div class="container text-center">
+        <div class="row">
+          <div class="col">
+            <img src="../../assets/img/logo_com_nome.png" alt="" />
+          </div>
+          <div class="col">
+            <p>Ac. Publico, 286 - Parque dos Jacarandás</p>
+            <p>Campinas - SP, 13086-061</p>
+          </div>
+          <div class="col">
+            <img src="../../assets/img/logo-puc.png" alt="" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>©Verde Airlines</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!--JavaScript Bootstrap-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

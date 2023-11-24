@@ -1,0 +1,19 @@
+.header-pagamento {
+    color: #105014;
+    font-size: 1.3rem;
+}
+
+.forma-pagamento {
+    width: 300px;
+    padding: 10px;
+    padding-left: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.forma-pagamento > span {
+    margin-left: 5px;
+}
+
+.forma-pagamento:hover {
+    background-color: rgb(244, 242, 242)
+}
