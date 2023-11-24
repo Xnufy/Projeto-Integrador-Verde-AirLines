@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../../styles/contentTable.css">
     <link rel="stylesheet" href="../../styles/addButton.css">
 
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,12 +25,12 @@
                 <li><a href="../aeroporto/listarAeroporto.html">Aeroportos</a></li>
                 <li><a href="../voo/listarVoo.html">Voos</a></li>
                 <li><a href="../aeronave/listarAeronave.html">Aeronaves</a></li>
-                <li><a href="../trecho/listarTrecho.html">Trechos</a></li>
-                <li><a href="../cidade/listarCidade.html">Cidades</a></li>
+                <li><a href="listarTrecho.html">Trechos</a></li>
+                <li><a href="#">Cidades</a></li>
             </ul>
         </div>
         <div id="titlePage">
-            <h1>Listar Voo(Qtde)</h1>
+            <h1>Listar Cidade (Qtde)</h1>
         </div>
         <div class="contentTable">
             <table>
@@ -39,18 +38,20 @@
                     <tr id="cabecalhoTabela">
                     </tr>
                 </thead>
-                <tbody id="voos-list"></tbody>
+                <tbody id="trecho-list"></tbody>
             </table>
         </div>
         <div class="addButton">
-            <button id="redirectAeronave" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
+            <button id="redirectTrecho" title="Adicionar"><i class="fa-solid fa-circle-plus"></i></button>
         </div>
     </div>
     <script>
-        document.getElementById('redirectAeronave').addEventListener('click', function() {
-            window.location.href = 'addVoo.html';
+        document.getElementById('redirectTrecho').addEventListener('click', function() {
+            window.location.href = 'addTrecho.html';
         });
     </script>
-    <script src="funcionalidades/listarVoos.js"></script>
+
+    <script src="funcionalidades/listarTrecho.js"></script>
+
 </body>
 </html>

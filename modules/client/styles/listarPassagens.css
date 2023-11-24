@@ -1,0 +1,52 @@
+.dashed-line {
+    border: 2px dashed #000000;
+    background-color: #fff;
+    width: 300px;
+    margin: 0 10px;
+}
+
+.dados-voo {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    margin-left: 2px;
+}
+
+.dados-voo:hover {
+    background-color: rgb(244, 242, 242);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.dados-voo:last-child {
+    border-bottom: none;
+}
+
+.content-preco {
+    border: 2px solid black;
+}
+
+.text-hora {
+    font-size: 2rem;
+}
+
+#hora-chegada {
+    margin-left: -10px;
+}
+
+.text-sigla {
+    font-weight: lighter;
+}
+
+.text-duracao {
+    color: #16731C;
+    font-weight: 600;
+}
+
+.text-preco {
+    color: #16731C;
+    font-size: 2rem;
+}
+
+.simbolo-real {
+    font-size: 1rem;
+}
