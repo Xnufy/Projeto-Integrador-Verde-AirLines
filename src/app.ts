@@ -516,16 +516,16 @@ app.put("/inserirVoo", async (req, res) => {
   else {
     let connection;
     try {
-      const inserirVoo =
-        `INSERT INTO VOOS
-      (ID_VOO, DATA_VOO, VALOR, ID_TRECHO)
+      const inserirVoo = `INSERT INTO VOOS(ID_VOO, ID_TRECHO, DATA_VOO_PARTIDA, HORARIO_PARTIDA,
+      DATA_VOO_CHEGADA, HORARIO_CHEGADA, NUMERO_AVIAO, VALOR)
       VALUES
-      (SEQ_VOOS.NEXTVAL,:2,:3,:4)`;
+      (SEQ_VOOS.NEXTVAL,:2,:3,:4,:5,:6,:7,:8)`;
 
       //Formata o tipo da data.
-      const new_date = moment(voo.data, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      const new_date_partida = moment(voo.data_partida, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      const new_date_chegada = moment(voo.data_chegada, 'YYYY-MM-DD').format('DD/MM/YYYY');
 
-      const dados = [new_date, voo.valor?.toFixed(2), voo.trecho];
+      const dados = [voo.trecho, new_date_partida, voo.horaPartida,new_date_chegada, voo.horaChegada, voo.idAeronave, voo.valor?.toFixed(2)];
 
       connection = await oracledb.getConnection(oraConnAttribs);
       let resInsert = await connection.execute(inserirVoo, dados);
@@ -581,7 +581,7 @@ app.put("/alterarVoo/:idVoo", async (req, res) => {
 
 
       //Formata o tipo da data.
-      const new_date = moment(voo.data, 'YYYY-MM-DD').format('DD/MM/YYYY');
+      const new_date = moment(voo.data_partida, 'YYYY-MM-DD').format('DD/MM/YYYY');
 
       const dados = [voo.idVoo, new_date, voo.valor?.toFixed(2), voo.trecho];
 
@@ -672,13 +672,13 @@ app.get("/listarPassagens", async (req, res) => {
     const localOrigem = req.query.localOrigem;
     const localDestino = req.query.localDestino;
 
-    let resultadoConsulta = await connection.execute(`SELECT ID_VOO, DATA_VOO, PARTIDA.NOME_AEROPORTO AS nome_aeroporto_partida,
+    let resultadoConsulta = await connection.execute(`SELECT ID_VOO, DATA_VOO_PARTIDA, PARTIDA.NOME_AEROPORTO AS nome_aeroporto_partida,
     CHEGADA.NOME_AEROPORTO AS nome_aeroporto_chegada
     FROM VOOS v
     JOIN TRECHO t ON v.ID_TRECHO  = t.ID_TRECHO
     JOIN AEROPORTO PARTIDA ON t.ID_LOCAL_PARTIDA = PARTIDA.ID_AEROPORTO  
     JOIN AEROPORTO CHEGADA ON t.ID_LOCAL_CHEGADA  = CHEGADA.ID_AEROPORTO 
-    WHERE v.DATA_VOO = '${dataVoo}' 
+    WHERE v.DATA_VOO_PARTIDA = '${dataVoo}' 
     AND PARTIDA.NOME_AEROPORTO = '${localOrigem}' 
     AND CHEGADA.NOME_AEROPORTO = '${localDestino}'`);
 
@@ -724,16 +724,21 @@ app.get("/listarVoos", async (req, res) => {
       t.id_trecho,
       a_partida.nome_aeroporto AS nome_aeroporto_partida,
       a_chegada.nome_aeroporto AS nome_aeroporto_chegada,
-      v.data_VOO,
-      v.valor
-    FROM
-      voos v
+      v.DATA_VOO_PARTIDA,
+      v.data_voo_chegada,
+      v.valor,
+      v.horario_partida,
+      v.horario_chegada,
+      aviao.registro,
+      aviao.id_aeronave FROM voos v
     INNER JOIN
       trecho t ON v.id_trecho = t.id_trecho
     INNER JOIN
       aeroporto a_partida ON t.id_local_partida = a_partida.id_aeroporto
     INNER JOIN
       aeroporto a_chegada ON t.id_local_chegada = a_chegada.id_aeroporto
+    JOIN 
+      aeronaves aviao on v.numero_aviao = aviao.id_aeronave
     `);
 
     cr.status = "SUCCESS";
@@ -750,7 +755,6 @@ app.get("/listarVoos", async (req, res) => {
   finally {
     if (connection !== undefined)
       await connection.close();
-
     res.send(cr);
   }
 });

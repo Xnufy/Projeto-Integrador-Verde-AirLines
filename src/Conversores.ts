@@ -59,11 +59,16 @@ export function rowsToListarVoos(oracleRows: unknown[] | undefined): Array<Lista
         oracleRows.forEach((registro: any) => {
             voo = {
                 idVoo: registro.ID_VOO,
+                trecho: registro.ID_TRECHO,
                 nomeSaidaVoo: registro.NOME_AEROPORTO_PARTIDA,
                 nomeChegadaVoo: registro.NOME_AEROPORTO_CHEGADA,
-                data: registro.DATA_VOO,
+                data_partida: registro.DATA_VOO_PARTIDA,
+                data_chegada: registro.DATA_VOO_CHEGADA,
                 valor: registro.VALOR,
-                trecho: registro.ID_TRECHO
+                horaPartida: registro.HORARIO_PARTIDA,
+                horaChegada: registro.HORARIO_CHEGADA,
+                registro: registro.REGISTRO,
+                idAeronave: registro.ID_AERONAVE
             } as ListarVoo;
 
             // inserindo o novo Array convertido.
