@@ -72,7 +72,6 @@ app.put("/inserirAeronave", async (req, res) => {
   };
 
   const aeronave: Aeronave = req.body as Aeronave;
-  console.log(aeronave);
 
   let [valida, mensagem] = aeronaveValida(aeronave);
   if (!valida) {
@@ -214,7 +213,6 @@ app.put("/alterarAeronave/:idAeronave", async (req, res) => {
   };
 
   const aeronave: Aeronave = req.body as Aeronave;
-  console.log(aeronave);
 
   let [valida, mensagem] = aeronaveValida(aeronave);
   if (!valida) {
@@ -306,7 +304,6 @@ app.put("/inserirAeroporto", async (req, res) => {
   };
 
   const aeroporto: Aeroporto = req.body as Aeroporto;
-  console.log(aeroporto);
 
   let [valida, mensagem] = aeroportoValida(aeroporto);
   if (!valida) {
@@ -447,7 +444,6 @@ app.put("/alterarAeroporto/:idAeroporto", async (req, res) => {
   };
 
   const aeroporto: Aeroporto = req.body as Aeroporto;
-  console.log(aeroporto);
 
   let [valida, mensagem] = aeroportoValida(aeroporto);
   if (!valida) {
@@ -505,7 +501,6 @@ app.put("/inserirVoo", async (req, res) => {
   };
 
   const voo: ListarVoo = req.body as ListarVoo;
-  console.log(voo);
 
   let [valida, mensagem] = aeroportoVoo(voo);
   if (!valida) {
@@ -563,8 +558,6 @@ app.put("/alterarVoo/:idVoo", async (req, res) => {
   const idVoo = req.params.idVoo;
 
   const voo: ListarVoo = req.body as ListarVoo;
-  console.log("VOO", voo);
-  console.log("IDVOO", idVoo)
 
   let [valida, mensagem] = aeroportoVoo(voo);
   if (!valida) {
@@ -957,7 +950,6 @@ app.put("/inserirTrecho", async (req, res) => {
   };
 
   const trecho: Trecho = req.body as Trecho;
-  console.log(trecho);
 
   let [valida, mensagem] = trechoValido(trecho);
   if (!valida) {
@@ -1058,7 +1050,6 @@ app.put("/alterarTrecho/:idTrecho", async (req, res) => {
   };
 
   const trecho: Trecho = req.body as Trecho;
-  console.log(trecho);
 
   let [valida, mensagem] = trechoValido(trecho);
   if (!valida) {
