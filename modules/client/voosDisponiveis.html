@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- biblioteca icones bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <!-- biblioteca css bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <!-- biblitoeca css font-awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!--icone da pagina-->
+    <link
+      rel="shortcut icon"
+      href="../../assets/img/favicon.png"
+      type="image/x-icon"
+    />
+
+    <!-- estilização -->
+    <link rel="stylesheet" href="styles/home.css" />
+    <link rel="stylesheet" href="styles/listarPassagens.css" />
+
+    <title>Selecao Viagem</title>
+  </head>
+  <body>
+    <!--Menu de navegação-->
+    <nav class="navbar sticky-top navbar-expand-lg">
+      <div class="container-fluid container-header">
+        <a class="navbar-brand d-lg-none" href="#"
+          ><img src="../../assets/img/LogoBranco.svg" alt="" width="110"
+        /></a>
+        <button
+          class="navbar-toggler border-0 shadow-none"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="bi bi-list btn-menu-expanded"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav mx-auto d-lg-flex align-items-lg-center">
+            <a class="navbar-brand d-none d-lg-block" href="#"
+              ><img src="../../assets/img/LogoBranco.svg" alt="" width="110"
+            /></a>
+            <li class="nav-item">
+              <a class="nav-link" href="container-compra"
+                ><i class="bi bi-bag-fill"></i>Comprar</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="bi bi-coin"></i>Ofertas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="bi bi-check-lg"></i>Check-in</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-lg container-sm containder-md]">
+      <div class="row">
+        <div class="col-lg-auto text-center text-lg-start">
+          <span class="text-sm text-md text-lg">
+            Brasília
+            <span>(BSB)</span>
+            <span>
+              <i
+                class="fa-solid fa-arrow-right"
+                style="color: #000000"
+              ></i>
+            </span
+            >São Paulo - Congonhas
+            <span class="text-sigla">(CGH)</span>
+             - 13/12
+            </span>
+        </div>
+        <div
+          class="col-lg text-lg-end text-md-center text-center align-self-end"
+        >
+          <span class="text-duracao">7 voos encontrados</span>
+        </div>
+      </div>
+      <hr class="mt-3 mb-3" />
+      <div class="row dados-voo container-sm container-md container-lg">
+        <div class="col-6 col-lg-auto d-flex flex-column">
+          <span class=""
+            ><span class="text-hora" id="hora-partida">05:25</span
+            ><i class="fa-solid fa-plane-departure" style="color: #000000"></i
+          ></span>
+          <span class="text-sigla" id="sigla-partida">BSB</span>
+          <span class="text-duracao">Duração: 1h 30min</span>
+        </div>
+        <div class="col-lg-auto d-flex flex-column text-center align-self-center d-none d-lg-block">
+          <span><hr class="dashed-line" /></span>
+          <span class="text-sigla">Voo 4589</span>
+        </div>
+        <div class="col-6 col-lg-auto d-flex flex-column text-end text-lg-start">
+          <span
+            ><i class="fa-solid fa-plane-arrival" style="color: #000000"></i>
+            <span class="text-hora" id="hora-chegada">07:10</span>
+          </span>
+          <span class="text-sigla" id="sigla-chegada">CGH</span>
+        </div>
+        <div class="col-lg d-lg-flex flex-lg-column text-end align-self-lg-center">
+          <span>
+            <span class="text-preco simbolo-real">R$</span>
+            <span class="text-preco">750,00</span>
+          </span>
+        </div>
+      </div>
+      <div class="row dados-voo container-sm container-md container-lg">
+        <div class="col-6 col-lg-auto d-flex flex-column">
+          <span class=""
+            ><span class="text-hora" id="hora-partida">05:25</span
+            ><i class="fa-solid fa-plane-departure" style="color: #000000"></i
+          ></span>
+          <span class="text-sigla" id="sigla-partida">BSB</span>
+          <span class="text-duracao">Duração: 1h 30min</span>
+        </div>
+        <div class="col-lg-auto d-flex flex-column text-center align-self-center d-none d-lg-block">
+          <span><hr class="dashed-line" /></span>
+          <span class="text-sigla">Voo 4589</span>
+        </div>
+        <div class="col-6 col-lg-auto d-flex flex-column text-end text-lg-start">
+          <span
+            ><i class="fa-solid fa-plane-arrival" style="color: #000000"></i>
+            <span class="text-hora" id="hora-chegada">07:10</span>
+          </span>
+          <span class="text-sigla" id="sigla-chegada">CGH</span>
+        </div>
+        <div class="col-lg d-lg-flex flex-lg-column text-end align-self-lg-center">
+          <span>
+            <span class="text-preco simbolo-real">R$</span>
+            <span class="text-preco">750,00</span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <!--Roda pé-->
+    <footer class="container-footer">
+      <hr />
+      <div class="container text-center">
+        <div class="row">
+          <div class="col">
+            <img src="../../assets/img/logo_com_nome.png" alt="" />
+          </div>
+          <div class="col">
+            <p>Ac. Publico, 286 - Parque dos Jacarandás</p>
+            <p>Campinas - SP, 13086-061</p>
+          </div>
+          <div class="col">
+            <img src="../../assets/img/logo-puc.png" alt="" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p>©Verde Airlines</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!--JavaScript Bootstrap-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

@@ -26,7 +26,6 @@ function requestExcluirAeronave(body) {
 
 
 function excluirAeronave(idAeronave) {
-    console.log('Clicou no excluir aeronave: ' + idAeronave);
     requestExcluirAeronave({idAeronave: idAeronave})
         .then(customResponse => {
             if(customResponse.status === "SUCCESS") {

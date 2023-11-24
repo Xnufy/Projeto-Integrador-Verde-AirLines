@@ -652,6 +652,61 @@ app.get("/listarVoos/:idVoo", async (req, res) => {
   }
 });
 
+/**
+ * Requisição para buscar a passagem pela data de ida e/ou de volta.
+ * Além disso, irá verificar os aeroportos de origem e destino selecionados.
+ */
+app.get("/listarPassagens", async (req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+
+    // Parametro recebido na URL
+    const dataVoo = req.query.dataVoo;
+    const localOrigem = req.query.localOrigem;
+    const localDestino = req.query.localDestino;
+
+    let resultadoConsulta = await connection.execute(`SELECT ID_VOO, DATA_VOO_PARTIDA, PARTIDA.NOME_AEROPORTO AS nome_aeroporto_partida,
+    CHEGADA.NOME_AEROPORTO AS nome_aeroporto_chegada
+    FROM VOOS v
+    JOIN TRECHO t ON v.ID_TRECHO  = t.ID_TRECHO
+    JOIN AEROPORTO PARTIDA ON t.ID_LOCAL_PARTIDA = PARTIDA.ID_AEROPORTO  
+    JOIN AEROPORTO CHEGADA ON t.ID_LOCAL_CHEGADA  = CHEGADA.ID_AEROPORTO 
+    WHERE v.DATA_VOO_PARTIDA = '${dataVoo}' 
+    AND PARTIDA.NOME_AEROPORTO = '${localOrigem}' 
+    AND CHEGADA.NOME_AEROPORTO = '${localDestino}'`);
+
+    const rowFetched = rowsToListarVoos(resultadoConsulta.rows);
+    if (rowFetched !== undefined && rowFetched.length >= 1) {
+      cr.status = "SUCCESS";
+      cr.messagem = "Voo encontrado";
+      cr.payload = rowsToListarVoos(resultadoConsulta.rows);
+    } else
+      cr.messagem = "Voo não encontrado.";
+
+  }
+  catch (e) {
+    if (e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else {
+      cr.messagem = "Erro ao conectar ao Oracle. Sem detalhes";
+    }
+  }
+  finally {
+    if (connection !== undefined) await connection.close();
+
+    res.send(cr);
+  }
+});
+
+
 app.get("/listarVoos", async (req, res) => {
   let cr: CustomResponse = {
     status: "ERROR",

@@ -53,11 +53,13 @@ function selecionaIdaVolta()
       dateControlIda.value = "0000-00-00";
       dateControlVolta.value = "0000-00-00";
 
+      console.log(calendarioIda.value);
+      console.log(calendarioVolta.value);
 
       calendarioIda.addEventListener("change", event => {
-        if (event.target.value) {
+        if (event.target.value.length > 0) {
           calendarioVolta.addEventListener("change", event => {
-            if (event.target.value) {
+            if (event.target.value.length > 0) {
               containerPassageiros.style.display = "block";
             } else {
               containerPassageiros.style.display = "none";
