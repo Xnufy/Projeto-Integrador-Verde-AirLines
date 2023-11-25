@@ -116,8 +116,9 @@ function showStatusMessage(msg, error) {
     var pStatus = document.getElementById("status");
     if (error === true)
         pStatus.className = "statusError";
-    else
+    else 
         pStatus.className = "statusSuccess";
+
     pStatus.textContent = msg;
 }
 
@@ -167,34 +168,18 @@ function confirmarBusca() {
         e.preventDefault();
     })
 
-    if(!selecionouOrigem()) {
-        showStatusMessage("Selecione a origem", true);
-        return;
-    } else
-        showStatusMessage("", false);
+    if(!selecionouOrigem()) return;
+    else    showStatusMessage("", false);
         
-    if(!selecionouDestino()) {
-        showStatusMessage("Selecione o destino", true);
-        return;
-    } else
-        showStatusMessage("", false);
+    if(!selecionouDestino())    return;
+    else    showStatusMessage("", false);
 
-    if(!selecionouTipoVoo()) {
-        showStatusMessage("Selecione o tipo do voo", true);
-        return;
-    } else
-        showStatusMessage("", false);
+    if(!selecionouTipoVoo())    return;
+    else showStatusMessage("", false);
 
     var flagData = selecionouData();
-    if(flagData === 0) {
-        showStatusMessage("Selecione a data de ida", true);
-        return;
-    }
-    else if (flagData === 1) {
-        showStatusMessage("Selecione a data de volta", true);
-        return;
-    }
-    else    showStatusMessage("", false);
+    if(flagData === 0)  return;
+    else if (flagData === 1)    return;
 
     if (!validaData()) {
         showStatusMessage("Data de volta inválida", true);
@@ -202,10 +187,11 @@ function confirmarBusca() {
     }   else    showStatusMessage("", false);
 
     var flagPassageiros = preencheuNumeroPassageiros();
-    if(flagPassageiros === 0)
-        showStatusMessage("Preencha o número de passageiros", true);
-    else if(flagPassageiros === 1)
+    if(flagPassageiros === 0)   return
+    else if(flagPassageiros === 1) {
         showStatusMessage("Número de passageiros inválido", true);
+        return;
+    }
     else
         showStatusMessage("", false);
 
@@ -217,7 +203,7 @@ function confirmarBusca() {
     var dataIdaFormatada = data.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
 
     const dataVolta = document.getElementById('dataVolta');
-    var dataVoltaFomratada = new Date(dataVolta).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+    var dataVoltaFormatada = new Date(dataVolta).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
 
     const selectOrigem = document.getElementById('selectOrigem');
     const optionOrigem = selectOrigem.options[selectOrigem.selectedIndex];
@@ -231,3 +217,28 @@ function confirmarBusca() {
         buscarPassagem(dataIdaFormatada, localOrigem, localDestino);
     }
 }
+
+(() => {
+    "use strict";
+
+    // Buscar todos os formulários nos quais queremos aplicar estilos de validação personalizados do Bootstrap
+    const forms = document.querySelectorAll(".needs-validation");
+
+    // Loop sobre eles e prevenir a submissão ao clicar no botão
+    Array.from(forms).forEach((form) => {
+        const btnSubmit = form.querySelector("[type='button']");
+
+        btnSubmit.addEventListener(
+            "click",
+            (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add("was-validated");
+            },
+            false
+        );
+    });
+})();

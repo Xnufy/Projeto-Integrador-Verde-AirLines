@@ -19,7 +19,11 @@
     />
 
     <!--icone da pagina-->
-    <link rel="shortcut icon" href="../../assets/img/favicon.png" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="../../assets/img/favicon.png"
+      type="image/x-icon"
+    />
 
     <!-- estilização -->
     <link rel="stylesheet" href="styles/home.css" />
@@ -51,7 +55,7 @@
               ><img src="../../assets/img/LogoBranco.svg" alt="" width="110"
             /></a>
             <li class="nav-item">
-              <a class="nav-link" href="container-compra"
+              <a class="nav-link" href="#container-compra"
                 ><i class="bi bi-bag-fill"></i>Comprar</a
               >
             </li>
@@ -67,8 +71,8 @@
         </div>
       </div>
     </nav>
-    <div class="container-compra mx-auto p-2">
-      <form>
+    <div class="container-compra mx-auto p-2" id="container-compra">
+      <form class="needs-validation" novalidate>
         <div class="header-form">
           <h1>Vamos decolar? Escolha sua rota!</h1>
         </div>
@@ -76,10 +80,13 @@
         <div class="row mb-3">
           <div class="col-6">
             <div class="form-floating">
-              <select class="form-select" id="selectOrigem">
+              <select class="form-select" id="selectOrigem" required>
                 <option selected hidden value="">Selecione a Origem</option>
               </select>
-              <label for="selectOrigem"><i class="bi bi-circle"></i>Origem</label>
+              <label for="selectOrigem"
+                ><i class="bi bi-circle"></i>Origem</label
+              >
+              <div class="invalid-feedback">Selecione a origem</div>
             </div>
           </div>
         </div>
@@ -87,38 +94,85 @@
         <div class="row mb-3">
           <div class="col-6">
             <div class="form-floating">
-              <select class="form-select" id="selectDestino">
+              <select class="form-select" id="selectDestino" required>
                 <option selected hidden value="">Selecione o Destino</option>
               </select>
-              <label for="selectDestino"><i class="bi bi-geo-alt-fill"></i
-                ></i>Destino</label>
+              <label for="selectDestino"
+                ><i class="bi bi-geo-alt-fill"></i>Destino</label
+              >
+              <div class="invalid-feedback">Selecione o destino</div>
             </div>
           </div>
         </div>
         <!--Tipo do Voo-->
-        <div class="container-tipo-voo mb-3">
+        <div class="mb-3">
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="radioIda" value="ida">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions"
+              id="radioIda"
+              value="ida"
+              required
+            />
             <label class="form-check-label" for="radioIda">Ida</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="radioIdaVolta" value="idaVolta">
-            <label class="form-check-label" for="radioIdaVolta">Ida e Volta</label>
+            <input
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions"
+              id="radioIdaVolta"
+              value="idaVolta"
+              required
+            />
+            <label class="form-check-label" for="radioIdaVolta"
+              >Ida e Volta</label
+            >
+          </div>
+
+          <div>
+            <input
+              class="d-none"
+              type="radio"
+              name="inlineRadioOptions"
+              value=""
+              required
+            />
+            <div class="invalid-feedback">Selecione o tipo de voo</div>
           </div>
         </div>
         <!--calendario da data de ida-->
         <div class="row mb-3 container-calendario">
           <div class="col-4">
             <div class="form-floating calendario-ida">
-              <input class="form-control" type="date" name="dataIda" id="dataIda">
-              <label for="dataIda"><i class="bi bi-calendar"></i>Data de Ida</label>
+              <input
+                class="form-control"
+                type="date"
+                name="dataIda"
+                id="dataIda"
+                required
+              />
+              <label for="dataIda"
+                ><i class="bi bi-calendar"></i>Data de Ida</label
+              >
+              <div class="invalid-feedback">Selecione a data de ida</div>
             </div>
           </div>
           <!--calendario da data de volta-->
           <div class="col-4">
             <div class="form-floating calendario-volta">
-              <input class="form-control" type="date" name="dataVolta" id="dataVolta">
-              <label for="dataVolta"><i class="bi bi-calendar"></i>Data de Volta</label>
+              <input
+                class="form-control"
+                type="date"
+                name="dataVolta"
+                id="dataVolta"
+                required
+              />
+              <label for="dataVolta"
+                ><i class="bi bi-calendar"></i>Data de Volta</label
+              >
+              <div class="invalid-feedback" id="invalid-feedback-data-de-volta">Selecione a data de volta</div>
             </div>
           </div>
         </div>
@@ -126,18 +180,29 @@
           <div class="row mb-3">
             <div class="col-5">
               <div class="form-floating">
-                <input type="number" class="form-control" id="passageirosInput" min="0"> 
-                <label for="passageirosInput"><i class="bi bi-person-fill"></i>Passageiros(Qtde)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="passageirosInput"
+                  required
+                />
+                <label for="passageirosInput"
+                  ><i class="bi bi-person-fill"></i>Passageiros(Qtde)</label
+                >
+                <div class="invalid-feedback" id="invalid-feedback-passageiros">Preencha o número de passageiros</div>
               </div>
             </div>
           </div>
         </div>
         <!--Botão Submit-->
-        <button 
-          type="button" 
-          class="btn btn-success mb-3" 
+        <button
+          type="button"
+          class="btn btn-success mb-3"
           id="btn-submit"
-          onclick="confirmarBusca();">Confirmar</button>
+          onclick="confirmarBusca();"
+        >
+          Confirmar
+        </button>
         <!--Mostra as mensagens tanto de erro quanto suceso-->
         <p id="status" class="statusError"></p>
       </form>
@@ -169,8 +234,8 @@
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous">
-    </script>
+      crossorigin="anonymous"
+    ></script>
     <!--JavaScript - Mostrar Calendários-->
     <script src="js/showCalendar.js"></script>
     <!--JavaScript - Preencher Combo Box da Origem e Destino-->

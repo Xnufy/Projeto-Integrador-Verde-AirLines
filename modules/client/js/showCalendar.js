@@ -53,9 +53,6 @@ function selecionaIdaVolta()
       dateControlIda.value = "0000-00-00";
       dateControlVolta.value = "0000-00-00";
 
-      console.log(calendarioIda.value);
-      console.log(calendarioVolta.value);
-
       calendarioIda.addEventListener("change", event => {
         if (event.target.value.length > 0) {
           calendarioVolta.addEventListener("change", event => {
