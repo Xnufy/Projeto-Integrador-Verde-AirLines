@@ -31,19 +31,6 @@ function preencheuRegistro(){
     return resultado;
 }
 
-// funcao que verifica se selecionou ou não o fabricante.
-function selecionouAeroporto(){
-    let resultado = false; 
-    var listaAeroportos = document.getElementById("comboAeroportos");
-    var valorSelecionado = listaAeroportos.value;
-    // se quiséssemos obter o TEXTO selecionado. 
-    // var text = listaFabricantes.options[listaFabricantes.selectedIndex].text;
-    if (valorSelecionado !== "0"){
-        resultado = true;
-    }
-    return resultado;
-}
-
 // verifica se o ano é valido
 function anoFabricacaoValido(){
     let resultado = false;
@@ -121,12 +108,6 @@ function inserirAeronave(){
     } else
     showStatusMessage("", false);
 
-    if(!selecionouAeroporto()) {
-        showStatusMessage("Selecione o aeroporto...", true);
-        return
-    } else
-        showStatusMessage("", false);
-
     if(!anoFabricacaoValido()){
       showStatusMessage("Ano deve de 1990 até 2026...", true);
       return;
@@ -150,7 +131,6 @@ function inserirAeronave(){
     const modelo = document.getElementById("modelo").value;
     const fabricante = document.getElementById("comboFabricantes").value;
     const anoFabricacao = document.getElementById("anoFabricacao").value;
-    const idAeroportoAeronave = document.getElementById("comboAeroportos").value;
     const assentosLinha = document.getElementById("num_linha").value;
     const assentosColuna = document.getElementById("num_coluna").value;
     const registro = document.getElementById("registro").value;
@@ -160,7 +140,6 @@ function inserirAeronave(){
         modelo: modelo, 
         fabricante: fabricante, 
         anoFabricacao: anoFabricacao,
-        idAeroportoAeronave: idAeroportoAeronave,
         linhasAssentos: assentosLinha,
         colunasAssentos: assentosColuna,
         registro: registro
@@ -169,8 +148,8 @@ function inserirAeronave(){
           // obteve resposta, vamos simplesmente exibir como mensagem: 
           if(resultado.status === "SUCCESS"){
             showStatusMessage("Aeronave cadastrada... ", false);
-          }else{
-            showStatusMessage("Erro ao cadastrar aeronave...: " + resultado.messagem, true);
+          }else if (resultado.status === "ERROR"){
+            showStatusMessage(resultado.messagem, true);
             console.log(resultado.messagem);
           }
         })

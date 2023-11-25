@@ -71,15 +71,15 @@ function alterarTrecho() {
         destino: destino
     })
     .then(resultado => {
-        if (resultado.status === "SUCCESS") {
-            showStatusMessage("Trecho atualizado com sucesso.", false);
-        } else {
-            showStatusMessage("Erro ao atualizar o Trecho: " + resultado.messagem, true);
-            console.log(resultado.messagem);
+        if(resultado.status === "SUCCESS") {
+            showStatusMessage("Trecho atualizado.", false);
+        } else if (resultado.status === "ERROR") {
+            showStatusMessage(resultado.messagem, true);
         }
     })
-    .catch(() => {
-        showStatusMessage("Erro técnico ao atualizar o Trecho. Contate o suporte.", true);
-        console.log("Falha grave ao atualizar o Trecho.");
-    });
+    .catch((e) => {
+        showStatusMessage("Falha grave ao cadastrar. Verifique sua conexão ou tente novamente mais tarde.", true);
+        console.log("Falha grave ao cadastrar", e);
+        }
+    );
 }

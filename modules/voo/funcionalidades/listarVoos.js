@@ -83,11 +83,14 @@ function preencherTabela(voos) {
       else
           row.className = "oddRow";
 
-      row.innerHTML = 
-          `<td>${voo.idVoo}</td>
+      row.innerHTML = `<td>${voo.idVoo}</td>
           <td>${voo.nomeSaidaVoo}</td>
           <td>${voo.nomeChegadaVoo}</td>
           <td>${voo.data_partida}</td>
+          <td>${voo.horaPartida}</td>
+          <td>${voo.data_chegada}</td>
+          <td>${voo.horaChegada}</td>
+          <td>${voo.registro}</td>
           <td>${number_formatted}</td>
           <td>
               <img 

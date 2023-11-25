@@ -31,19 +31,6 @@ function preencheuRegistro(){
     return resultado;
 }
 
-// funcao que verifica se selecionou ou não o fabricante.
-function selecionouAeroporto(){
-    let resultado = false; 
-    var listaAeroportos = document.getElementById("comboAeroportos");
-    var valorSelecionado = listaAeroportos.value;
-    // se quiséssemos obter o TEXTO selecionado. 
-    // var text = listaFabricantes.options[listaFabricantes.selectedIndex].text;
-    if (valorSelecionado !== "0"){
-        resultado = true;
-    }
-    return resultado;
-}
-
 // verifica se o ano é valido
 function anoFabricacaoValido(){
     let resultado = false;
@@ -122,12 +109,6 @@ function alterarAeronave() {
     } else
     showStatusMessage("", false);
 
-    if(!selecionouAeroporto()) {
-        showStatusMessage("Selecione o aeroporto...", true);
-        return
-    } else
-        showStatusMessage("", false);
-
     if(!anoFabricacaoValido()){
       showStatusMessage("Ano deve de 1990 até 2026...", true);
       return;
@@ -154,13 +135,11 @@ function alterarAeronave() {
     const anoFabricacao = document.getElementById("anoFabricacao").value;
     const assentosLinha = document.getElementById("num_linha").value;
     const assentosColuna = document.getElementById("num_coluna").value;
-    const idAeroportoAeronave = document.getElementById("comboAeroportos").value;
 
     fetchInserir({
         modelo: modelo, 
         fabricante: fabricante, 
         anoFabricacao: anoFabricacao,
-        idAeroportoAeronave: idAeroportoAeronave,
         linhasAssentos: assentosLinha,
         colunasAssentos: assentosColuna,
         registro: registro
@@ -169,8 +148,7 @@ function alterarAeronave() {
         if (resultado.status === "SUCCESS") {
             showStatusMessage("Aeronave atualizada com sucesso.", false);
         } else {
-            showStatusMessage("Erro ao atualizar a aeronave: " + resultado.messagem, true);
-            console.log(resultado.messagem);
+            showStatusMessage(resultado.messagem, true);
         }
     })
     .catch(() => {

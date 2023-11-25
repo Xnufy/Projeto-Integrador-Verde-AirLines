@@ -63,15 +63,15 @@ function inserirTrecho() {
         destino: destino
     })
     .then(resultado => {
-        if(resultado.status === "SUCCESS")
+        if(resultado.status === "SUCCESS") {
             showStatusMessage("Trecho cadastrado...", false);
-        else {
-            showStatusMessage("Erro ao cadastrar trecho..." + message, true);
-            console.log(resultado.message);
+        } else if (resultado.status === "ERROR") {
+            showStatusMessage(resultado.messagem, true);
         }
     })
-    .catch(() => {
-        showStatusMessage("Erro técnico ao cadastrar... Contate o suporte.", true);
-        console.log("Falha grave ao cadastrar");
-    }) 
+    .catch((e) => {
+        showStatusMessage("Falha grave ao cadastrar. Verifique sua conexão ou tente novamente mais tarde.", true);
+        console.log("Falha grave ao cadastrar", e);
+        }
+    );
 }

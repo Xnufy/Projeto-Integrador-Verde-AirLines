@@ -14,7 +14,6 @@ export function rowsToAeronaves(oracleRows: unknown[] | undefined): Array<Aerona
                 modelo: registro.MODELO,
                 fabricante: registro.FABRICANTE,
                 anoFabricacao: registro.ANO_FABRICACAO,
-                idAeroportoAeronave: registro.ID_AEROPORTO_AERONAVE,
                 linhasAssentos: registro.LINHAS_ASSENTO,
                 colunasAssentos: registro.COLUNAS_ASSENTO,
                 registro: registro.REGISTRO
@@ -29,7 +28,6 @@ export function rowsToAeronaves(oracleRows: unknown[] | undefined): Array<Aerona
 export function rowsToAeroportos(oracleRows: unknown[] | undefined): Array<Aeroporto> {
     // vamos converter um array any (resultados do oracle)
     // em um array de Aeroporto
-    console.log(oracleRows)
     let aeroportos: Array<Aeroporto> = [];
     let aeroporto;
     if (oracleRows !== undefined) {
