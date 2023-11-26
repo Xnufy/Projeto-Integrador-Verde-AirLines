@@ -93,7 +93,6 @@ function preencherTabela(trechos) {
 }
 
 function exibirTrecho() {
-    console.log('Entrou no exibir...')
     requestListaDeTrecho()
     .then(customResponse => {
         // obteve resposta, vamos simplesmente exibir como mensagem:

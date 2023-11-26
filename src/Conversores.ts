@@ -57,9 +57,15 @@ export function rowsToListarVoos(oracleRows: unknown[] | undefined): Array<Lista
         oracleRows.forEach((registro: any) => {
             voo = {
                 idVoo: registro.ID_VOO,
+                numAssento: registro.NUM_ASSENTOS,
+                numVoo: registro.NUM_VOOS,
                 trecho: registro.ID_TRECHO,
                 nomeSaidaVoo: registro.NOME_AEROPORTO_PARTIDA,
+                cidade_aeroporto_partida: registro.CIDADE_AEROPORTO_PARTIDA,
+                sigla_aeroporto_partida: registro.SIGLA_AEROPORTO_PARTIDA,
                 nomeChegadaVoo: registro.NOME_AEROPORTO_CHEGADA,
+                cidade_aeroporto_chegada: registro.CIDADE_AEROPORTO_CHEGADA,
+                sigla_aeroporto_chegada: registro.SIGLA_AEROPORTO_CHEGADA,
                 data_partida: registro.DATA_VOO_PARTIDA,
                 data_chegada: registro.DATA_VOO_CHEGADA,
                 valor: registro.VALOR,
@@ -92,7 +98,6 @@ export function rowsToTrecho(oracleRows: unknown[] | undefined): Array<Trecho> {
     }
     return trechos;
 }
-
 
 export function rowsToListarTrecho(oracleRows: unknown[] | undefined): Array<ListarTrecho> {
     let listaTrechos: Array<ListarTrecho> = [];

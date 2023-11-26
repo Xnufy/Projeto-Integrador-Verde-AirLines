@@ -688,17 +688,38 @@ app.get("/listarPassagens", async (req, res) => {
     const localOrigem = req.query.localOrigem;
     const localDestino = req.query.localDestino;
 
-    let resultadoConsulta = await connection.execute(`SELECT ID_VOO, DATA_VOO_PARTIDA, PARTIDA.NOME_AEROPORTO AS nome_aeroporto_partida,
-    CHEGADA.NOME_AEROPORTO AS nome_aeroporto_chegada
-    FROM VOOS v
-    JOIN TRECHO t ON v.ID_TRECHO  = t.ID_TRECHO
-    JOIN AEROPORTO PARTIDA ON t.ID_LOCAL_PARTIDA = PARTIDA.ID_AEROPORTO  
-    JOIN AEROPORTO CHEGADA ON t.ID_LOCAL_CHEGADA  = CHEGADA.ID_AEROPORTO 
-    WHERE v.DATA_VOO_PARTIDA = '${dataVoo}' 
-    AND PARTIDA.NOME_AEROPORTO = '${localOrigem}' 
-    AND CHEGADA.NOME_AEROPORTO = '${localDestino}'`);
-
+    let resultadoConsulta = await connection.execute(
+      `SELECT
+        v.ID_VOO,
+        v.DATA_VOO_PARTIDA,
+        PARTIDA.NOME_AEROPORTO AS nome_aeroporto_partida,
+        PARTIDA.NOME_CIDADE AS cidade_aeroporto_partida,
+        PARTIDA.SIGLA AS sigla_aeroporto_partida,
+        v.HORARIO_PARTIDA,
+        v.DATA_VOO_CHEGADA,
+        CHEGADA.NOME_AEROPORTO AS nome_aeroporto_chegada,
+        CHEGADA.NOME_CIDADE AS cidade_aeroporto_chegada,
+        CHEGADA.SIGLA AS sigla_aeroporto_chegada,
+        v.HORARIO_CHEGADA,
+        v.VALOR,
+        COUNT(ma.ID_ASSENTO_MAPA) AS numAssento
+      FROM
+        MAPA_ASSENTO ma
+        JOIN VOOS v ON v.ID_VOO = ma.NUM_VOO
+        JOIN TRECHO t ON v.ID_TRECHO = t.ID_TRECHO
+        JOIN AEROPORTO PARTIDA ON t.ID_LOCAL_PARTIDA = PARTIDA.ID_AEROPORTO
+        JOIN AEROPORTO CHEGADA ON t.ID_LOCAL_CHEGADA = CHEGADA.ID_AEROPORTO
+      WHERE
+        v.DATA_VOO_PARTIDA = '${dataVoo}'
+        AND PARTIDA.NOME_AEROPORTO = '${localOrigem}'
+        AND CHEGADA.NOME_AEROPORTO = '${localDestino}'
+        AND ma.STATUS = 'livre'
+      GROUP BY
+        v.ID_VOO, v.DATA_VOO_PARTIDA, PARTIDA.NOME_AEROPORTO, PARTIDA.NOME_CIDADE, PARTIDA.SIGLA, v.HORARIO_PARTIDA, v.DATA_VOO_CHEGADA, CHEGADA.NOME_AEROPORTO, CHEGADA.NOME_CIDADE, CHEGADA.SIGLA, v.HORARIO_CHEGADA, v.VALOR`
+    );
+    
     const rowFetched = rowsToListarVoos(resultadoConsulta.rows);
+
     if (rowFetched !== undefined && rowFetched.length >= 1) {
       cr.status = "SUCCESS";
       cr.messagem = "Voo encontrado";

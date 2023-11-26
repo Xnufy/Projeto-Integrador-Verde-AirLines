@@ -128,34 +128,54 @@ function showStatusMessage(msg, error) {
  * @param {*} body - corpo da requisição
  * @returns Retorna um JSON contendo os voos com os filtros escolhidos pelo usuário.
  */
-function requestPassagem(dataVoo, localOrigem, localDestino) {
+function requestPassagem(dataVoo, localOrigem, localDestino, numPassageiros) {
     // Remova a configuração do corpo para solicitações GET
     const requestOptions = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     };
-    return fetch(`http://localhost:3000/listarPassagens?dataVoo=${dataVoo}&localOrigem=${localOrigem}&localDestino=${localDestino}`, requestOptions)
+    return fetch(`http://localhost:3000/listarPassagens?dataVoo=${dataVoo}&localOrigem=${localOrigem}&localDestino=${localDestino}&numPassageiros=${numPassageiros}`, requestOptions)
     .then(response => response.json());
 }
 
 /**
  * Função que utiliza da requisição requestPassagem para realizar as buscas de acordo com o filtro
  * do usuário. O usuário receberá um retorno se foi encontrado a requisição ou se deu erro.
+ * @param {*} dataVoo - data do voo de ida selecionado pelo usuário.
+ * @param {*} localOrigem - local de origem selecionado pelo usuário.
+ * @param {*} localDestino - local de destino selecionado pelo usuário.
+ * @param {*} numPassageiros  - número de bilhetes que serão comprados/número de passageiros a ser alocados.
+ * @param {*} tipoVoo - tipo de voo, se é ida ou se é ida e volta.
+ * @param {*} dataVolta - data de volta, caso o voo for ida e volta.
  */
-function buscarPassagem(dataVoo, localOrigem, localDestino) {
-    requestPassagem(dataVoo, localOrigem, localDestino)
-        .then(customResponse => {
-            if (customResponse.status === "SUCCESS") {
-                window.location.href = 'voosDisponiveis.html';
+function buscarPassagem(dataVoo, localOrigem, localDestino, numPassageiros, tipoVoo, dataVolta) {
+    if (tipoVoo === "ida") {
+        const voosDisponiveis = `voosDisponiveis.html?dataVoo=${dataVoo}&localOrigem=${localOrigem}&localDestino=${localDestino}&numPassageiros=${numPassageiros}&tipoVoo=${tipoVoo}`;
+        window.location.href = voosDisponiveis;
+    } else {
+        requestPassagem(dataVoo, localOrigem, localDestino, numPassageiros)
+        .then(responseIda => {
+            if (responseIda.status === "SUCCESS") {
+                // Se a passagem de ida for encontrada, procurar a de volta
+                return requestPassagem(dataVolta, localDestino, localOrigem, numPassageiros);
             } else {
-                showStatusMessage("Voo não foi encontrado.", true);
-                console.log(customResponse.messagem);
+                showStatusMessage("Voo de ida não foi encontrado.", true);
             }
         })
-        .catch((e) => {
-            console.log("Não foi possível buscar o voo." + e);
+        .then(responseVolta => {
+            if (responseVolta.status === "SUCCESS") {
+                const voosDisponiveis = `voosDisponiveis.html?dataVoo=${dataVoo}&localOrigem=${localOrigem}&localDestino=${localDestino}&numPassageiros=${numPassageiros}&tipoVoo=${tipoVoo}&dataVolta=${dataVolta}`;
+                window.location.href = voosDisponiveis;
+            } else {
+                showStatusMessage("Voo de volta não foi encontrado.", true);
+            }
+        })
+        .catch(() => {
+            showStatusMessage("Erro ao buscar passagens: Tente novamente", true);
         });
+    }
 }
+
 
 /**
  * Ao clicar no botão confirmar é validado todos os campos(é verificado se foi preenchido e se os valores são válidos).
@@ -199,11 +219,12 @@ function confirmarBusca() {
     var radioIdaVolta = document.getElementById('radioIdaVolta');
 
     const dataIda = document.getElementById('dataIda');
-    const data = new Date(dataIda.value);
-    var dataIdaFormatada = data.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+    const dataIdaAux = new Date(dataIda.value);
+    var dataIdaFormatada = dataIdaAux.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
 
     const dataVolta = document.getElementById('dataVolta');
-    var dataVoltaFormatada = new Date(dataVolta).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+    const dataVoltaAux = new Date(dataVolta.value)
+    var dataVoltaFormatada = dataVoltaAux.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
 
     const selectOrigem = document.getElementById('selectOrigem');
     const optionOrigem = selectOrigem.options[selectOrigem.selectedIndex];
@@ -213,9 +234,13 @@ function confirmarBusca() {
     const optionDestino = selectDestino.options[selectDestino.selectedIndex];  
     const localDestino = optionDestino.text;
 
-    if(radioIda.checked) {
-        buscarPassagem(dataIdaFormatada, localOrigem, localDestino);
-    }
+    const numPassageiros = document.getElementById('passageirosInput').value;
+
+    if(radioIda.checked)
+        buscarPassagem(dataIdaFormatada, localOrigem, localDestino, numPassageiros, "ida", dataVoltaFormatada);
+    else 
+        buscarPassagem(dataIdaFormatada, localOrigem, localDestino, numPassageiros, "idaVolta", dataVoltaFormatada);
+
 }
 
 (() => {
