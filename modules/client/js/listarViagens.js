@@ -316,7 +316,7 @@ function exibirViagens() {
     const dataVoo = urlParams.get('dataVoo');
     const localOrigem = urlParams.get('localOrigem');
     const localDestino = urlParams.get('localDestino');
-    const numPassageiros = urlParams.get('numPassageiros');
+    var numPassageiros = urlParams.get('numPassageiros');
     var tipoVoo = urlParams.get('tipoVoo');
     var dataVolta = urlParams.get('dataVolta');
     var idVooIda = urlParams.get('idVooIda');
@@ -338,7 +338,7 @@ function exibirViagens() {
             } else if(tipoVoo === "ida") {
                 btnsConfirmarCompra.forEach(btn => {
                     btn.addEventListener("click", e => {
-                        const mapaAssentosPage = `mapaAssentos.html?idVooIda=${e.target.id}&tipoVoo=${tipoVoo}`;
+                        const mapaAssentosPage = `mapaAssentos.html?idVooIda=${e.target.id}&tipoVoo=${tipoVoo}&numPassageiros=${numPassageiros}`;
                         // Redirecione para a página de mapa de assentos
                         window.location.href = mapaAssentosPage;
                     });
@@ -346,7 +346,7 @@ function exibirViagens() {
             } else {
                 btnsConfirmarCompra.forEach(btn => {
                     btn.addEventListener("click", e => {
-                        const mapaAssentosPage = `mapaAssentos.html?idVooIda=${idVooIda}&idVooVolta=${e.target.id}&tipoVoo=idaVolta`;
+                        const mapaAssentosPage = `mapaAssentos.html?idVooIda=${idVooIda}&idVooVolta=${e.target.id}&tipoVoo=idaVolta&numPassageiros=${numPassageiros}`;
                         // Redirecione para a página de mapa de assentos
                         window.location.href = mapaAssentosPage;
                     });
