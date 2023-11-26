@@ -14,6 +14,11 @@ function requestPassagem(dataVoo, localOrigem, localDestino, numPassageiros) {
     .then(response => response.json());
 }
 
+function buscarPassagemVolta(dataVoo, localOrigem, localDestino, numPassageiros, tipoVoo, idVooIda) {
+    const voosDisponiveis = `voosDisponiveis.html?dataVoo=${dataVoo}&localOrigem=${localOrigem}&localDestino=${localDestino}&numPassageiros=${numPassageiros}&tipoVoo=${tipoVoo}&idVooIda=${idVooIda}`;
+    window.location.href = voosDisponiveis;
+}
+
 /**
  * Função que recebe o array e o índice e vai retorno a duração do voo. Retorna a quantidade
  * de dias, horas e minutos se houver todos esses dados.
@@ -258,7 +263,8 @@ function montarListagemPassagens(viagens) {
 
             // container/col que vai guarda dados pertinentes ao valor do voo
             const colValor = document.createElement("div");
-            colValor.classList.add("col-lg", "d-lg-flex", "flex-lg-column", "text-end", "align-self-lg-center");
+            colValor.classList.add("col-lg", "d-flex", "flex-column", "text-end", "align-self-lg-center");
+            colValor.setAttribute("id", "container-valor")
             containerDadosVoo.appendChild(colValor);
 
             // span que engloba os dados do valor
@@ -271,12 +277,23 @@ function montarListagemPassagens(viagens) {
             simboloReal.textContent = "R$";
             spanValor.appendChild(simboloReal);
 
+            // span que guarda o botão de confirmar voo
+            const spanBtn = document.createElement("span");
+            colValor.appendChild(spanBtn);
+            const btnConfirmarCompra = document.createElement("button");
+            btnConfirmarCompra.type = "button";
+            btnConfirmarCompra.classList.add("btn", "btn-success");
+            btnConfirmarCompra.setAttribute("id", viagens[i].idVoo);
+            btnConfirmarCompra.textContent = "Escolher Voo";
+            spanBtn.appendChild(btnConfirmarCompra);
+
             // texto - valor do voo
             const preco = document.createElement("span");
             preco.classList.add("text-preco");
             preco.textContent = viagens[i].valor.toFixed(2).replace('.', ',');
             spanValor.appendChild(preco);
-            
+
+            containerDadosVoo.setAttribute("id", viagens[i].idVoo);
             containerPrincipal.appendChild(containerDadosVoo);
         }
     }
@@ -300,23 +317,51 @@ function exibirViagens() {
     const localOrigem = urlParams.get('localOrigem');
     const localDestino = urlParams.get('localDestino');
     const numPassageiros = urlParams.get('numPassageiros');
-    const tipoVoo = urlParams.get('tipoVoo');
-    const dataVolta = urlParams.get('dataVolta');
+    var tipoVoo = urlParams.get('tipoVoo');
+    var dataVolta = urlParams.get('dataVolta');
+    var idVooIda = urlParams.get('idVooIda');
 
     requestPassagem(dataVoo, localOrigem, localDestino, numPassageiros)
     .then(customResponse => {
-        if(customResponse.status === "SUCCESS") {
+        if (customResponse.status === "SUCCESS") {
             montarListagemPassagens(JSON.parse(JSON.stringify(customResponse.payload)));
-        }
-        else {
+
+            // Obtenha os botões após a montagem da lista de passagens
+            var btnsConfirmarCompra = document.querySelectorAll(".btn.btn-success");
+
+            if (tipoVoo === "idaVolta") {
+                btnsConfirmarCompra.forEach(btn => {
+                    btn.addEventListener("click", e => {
+                        buscarPassagemVolta(dataVolta, localDestino, localOrigem, numPassageiros, "volta", e.target.id);
+                    });
+                });
+            } else if(tipoVoo === "ida") {
+                btnsConfirmarCompra.forEach(btn => {
+                    btn.addEventListener("click", e => {
+                        const mapaAssentosPage = `mapaAssentos.html?idVooIda=${e.target.id}&tipoVoo=${tipoVoo}`;
+                        // Redirecione para a página de mapa de assentos
+                        window.location.href = mapaAssentosPage;
+                    });
+                });
+            } else {
+                btnsConfirmarCompra.forEach(btn => {
+                    btn.addEventListener("click", e => {
+                        const mapaAssentosPage = `mapaAssentos.html?idVooIda=${idVooIda}&idVooVolta=${e.target.id}&tipoVoo=idaVolta`;
+                        // Redirecione para a página de mapa de assentos
+                        window.location.href = mapaAssentosPage;
+                    });
+                });
+            }
+        } else {
             alert(customResponse.messagem);
             window.location.href = 'home.html';
         }
     })
-    .catch(e => {
-        alert("Erro: voltando a página principal");
+    .catch(() => {
+        alert("Erro: voltando à página principal");
         window.location.href = 'home.html';
-    })
+    });
+
 }
 
 exibirViagens();

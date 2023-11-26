@@ -150,8 +150,18 @@ function requestPassagem(dataVoo, localOrigem, localDestino, numPassageiros) {
  */
 function buscarPassagem(dataVoo, localOrigem, localDestino, numPassageiros, tipoVoo, dataVolta) {
     if (tipoVoo === "ida") {
-        const voosDisponiveis = `voosDisponiveis.html?dataVoo=${dataVoo}&localOrigem=${localOrigem}&localDestino=${localDestino}&numPassageiros=${numPassageiros}&tipoVoo=${tipoVoo}`;
-        window.location.href = voosDisponiveis;
+        requestPassagem(dataVoo, localOrigem, localDestino, localOrigem, numPassageiros)
+        .then(responseIda => {
+            if (responseIda.status === "SUCCESS") {
+                const voosDisponiveis = `voosDisponiveis.html?dataVoo=${dataVoo}&localOrigem=${localOrigem}&localDestino=${localDestino}&numPassageiros=${numPassageiros}&tipoVoo=${tipoVoo}`;
+                window.location.href = voosDisponiveis;
+            } else {
+                showStatusMessage("Voo de ida não foi encontrado.", true);
+            }
+        })
+        .catch(() => {
+            showStatusMessage("Erro ao buscar passagens: Tente novamente", true);
+        });
     } else {
         requestPassagem(dataVoo, localOrigem, localDestino, numPassageiros)
         .then(responseIda => {
