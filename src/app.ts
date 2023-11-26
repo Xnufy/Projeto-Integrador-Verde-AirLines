@@ -722,7 +722,7 @@ app.get("/listarPassagens", async (req, res) => {
 
     if (rowFetched !== undefined && rowFetched.length >= 1) {
       cr.status = "SUCCESS";
-      cr.messagem = "Voo encontrado";
+      cr.messagem = ("Voo encontrado");
       cr.payload = rowsToListarVoos(resultadoConsulta.rows);
     } else
       cr.messagem = "Voo não encontrado.";

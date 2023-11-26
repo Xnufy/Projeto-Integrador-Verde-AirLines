@@ -90,9 +90,13 @@ function duracaoVoo(viagens, i) {
  * do Bootstrap e outras personalizadas pela equipe.
  * @param {*} viagens - recebe os dados de cada viagem/voo
  */
-function montarListagemPassagens(viagens) {
+function montarListagemPassagens(viagens,numPassageiros ) {
     var containerPrincipal = document.getElementById("container-principal");
     let numeroPassagens = viagens.length;
+    var count = 0;
+    for (let i = 0; i < viagens.length; i++) {
+    if (viagens[i].numAssento - numPassageiros > 0) count++;
+    }
 
     if (numeroPassagens > 0) {
         // div/row(boostrap) que guarda o cabeçalho da passagem
@@ -162,9 +166,9 @@ function montarListagemPassagens(viagens) {
         const linhaVoosEncontrados = document.createElement("span");
         linhaVoosEncontrados.classList.add("text-duracao");
         if (viagens.length > 1)
-            linhaVoosEncontrados.textContent = viagens.length + " voos encontrados";
+            linhaVoosEncontrados.textContent = count + " voos encontrados";
         else
-            linhaVoosEncontrados.textContent = viagens.length + " voo encontrado";
+            linhaVoosEncontrados.textContent = count + " voo encontrado";
         containerVoosEcontrados.appendChild(linhaVoosEncontrados);
         
         // acrescenta todo contéudo que tava em container para a div principal
@@ -177,124 +181,126 @@ function montarListagemPassagens(viagens) {
 
         // loop para acessar todos os voos, montar e preencher a estrutura
         for (let i = 0; i < viagens.length; i++) {
-            // container que guarda todo o conteudo de cada voo
-            const containerDadosVoo = document.createElement("div");
-            containerDadosVoo.classList.add("dados-voo", "row", "container-sm", "container-md", "container-lg");
+            if (viagens[i].numAssento - numPassageiros > 0){
+                // container que guarda todo o conteudo de cada voo
+                const containerDadosVoo = document.createElement("div");
+                containerDadosVoo.classList.add("dados-voo", "row", "container-sm", "container-md", "container-lg");
 
-            // container/col(bootstrap) vai guarda os dados do voo de partida
-            const colDadosPartida = document.createElement("div");
-            colDadosPartida.classList.add("col-6", "col-lg-2", "d-flex", "flex-column");
-            containerDadosVoo.appendChild(colDadosPartida);
+                // container/col(bootstrap) vai guarda os dados do voo de partida
+                const colDadosPartida = document.createElement("div");
+                colDadosPartida.classList.add("col-6", "col-lg-2", "d-flex", "flex-column");
+                containerDadosVoo.appendChild(colDadosPartida);
 
-            // span que ta dentro da col que guarda os dados do voo de partida
-            const linhaPartida = document.createElement("span");
-            
-            // span que guarda hora de partida
-            const horaPartida = document.createElement("span");
-            horaPartida.classList.add("text-hora");
-            horaPartida.textContent = viagens[i].horaPartida;
-            linhaPartida.appendChild(horaPartida);
+                // span que ta dentro da col que guarda os dados do voo de partida
+                const linhaPartida = document.createElement("span");
+                
+                // span que guarda hora de partida
+                const horaPartida = document.createElement("span");
+                horaPartida.classList.add("text-hora");
+                horaPartida.textContent = viagens[i].horaPartida;
+                linhaPartida.appendChild(horaPartida);
 
-            // ícone font-awesome - aviao de partida
-            const iconAviaoPartida = document.createElement("i");
-            iconAviaoPartida.classList.add("fa-solid", "fa-plane-departure");
-            linhaPartida.appendChild(iconAviaoPartida);
+                // ícone font-awesome - aviao de partida
+                const iconAviaoPartida = document.createElement("i");
+                iconAviaoPartida.classList.add("fa-solid", "fa-plane-departure");
+                linhaPartida.appendChild(iconAviaoPartida);
 
-            // texto - sigla aeroporto de partida
-            const siglaPartida2 = document.createElement("span");
-            siglaPartida2.classList.add("text-sigla");
-            siglaPartida2.textContent = viagens[i].sigla_aeroporto_partida;
+                // texto - sigla aeroporto de partida
+                const siglaPartida2 = document.createElement("span");
+                siglaPartida2.classList.add("text-sigla");
+                siglaPartida2.textContent = viagens[i].sigla_aeroporto_partida;
 
-            // texto - duração do voo
-            const txtDuracao = document.createElement("span");
-            txtDuracao.classList.add("text-duracao");
-            txtDuracao.textContent = "Duração: " + duracaoVoo(viagens, i);
+                // texto - duração do voo
+                const txtDuracao = document.createElement("span");
+                txtDuracao.classList.add("text-duracao");
+                txtDuracao.textContent = "Duração: " + duracaoVoo(viagens, i);
 
-            // todos os dados são adicionados na col que tem os dados do voo de partida
-            colDadosPartida.appendChild(linhaPartida);
-            colDadosPartida.appendChild(siglaPartida2);
-            colDadosPartida.appendChild(txtDuracao);    
+                // todos os dados são adicionados na col que tem os dados do voo de partida
+                colDadosPartida.appendChild(linhaPartida);
+                colDadosPartida.appendChild(siglaPartida2);
+                colDadosPartida.appendChild(txtDuracao);    
 
-            // col que o numero do voo é uma linha pontilhada
-            const colNumVoo = document.createElement("div");
-            colNumVoo.classList.add("col-lg-auto", "d-flex", "flex-column", "text-center", "align-self-center", "d-none", "d-lg-block");
-            containerDadosVoo.appendChild(colNumVoo);
+                // col que o numero do voo é uma linha pontilhada
+                const colNumVoo = document.createElement("div");
+                colNumVoo.classList.add("col-lg-auto", "d-flex", "flex-column", "text-center", "align-self-center", "d-none", "d-lg-block");
+                containerDadosVoo.appendChild(colNumVoo);
 
-            // linha pontilhada
-            const spanDashedLine = document.createElement("span");
-            const dashedLine = document.createElement("hr")
-            dashedLine.classList.add("dashed-line");
-            spanDashedLine.appendChild(dashedLine);
-            colNumVoo.appendChild(spanDashedLine);
-            
-            // span que guarda o número de voo
-            const spanNumVoo = document.createElement("span");
-            spanNumVoo.classList.add("text-sigla");
-            spanNumVoo.textContent = "Voo " + viagens[i].idVoo;
-            colNumVoo.appendChild(spanNumVoo);
+                // linha pontilhada
+                const spanDashedLine = document.createElement("span");
+                const dashedLine = document.createElement("hr")
+                dashedLine.classList.add("dashed-line");
+                spanDashedLine.appendChild(dashedLine);
+                colNumVoo.appendChild(spanDashedLine);
+                
+                // span que guarda o número de voo
+                const spanNumVoo = document.createElement("span");
+                spanNumVoo.classList.add("text-sigla");
+                spanNumVoo.textContent = "Voo " + viagens[i].idVoo;
+                colNumVoo.appendChild(spanNumVoo);
 
-            // container/col(bootstrap) vai guarda os dados do voo de chegada
-            const colDadosChegada = document.createElement("div");
-            colDadosChegada.classList.add("col-6","col-lg-auto", "d-flex", "flex-column", "text-end", "text-lg-start");
-            containerDadosVoo.appendChild(colDadosChegada);
+                // container/col(bootstrap) vai guarda os dados do voo de chegada
+                const colDadosChegada = document.createElement("div");
+                colDadosChegada.classList.add("col-6","col-lg-auto", "d-flex", "flex-column", "text-end", "text-lg-start");
+                containerDadosVoo.appendChild(colDadosChegada);
 
-            // span que ta dentro da col que guarda os dados do voo de chegada
-            const linhaChegada = document.createElement("span");
+                // span que ta dentro da col que guarda os dados do voo de chegada
+                const linhaChegada = document.createElement("span");
 
-            // icone font-awesome avião chegando
-            const iconAviaoChegada = document.createElement("i");
-            iconAviaoChegada.classList.add("fa-solid", "fa-plane-arrival");
-            linhaChegada.appendChild(iconAviaoChegada);
+                // icone font-awesome avião chegando
+                const iconAviaoChegada = document.createElement("i");
+                iconAviaoChegada.classList.add("fa-solid", "fa-plane-arrival");
+                linhaChegada.appendChild(iconAviaoChegada);
 
-            // texto - hora de chegada
-            const horaChegada = document.createElement("span");
-            horaChegada.classList.add("text-hora");
-            horaChegada.textContent = viagens[i].horaChegada;
-            linhaChegada.appendChild(horaChegada);
-            
-            // texto - sigla aeroporto chegada
-            const siglaChegada2 = document.createElement("span");
-            siglaChegada2.classList.add("text-sigla");
-            siglaChegada2.textContent = viagens[i].sigla_aeroporto_chegada
+                // texto - hora de chegada
+                const horaChegada = document.createElement("span");
+                horaChegada.classList.add("text-hora");
+                horaChegada.textContent = viagens[i].horaChegada;
+                linhaChegada.appendChild(horaChegada);
+                
+                // texto - sigla aeroporto chegada
+                const siglaChegada2 = document.createElement("span");
+                siglaChegada2.classList.add("text-sigla");
+                siglaChegada2.textContent = viagens[i].sigla_aeroporto_chegada
 
-            // todos os dados realcionados ao voo de chegada são adicionados no col
-            colDadosChegada.appendChild(linhaChegada);
-            colDadosChegada.appendChild(siglaChegada2);
+                // todos os dados realcionados ao voo de chegada são adicionados no col
+                colDadosChegada.appendChild(linhaChegada);
+                colDadosChegada.appendChild(siglaChegada2);
 
-            // container/col que vai guarda dados pertinentes ao valor do voo
-            const colValor = document.createElement("div");
-            colValor.classList.add("col-lg", "d-flex", "flex-column", "text-end", "align-self-lg-center");
-            colValor.setAttribute("id", "container-valor")
-            containerDadosVoo.appendChild(colValor);
+                // container/col que vai guarda dados pertinentes ao valor do voo
+                const colValor = document.createElement("div");
+                colValor.classList.add("col-lg", "d-flex", "flex-column", "text-end", "align-self-lg-center");
+                colValor.setAttribute("id", "container-valor")
+                containerDadosVoo.appendChild(colValor);
 
-            // span que engloba os dados do valor
-            const spanValor = document.createElement("span");
-            colValor.appendChild(spanValor);
+                // span que engloba os dados do valor
+                const spanValor = document.createElement("span");
+                colValor.appendChild(spanValor);
 
-            // span que guarda o "R$" com classes estilizidas
-            const simboloReal = document.createElement("span");
-            simboloReal.classList.add("text-preco", "simbolo-real");
-            simboloReal.textContent = "R$";
-            spanValor.appendChild(simboloReal);
+                // span que guarda o "R$" com classes estilizidas
+                const simboloReal = document.createElement("span");
+                simboloReal.classList.add("text-preco", "simbolo-real");
+                simboloReal.textContent = "R$";
+                spanValor.appendChild(simboloReal);
 
-            // span que guarda o botão de confirmar voo
-            const spanBtn = document.createElement("span");
-            colValor.appendChild(spanBtn);
-            const btnConfirmarCompra = document.createElement("button");
-            btnConfirmarCompra.type = "button";
-            btnConfirmarCompra.classList.add("btn", "btn-success");
-            btnConfirmarCompra.setAttribute("id", viagens[i].idVoo);
-            btnConfirmarCompra.textContent = "Escolher Voo";
-            spanBtn.appendChild(btnConfirmarCompra);
+                // span que guarda o botão de confirmar voo
+                const spanBtn = document.createElement("span");
+                colValor.appendChild(spanBtn);
+                const btnConfirmarCompra = document.createElement("button");
+                btnConfirmarCompra.type = "button";
+                btnConfirmarCompra.classList.add("btn", "btn-success");
+                btnConfirmarCompra.setAttribute("id", viagens[i].idVoo);
+                btnConfirmarCompra.textContent = "Escolher Voo";
+                spanBtn.appendChild(btnConfirmarCompra);
 
-            // texto - valor do voo
-            const preco = document.createElement("span");
-            preco.classList.add("text-preco");
-            preco.textContent = viagens[i].valor.toFixed(2).replace('.', ',');
-            spanValor.appendChild(preco);
+                // texto - valor do voo
+                const preco = document.createElement("span");
+                preco.classList.add("text-preco");
+                preco.textContent = viagens[i].valor.toFixed(2).replace('.', ',');
+                spanValor.appendChild(preco);
 
-            containerDadosVoo.setAttribute("id", viagens[i].idVoo);
-            containerPrincipal.appendChild(containerDadosVoo);
+                containerDadosVoo.setAttribute("id", viagens[i].idVoo);
+                containerPrincipal.appendChild(containerDadosVoo);
+            }
         }
     }
 }
@@ -324,7 +330,7 @@ function exibirViagens() {
     requestPassagem(dataVoo, localOrigem, localDestino, numPassageiros)
     .then(customResponse => {
         if (customResponse.status === "SUCCESS") {
-            montarListagemPassagens(JSON.parse(JSON.stringify(customResponse.payload)));
+            montarListagemPassagens(JSON.parse(JSON.stringify(customResponse.payload)), numPassageiros);
 
             // Obtenha os botões após a montagem da lista de passagens
             var btnsConfirmarCompra = document.querySelectorAll(".btn.btn-success");
