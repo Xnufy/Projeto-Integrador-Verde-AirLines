@@ -1146,7 +1146,8 @@ app.get("/reservaAssento/:idVoo",async (req, res) => {
         JOIN TRECHO t ON v.ID_TRECHO = t.ID_TRECHO
         JOIN AERONAVES aviao on v.NUMERO_AVIAO = aviao.ID_AERONAVE
       WHERE
-        ma.NUM_VOO = '${idVoo}'`
+        ma.NUM_VOO = '${idVoo}'
+      ORDER BY ID_ASSENTO_MAPA ASC`
     );
     
     const rowFetched = rowsToListarAssentos(resultadoConsulta.rows);

@@ -126,7 +126,7 @@ export function rowsToListarAssentos(oracleRows: unknown[] | undefined): Array<L
                 idMapaAssento: registro.ID_ASSENTO_MAPA,
                 numVoo: registro.NUM_VOO,
                 numAssentoCliente: registro.NUM_ASSENTO_CLIENTE,
-                referenciaAssento: registro.RF_ASSENTO,
+                referenciaAssento: registro.REF_ASSENTO,
                 statusAsssento: registro.STATUS,
                 ticket: registro.TICKET,
                 valor: registro.VALOR,
