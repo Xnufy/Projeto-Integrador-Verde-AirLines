@@ -59,13 +59,13 @@ function montarMapaAssentos(assentos) {
             `
             <td>
                 <button
-                    class="btn iconAssento ${assentos[j * colunas + i].statusAssento}"
+                    class="btn iconAssento ${assentos[j * colunas + i].statusAsssento}"
                     onclick="assentoClick(this);"
                     id="${referenciaAssento}">
                         <img src="../../assets/img/assento-verde.png" alt="" id="spanIcone">
                 </button>
             </td>
-            `;
+            `
         }
     }
 }
@@ -91,22 +91,36 @@ function exibirAssentos() {
         requestMapaAssento(idVooIda)
         .then(customResponse => {
             if(customResponse.status === "SUCCESS") {
-                montarMapaAssentos(JSON.parse(JSON.stringify(customResponse.payload)))
+                montarMapaAssentos(JSON.parse(JSON.stringify(customResponse.payload)));
+                mudaStatusAssento();
             }
         })
     } else {
         requestMapaAssento(idVooVolta)
         .then(customResponse => {
             if(customResponse.status === "SUCCESS") {
-                    montarMapaAssentos(JSON.parse(JSON.stringify(customResponse.payload)))
+                montarMapaAssentos(JSON.parse(JSON.stringify(customResponse.payload)));
+                mudaStatusAssento();
             }
         })
     }
 }
 
-function verificaStatus() {
-    
+/**
+ * Função que muda o status do assento com base no retorno do status do assento
+ * que vem do backend.
+ */
+function mudaStatusAssento() {
+    var assentos = document.querySelectorAll('.btn.iconAssento');
+    assentos.forEach(assento => {
+        if (assento.classList.contains("ocupado")) {
+            assento.classList.add("disabled");
+            var imgElement = assento.querySelector('#spanIcone');
+            imgElement.src = "../../assets/img/assento-vermelho.png"; // Atualize o caminho conforme necessário
+        }
+    });
 }
+
 
 /**
  * Função que muda o contéudo do botão de acordo com o clique,

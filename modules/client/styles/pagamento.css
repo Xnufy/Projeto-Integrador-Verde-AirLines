@@ -17,3 +17,8 @@
 .forma-pagamento:hover {
     background-color: rgb(244, 242, 242)
 }
+
+.btn.formaPagamento {
+    width: 100%;
+    height: 100%;
+}
