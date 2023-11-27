@@ -1,3 +1,9 @@
+/**
+ * Função que recebe como parâmetro o id do voo e retorna a listagem
+ * dos assentos desse voo.
+ * @param {*} idVoo - id do voo.
+ * @returns - Retorna os assentos de determinado voo.  
+ */
 function requestMapaAssento(idVoo) {
     const requestOptions = {
         method: 'GET',
@@ -7,6 +13,12 @@ function requestMapaAssento(idVoo) {
     .then(response => response.json());
 }
 
+/**
+ * Função que monta de forma automática a tabela que representa o mapa de assentos
+ * de determinado voo. 
+ * @param {*} assentos - objeto de respostas contendo status, mensagem e o conteúdo
+ *
+ */
 function montarMapaAssentos(assentos) {
     var linhas = assentos[0].numLinhasAssento;
     var colunas = assentos[0].numColunasAssento;
@@ -36,7 +48,7 @@ function montarMapaAssentos(assentos) {
 
         for (let j = 0; j < linhas; j++) {
             // Calcula a letra da coluna considerando o alfabeto
-            var letraColuna = alfabeto[i % alfabeto.length];
+            var letraColuna = alfabeto[i];
             // Calcula o número da linha
             var numeroLinha = j + 1;
 
@@ -58,6 +70,11 @@ function montarMapaAssentos(assentos) {
     }
 }
 
+/**
+ * Função que engloba a requisição e montagem do mapa de assentos. Nela há
+ * uma condicional que dita o tipo de parâmetro que será enviado para a
+ * requisição, que é o tipo do voo.
+ */
 function exibirAssentos() {
     // Obtenha a string da consulta da URL
     const queryString = window.location.search;
@@ -69,20 +86,36 @@ function exibirAssentos() {
     var idVooIda = urlParams.get('idVooIda');
     var idVooVolta = urlParams.get('idVooVolta');
     var tipoVoo = urlParams.get('tipoVoo');
-    var numPassageiros = urlParams.get('numPassageiros');
 
     if(tipoVoo === "ida" || tipoVoo === "idaVolta") {
         requestMapaAssento(idVooIda)
         .then(customResponse => {
             if(customResponse.status === "SUCCESS") {
-                if(tipoVoo === "ida") {
-                    montarMapaAssentos(JSON.parse(JSON.stringify(customResponse.payload)))
-                }
+                montarMapaAssentos(JSON.parse(JSON.stringify(customResponse.payload)))
             }
         })
-    } 
+    } else {
+        requestMapaAssento(idVooVolta)
+        .then(customResponse => {
+            if(customResponse.status === "SUCCESS") {
+                    montarMapaAssentos(JSON.parse(JSON.stringify(customResponse.payload)))
+            }
+        })
+    }
 }
 
+function verificaStatus() {
+    
+}
+
+/**
+ * Função que muda o contéudo do botão de acordo com o clique,
+ *  manipulando a classe. Caso o botão não esteja selecionado,
+ * se ele for clicado será adicionado uma classe e personalizado
+ * o seu contéudo, caso contrário,  a classe e removida e retorna
+ * para o conteúdo padrão
+ * @param {*} button - objeto botão que realiza a ação. 
+ */
 function assentoClick(button) {
     var imgElement = button.querySelector('#spanIcone');
     if (button.classList.contains('selected')) {
@@ -94,6 +127,16 @@ function assentoClick(button) {
     }
 }
 
+/**
+ * Função que é acionada quando o usuário confirma os assentos
+ * selecionados. Nela há uma verificação se o número de assentos
+ * selecionados estão de acordo com o número de passagens escolhidas
+ * anteriormente. Se for um voo de ida, após essa função ele vai ser
+ * encaminhado para a página de pagamento. Senão, ele escolherá os
+ * assentos do voo de volta, posteriormente após essa escolha ele vai
+ * para a página de pagamento.
+ * @returns 
+ */
 function confirmarAssentos() {
     // Obtenha a string da consulta da URL
     const queryString = window.location.search;
@@ -106,22 +149,26 @@ function confirmarAssentos() {
     var idVooVolta = urlParams.get('idVooVolta');
     var tipoVoo = urlParams.get('tipoVoo');
     var numPassageiros = urlParams.get('numPassageiros');
+    var assentosIda = urlParams.get('assentosIda');
 
+    // guarda os botões com a classe selected
     var btnsSelecionados = document.querySelectorAll('.selected');
     let count = 0;
 
     // guarda o id dos assentos selecionados
     let idAssentos = []
 
+    // percorre cada botão e joga para o array os ids dele(que são a
+    // referência do assento, ou a numeração)
     btnsSelecionados.forEach((btn) => {
         count++;
         idAssentos.push(btn.id);
     })
 
-    for (let i = 0; i < idAssentos.length; i++) {
+    // transformar o array dos ids armazenados em uma string separada por vírgula
+    let stringAssentos = idAssentos.join(',');
 
-    }
-
+    // exibe um alerta caso o usuário escolha a quantidade inadequada de assentos
     const alerta = document.getElementById("alerta");
     if (count > numPassageiros || count < numPassageiros) {
         alerta.textContent = 
@@ -130,7 +177,18 @@ function confirmarAssentos() {
         return;
     } else {
         alerta.style.display = "none";
-        let stringAssentos = idAssentos.join(',');
+    }
+
+    // condicional para cada tipo de voo
+    if (tipoVoo === "ida") {
+        const pagePagamento = `pagamento.html?idVoo=${idVooIda}&assentosIda=${stringAssentos}`
+        window.location.href = pagePagamento;
+    } else if (tipoVoo === "idaVolta") {
+        const mapaAssentosPage = `mapaAssentos.html?idVooIda=${idVooIda}&idVooVolta=${idVooVolta}&tipoVoo=volta&assentosIda=${stringAssentos}&numPassageiros=${numPassageiros}`
+        window.location.href = mapaAssentosPage;
+    } else {
+        const pagePagamento = `pagamento.html?idVooIda=${idVooIda}&idVooVolta=${idVooVolta}&tipoVoo=volta&assentosIda=${assentosIda}&assentosVolta=${stringAssentos}&numPassageiros=${numPassageiros}`
+        window.location.href = pagePagamento;
     }
 }
 
