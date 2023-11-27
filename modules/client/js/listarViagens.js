@@ -14,6 +14,16 @@ function requestPassagem(dataVoo, localOrigem, localDestino, numPassageiros) {
     .then(response => response.json());
 }
 
+/**
+ * Função que vai redirecionar o usuário para a listagem dos voos de volta disponíveis.
+ * Com base nos parâmetros vai ser montado a url da próxima página que o usuário vai acessar.
+ * @param {*} dataVoo - no caso será a data voo de volta
+ * @param {*} localOrigem - nome do aeroporto de partida
+ * @param {*} localDestino - nome do aeroporto de chegada
+ * @param {*} numPassageiros - número de bilhetes que vão ser comprados
+ * @param {*} tipoVoo - tipo do voo: 'ida', 'idaVolta' ou 'volta'
+ * @param {*} idVooIda - id do voo de ida escolhido
+ */
 function buscarPassagemVolta(dataVoo, localOrigem, localDestino, numPassageiros, tipoVoo, idVooIda) {
     const voosDisponiveis = `voosDisponiveis.html?dataVoo=${dataVoo}&localOrigem=${localOrigem}&localDestino=${localDestino}&numPassageiros=${numPassageiros}&tipoVoo=${tipoVoo}&idVooIda=${idVooIda}`;
     window.location.href = voosDisponiveis;
@@ -89,13 +99,18 @@ function duracaoVoo(viagens, i) {
  * Função que recebe os dados do voo e monta a estrutura HTML, com classes CSS
  * do Bootstrap e outras personalizadas pela equipe.
  * @param {*} viagens - recebe os dados de cada viagem/voo
+ * @param {*} numPassageiros - número de passageiros a serem alocados ou número de bilhetes que vão ser comprados
  */
 function montarListagemPassagens(viagens,numPassageiros ) {
     var containerPrincipal = document.getElementById("container-principal");
     let numeroPassagens = viagens.length;
+    
+    // verifica na requisição os voos que tem assentos disponiveis
+    // com base no número de bilhetes que o usuário deseja.
+    // Armazena em count, o número de voos com os assentos disponiveis
     var count = 0;
     for (let i = 0; i < viagens.length; i++) {
-    if (viagens[i].numAssento - numPassageiros > 0) count++;
+        if (viagens[i].numAssento - numPassageiros > 0) count++;
     }
 
     if (numeroPassagens > 0) {
