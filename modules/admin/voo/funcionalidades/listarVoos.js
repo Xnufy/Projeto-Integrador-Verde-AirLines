@@ -94,12 +94,12 @@ function preencherTabela(voos) {
           <td>${number_formatted}</td>
           <td>
               <img 
-                  src="../../assets/img/delete_icon.png" 
+                  src="../../../assets/img/delete_icon.png" 
                   class="deletarIcon"
                   onclick="excluirVoo(${voo.idVoo});"/>
           </td>
           <td>
-              <img src="../../assets/img/alterar_icon.svg" 
+              <img src="../../../assets/img/alterar_icon.svg" 
                   class="alterarIcon"
                   onclick="redirecionaParaAlterar(${voo.idVoo});"/>
           </td>`;

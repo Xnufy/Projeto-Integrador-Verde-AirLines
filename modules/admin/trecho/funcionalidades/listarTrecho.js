@@ -77,12 +77,12 @@ function preencherTabela(trechos) {
             <td>${trecho.nomeAeroportoDestino}</td>
             <td>
                 <img 
-                    src="../../assets/img/delete_icon.png" 
+                    src="../../../assets/img/delete_icon.png" 
                     class="deletarIcon"
                     onclick="excluirTrecho(${trecho.idTrecho});"/>
             </td>
             <td> 
-                <img src="../../assets/img/alterar_icon.svg" 
+                <img src="../../../assets/img/alterar_icon.svg" 
                     class="alterarIcon" 
                     onclick="redirecionaParaAlterar(${trecho.idTrecho});"/>
             </td>`

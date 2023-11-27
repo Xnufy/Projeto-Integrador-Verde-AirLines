@@ -53,7 +53,11 @@ function exibirAssentos() {
 }
 
 function assentoHover(element) {
-    element.setAttribute("src", "../../assets/img/assento-amarelo.png")
+    var btnsDisponiveis = document.querySelectorAll(".livre")
+    btnsDisponiveis.forEach( btn => {
+            btn.setAttribute("src", "../../assents/img/assento-")
+        }
+    )
 }
 
 function assentoDefault(element) {

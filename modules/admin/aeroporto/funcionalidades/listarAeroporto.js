@@ -85,12 +85,12 @@ function preencherTabela(aeroportos) {
             <td>${aeroporto.uf}</td>
             <td>
                 <img 
-                    src="../../assets/img/delete_icon.png" 
+                    src="../../../assets/img/delete_icon.png" 
                     class="deletarIcon"
                     onclick="excluirAeroporto(${aeroporto.idAeroporto});"/>
             </td>
             <td>
-                <img src="../../assets/img/alterar_icon.svg" 
+                <img src="../../../assets/img/alterar_icon.svg" 
                     class="alterarIcon"
                     onclick="redirecionaParaAlterar(${aeroporto.idAeroporto});"/>
             </td>`

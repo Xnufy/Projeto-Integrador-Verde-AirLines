@@ -86,12 +86,12 @@ function preencherTabela(aeronaves) {
             <td>${aeronave.linhasAssentos * aeronave.colunasAssentos}</td>
             <td>
                 <img 
-                    src="../../assets/img/delete_icon.png" 
+                    src="../../../assets/img/delete_icon.png" 
                     class="deletarIcon"
                     onclick="excluirAeronave(${aeronave.idAeronave});"/>
             </td>
             <td>
-                <img src="../../assets/img/alterar_icon.svg" 
+                <img src="../../../assets/img/alterar_icon.svg" 
                     class="alterarIcon"
                     onclick="redirecionaParaAlterar(${aeronave.idAeronave});"/>
             </td>`

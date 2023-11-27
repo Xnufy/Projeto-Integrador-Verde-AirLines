@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="../../styles/app.css" />
-    <link rel="stylesheet" href="../../styles/header.css" />
-    <link rel="stylesheet" href="../../styles/contentCadastro.css" />
+    <link rel="stylesheet" href="../styles/app.css" />
+    <link rel="stylesheet" href="../styles/header.css" />
+    <link rel="stylesheet" href="../styles/contentCadastro.css" />
 
     <link
       rel="stylesheet"
@@ -29,7 +29,7 @@
     <div id="app">
       <div id="header">
         <a href="../home.html"
-          ><img src="../../assets/img/Logo-Verde-Em-Branco.png" alt="Logo"
+          ><img src="../../../assets/img/Logo-Verde-Em-Branco.png" alt="Logo"
         /></a>
         <h1>Aeronaves</h1>
         <a href="listarAeronave.html"><p>Voltar</p></a>
@@ -49,6 +49,7 @@
           <div class="campo">
             <label for="comboFabricantes"><i class="fa-solid fa-wrench" style="color: #000000"></i></label>
             <select name="comboFabricantes" id="comboFabricantes">
+              <option selected hidden value="0" id="optionPadrao">-- Selecione o Fabricante --</option>
               <option value="Airbus">Airbus</option>
               <option value="Embraer">Embraer</option>
               <option value="Boeing">Boeing</option>
@@ -103,6 +104,7 @@
         </form>
       </div>
     </div>
+    <script src="funcionalidades/comboBox.js"></script>
     <script src="funcionalidades/preencherCamposAeronave.js"></script>
     <script src="funcionalidades/alterarAeronave.js"></script>
   </body>

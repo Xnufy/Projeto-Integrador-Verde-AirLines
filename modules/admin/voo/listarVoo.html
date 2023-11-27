@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="../../styles/app.css">
-    <link rel="stylesheet" href="../../styles/header.css">
-    <link rel="stylesheet" href="../../styles/contentTable.css">
-    <link rel="stylesheet" href="../../styles/addButton.css">
+    <link rel="stylesheet" href="../styles/app.css">
+    <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="../styles/contentTable.css">
+    <link rel="stylesheet" href="../styles/addButton.css">
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -21,16 +21,16 @@
 <body>
     <div id="app">
         <div id="header">
-            <a href="../home.html"><img src="../../assets/img/Logo-Verde-Em-Branco.png" alt="Logo"></a>
+            <a href="../home.html"><img src="../../../assets/img/Logo-Verde-Em-Branco.png" alt="Logo"></a>
             <ul>
                 <li><a href="../aeroporto/listarAeroporto.html">Aeroportos</a></li>
                 <li><a href="../voo/listarVoo.html">Voos</a></li>
-                <li><a href="listarAeronave.html">Aeronaves</a></li>
+                <li><a href="../aeronave/listarAeronave.html">Aeronaves</a></li>
                 <li><a href="../trecho/listarTrecho.html">Trechos</a></li>
             </ul>
         </div>
         <div id="titlePage">
-            <h1>Listar Aeronave(Qtde)</h1>
+            <h1>Listar Voo(Qtde)</h1>
         </div>
         <div class="contentTable">
             <table>
@@ -38,7 +38,7 @@
                     <tr id="cabecalhoTabela">
                     </tr>
                 </thead>
-                <tbody id="aeronaves-list"></tbody>
+                <tbody id="voos-list"></tbody>
             </table>
         </div>
         <div class="addButton">
@@ -47,9 +47,9 @@
     </div>
     <script>
         document.getElementById('redirectAeronave').addEventListener('click', function() {
-            window.location.href = 'addAeronave.html';
+            window.location.href = 'addVoo.html';
         });
     </script>
-    <script src="funcionalidades/listarAeronave.js"></script>
+    <script src="funcionalidades/listarVoos.js"></script>
 </body>
 </html>

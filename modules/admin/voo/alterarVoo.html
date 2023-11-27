@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="../../styles/app.css">
-    <link rel="stylesheet" href="../../styles/header.css">
-    <link rel="stylesheet" href="../../styles/contentCadastro.css">
+    <link rel="stylesheet" href="../styles/app.css">
+    <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="../styles/contentCadastro.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
 <body>
     <div id="app">
         <div id="header">
-            <a href="../home.html"><img src="../../assets/img/Logo-Verde-Em-Branco.png" alt="Logo"></a>
+            <a href="../home.html"><img src="../../../assets/img/Logo-Verde-Em-Branco.png" alt="Logo"></a>
             <h1>Voos</h1>
             <a href="listarVoo.html"><p>Voltar</p></a>
         </div>
@@ -60,14 +60,20 @@
                 </div>
                 <p id="status" class="statusError"></p>
                 <div class="campoButton">
-                    <i class="fa-solid fa-plus" style="color: #fff;"></i>
-                    <button title="Adicionar" type="button" onclick="inserirVoo();">Adicionar</button>
+                  <i class="fa-solid fa-plus" style="color: #fff"></i>
+                  <button
+                    title="Adicionar"
+                    type="button"
+                    onclick="alterarVoo();"
+                    id="btnCadastrar">
+                    Alterar
+                  </button>
                 </div>
             </form>
         </div>
     </div>
-    <script src="funcionalidades/cadastroVoo.js"></script>
-    <script src="funcionalidades/listarTrecho.js"></script>
+    <script src="funcionalidades/preencherCamposVoo.js"></script>
+    <script src="funcionalidades/alterarVoo.js"></script>
     <script src="funcionalidades/listarComboAeronaves.js"></script>
 </body>
 </html>

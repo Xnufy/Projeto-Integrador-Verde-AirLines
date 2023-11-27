@@ -20,3 +20,15 @@
     width: 32px;
     margin-left: -8px;
   }
+
+.btn {
+  padding: 0;
+}
+
+.btn:active,
+.btn:focus,
+.btn.disabled{
+  border: none;
+  border-color: transparent;
+  outline: none;
+}
