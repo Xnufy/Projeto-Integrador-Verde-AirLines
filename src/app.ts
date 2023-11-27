@@ -11,7 +11,7 @@ import { Trecho } from "./Trecho";
 
 import { oraConnAttribs } from "./conexaoOracle";
 
-import { rowsToAeronaves, rowsToAeroportos, rowsToTrecho, rowsToListarTrecho, rowsToListarVoos } from "./Conversores";
+import { rowsToAeronaves, rowsToAeroportos, rowsToTrecho, rowsToListarTrecho, rowsToListarVoos, rowsToListarAssentos } from "./Conversores";
 
 import { aeroportoValida, aeroportoVoo, trechoValido } from "./Validadores";
 import { aeronaveValida } from "./Validadores";
@@ -1061,7 +1061,6 @@ app.delete("/excluirTrecho", async (req, res) => {
 
 app.put("/alterarTrecho/:idTrecho", async (req, res) => {
   const idTrecho = req.params.idTrecho;
-  console.log("Id do Trecho recebido: " + idTrecho);
 
   let cr: CustomResponse = {
     status: "ERROR",
@@ -1116,6 +1115,64 @@ app.put("/alterarTrecho/:idTrecho", async (req, res) => {
     }
   }
 });
+
+app.get("/reservaAssento/:idVoo",async (req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined
+  };
+
+  var idVoo = req.params.idVoo;
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+
+    let resultadoConsulta = await connection.execute(
+      `SELECT
+        ma.ID_ASSENTO_MAPA,
+        ma.NUM_VOO,
+        ma.NUM_ASSENTO_CLIENTE,
+        ma.REF_ASSENTO,
+        ma.STATUS,
+        ma.TICKET,
+        v.VALOR,
+        aviao.LINHAS_ASSENTO,
+        aviao.COLUNAS_ASSENTO
+      FROM
+        MAPA_ASSENTO ma
+        JOIN VOOS v ON v.ID_VOO = ma.NUM_VOO
+        JOIN TRECHO t ON v.ID_TRECHO = t.ID_TRECHO
+        JOIN AERONAVES aviao on v.NUMERO_AVIAO = aviao.ID_AERONAVE
+      WHERE
+        ma.NUM_VOO = '${idVoo}'`
+    );
+    
+    const rowFetched = rowsToListarAssentos(resultadoConsulta.rows);
+
+    if (rowFetched !== undefined && rowFetched.length >= 1) {
+      cr.status = "SUCCESS";
+      cr.messagem = ("Mapa de assento encontrado");
+      cr.payload = rowsToListarAssentos(resultadoConsulta.rows);
+    } else
+      cr.messagem = "Mapa de assento não encontrado.";
+
+  }
+  catch (e) {
+    if (e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else {
+      cr.messagem = "Erro ao conectar ao Oracle. Sem detalhes";
+    }
+  }
+  finally {
+    if (connection !== undefined) await connection.close();
+
+    res.send(cr);
+  }
+})
 
 app.listen(port, () => {
   console.log("Servidor HTTP rodando...");

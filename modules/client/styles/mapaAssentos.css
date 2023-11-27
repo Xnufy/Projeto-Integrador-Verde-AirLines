@@ -1,0 +1,21 @@
+.seat {
+    font-size: 24px;
+    margin: 5px;
+    cursor: pointer;
+    color: #3498db;
+  }
+
+  .reserved {
+    color: #e74c3c;
+  }
+
+  #assentos-container {
+    display: grid;
+    grid-template-columns: repeat(25, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 5px;
+  }
+
+  #spanIcone {
+      width: 32px;
+  }

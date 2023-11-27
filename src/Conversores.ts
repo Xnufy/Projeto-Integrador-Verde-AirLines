@@ -3,6 +3,7 @@ import { Aeronave } from "./Aeronave";
 import { ListarVoo } from "./ListarVoos";
 import { Trecho } from "./Trecho"
 import { ListarTrecho } from "./ListarTrecho"
+import { ListarAssentos } from "./ListarMapaAssentos";
 
 export function rowsToAeronaves(oracleRows: unknown[] | undefined): Array<Aeronave> {
     let aeronaves: Array<Aeronave> = [];
@@ -114,4 +115,27 @@ export function rowsToListarTrecho(oracleRows: unknown[] | undefined): Array<Lis
         });
     }
     return listaTrechos;
+}
+
+export function rowsToListarAssentos(oracleRows: unknown[] | undefined): Array<ListarAssentos> {
+    let listarAssentos: Array<ListarAssentos> = [];
+    let listarAssento;
+    if (oracleRows !== undefined) {
+        oracleRows.forEach((registro: any) => {
+            listarAssento = {
+                idMapaAssento: registro.ID_ASSENTO_MAPA,
+                numVoo: registro.NUM_VOO,
+                numAssentoCliente: registro.NUM_ASSENTO_CLIENTE,
+                referenciaAssento: registro.RF_ASSENTO,
+                statusAsssento: registro.STATUS,
+                ticket: registro.TICKET,
+                valor: registro.VALOR,
+                numLinhasAssento: registro.LINHAS_ASSENTO,
+                numColunasAssento: registro.COLUNAS_ASSENTO,
+            } as ListarAssentos;
+
+            listarAssentos.push(listarAssento);
+        });
+    }
+    return listarAssentos;
 }
