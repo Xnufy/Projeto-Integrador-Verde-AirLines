@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="styles/listarPassagens.css" />
     <link rel="stylesheet" href="styles/pagamento.css" />
     <link rel="stylesheet" href="styles/mapaAssentos.css">
-    
+
     <title>Reserva de Assentos</title>
   </head>
   <body>
@@ -59,26 +59,177 @@
       </div>
     </nav>
     <!--Conteúdo Assentos-->
-    <div class="container-sm container-md container-lg">
-      <div id="assentos-container">
-        <img src="../../assets/img/assento-azul.png" onmouseover="assentoHover(this);" onmouseout="assentoDefault(this)" id="spanIcone" alt="">
-        <script>
-          for (let i = 1; i <= 100; i++) {
-            document.write(
-              `<i class="fas fa-chair seat" onclick="reservarAssento(this)" data-assento="${i}"></i>`
-            );
-          }
-        </script>
-      </div>
+    <div class="container-sm container-md container-lg" >
+
+      <table class="table table-success table-striped">
+        <thead>
+          <th scope="row"></th>
+          <th scope="row">1</th>
+          <th scope="row">2</th>
+          <th scope="row">3</th>
+          <th scope="row">4</th>
+          <th scope="row">5</th>
+          <th scope="row">6</th>
+          <th scope="row">7</th>
+          <th scope="row">8</th>
+          <th scope="row">9</th>
+          <th scope="row">10</th>
+          <th scope="row">11</th>
+          <th scope="row">12</th>
+          <th scope="row">13</th>
+          <th scope="row">14</th>
+          <th scope="row">15</th>
+          <th scope="row">16</th>
+          <th scope="row">17</th>
+          <th scope="row">18</th>
+          <th scope="row">19</th>
+          <th scope="row">20</th>
+          <th scope="row">21</th>
+          <th scope="row">22</th>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">A</th>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+          </tr>
+          
+          <tr>
+            <th scope="row">B</th>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+          </tr>
+          <tr>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+            <td class="table-light"></td>
+          </tr>
+          <tr>
+            <th scope="row">C</th>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+          </tr>
+          <tr>
+            <th scope="row">D</th>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+            <td><img src="../../assets/img/assento-azul.png" alt="" id="spanIcone"></td>
+          </tr>
+        </tbody>
+      </table>
+      <hr class="mb-4">
       <!--Botão Submit-->
-      <button
-        type="button"
-        class="btn btn-success mb-3"
-        id="btn-submit"
-        onclick="confirmarBusca();"
-      >
-        Confirmar
-      </button>
+      <div class="d-flex flex-column row">
+        <div class="col-2">
+          <button
+            type="button"
+            class="btn btn-success mb-3"
+            id="btn-submit"
+            onclick="confirmarBusca();"
+          >
+            Confirmar
+          </button>
+        </div>
+      </div>
     </div>
     <!--Roda pé-->
     <footer class="container-footer">
