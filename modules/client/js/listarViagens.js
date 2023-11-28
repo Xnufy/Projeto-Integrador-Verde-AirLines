@@ -209,7 +209,6 @@ function exibirViagens() {
     .then(customResponse => {
         if (customResponse.status === "SUCCESS") {
             montarListagemPassagens(JSON.parse(JSON.stringify(customResponse.payload)), numPassageiros);
-
             // Obtenha os botões após a montagem da lista de passagens
             var btnsConfirmarCompra = document.querySelectorAll(".btn.btn-success");
 

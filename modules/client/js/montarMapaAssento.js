@@ -195,13 +195,13 @@ function confirmarAssentos() {
 
     // condicional para cada tipo de voo
     if (tipoVoo === "ida") {
-        const pagePagamento = `pagamento.html?idVoo=${idVooIda}&assentosIda=${stringAssentos}`
+        const pagePagamento = `pagamento.html?idVooIda=${idVooIda}&tipoVoo=${tipoVoo}&assentosIda=${stringAssentos}&numPassageiros=${numPassageiros}`
         window.location.href = pagePagamento;
     } else if (tipoVoo === "idaVolta") {
         const mapaAssentosPage = `mapaAssentos.html?idVooIda=${idVooIda}&idVooVolta=${idVooVolta}&tipoVoo=volta&assentosIda=${stringAssentos}&numPassageiros=${numPassageiros}`
         window.location.href = mapaAssentosPage;
     } else {
-        const pagePagamento = `pagamento.html?idVooIda=${idVooIda}&idVooVolta=${idVooVolta}&tipoVoo=volta&assentosIda=${assentosIda}&assentosVolta=${stringAssentos}&numPassageiros=${numPassageiros}`
+        const pagePagamento = `pagamento.html?idVooIda=${idVooIda}&idVooVolta=${idVooVolta}&tipoVoo=idaVolta&assentosIda=${assentosIda}&assentosVolta=${stringAssentos}&numPassageiros=${numPassageiros}`
         window.location.href = pagePagamento;
     }
 }
