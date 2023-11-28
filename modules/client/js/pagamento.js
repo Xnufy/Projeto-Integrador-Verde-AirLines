@@ -10,7 +10,13 @@ function requestVoos(idVoo) {
     .then(T => T.json())
 }
 
-function fetchInserir(body) {
+/**
+ * Função que altera o mapa de assento alocando os passageiros,
+ * adiciona o ticket no mapa de assento.
+ * @param {*} body 
+ * @returns 
+ */
+function fetchInserirCliente(body) {
     const requestOptions = 
     {
         method: 'PUT',
@@ -18,7 +24,44 @@ function fetchInserir(body) {
         body: JSON.stringify(body)
     };
 
-    return fetch('http://localhost:3000/confirmarPagamento', requestOptions)
+    return fetch('http://localhost:3000/inserirCliente', requestOptions)
+    .then(request => request.json())
+}
+
+/**
+ * Função que utiliza da requisição para adicionar os dados do cliente e do voo para
+ * serem reservados.
+ * @param {*} cpf - cpf do cliente que vai ser cadastrado para pegar o id do cliente
+ * @param {*} idVoo - id do voo para adicionar em reserva o id do voo
+ * @returns 
+ */
+function fetchInserirReserva(cpf, idVoo) {
+    const requestOptions = 
+    {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+    };
+
+    return fetch(`http://localhost:3000/inserirReserva/${cpf}?idVoo=${idVoo}`, requestOptions)
+    .then(request => request.json())
+}
+
+/**
+ * Função que atualiza no mapa de assentos de um determinado voo
+ * o status "ocupado" quando o usuário compra a passagem
+ * @param {*} idTicket - id do número da reserva do cliente
+ * @param {*} refAssento - referência do assento
+ * @param {*} idVoo - id do voo
+ * @returns 
+ */
+function fetchInserirAlterarMapa(idTicket, refAssento, idVoo) {
+    const requestOptions = 
+    {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+    };
+
+    return fetch(`http://localhost:3000/alterarMapaAssento/${idTicket}?refAssento=${refAssento}&idVoo=${idVoo}`, requestOptions)
     .then(request => request.json())
 }
 
@@ -94,6 +137,22 @@ function showStatusMessage(msg, error){
 }
 
 /**
+ * Função que retorna a forma de pagamento
+ * @returns retorna a forma de pagamento:pix ou cartão de crédito
+ */
+function formaPagamento() {
+    var todosElementos = document.querySelectorAll('.forma-pagamento');
+
+    for (const elemento of todosElementos) {
+        if (elemento.classList.contains('ativado')) {
+            return elemento.id;
+        }
+    }
+    return null;
+}
+
+
+/**
  * Função que muda o estado de cada opção de pagamento.
  * Verifica qual forma de pagamento o usuário selecionou
  * e troca a classe dela.
@@ -135,7 +194,6 @@ function mostrarValor() {
 
     var valorTotal = document.getElementById("valorTotal");
 
-    console.log("teste")
     if(tipoVoo === "ida") {
         requestVoos(idVooIda)
         .then((customResponse) => {
@@ -144,10 +202,7 @@ function mostrarValor() {
               var valor = responseVoos[0].valor * numPassageiros;
               valorTotal.textContent = valor.toFixed(2).replace('.', ',')
             }
-          })
-          .catch((e) => {
-            showStatusMessage("Não foi possível exibir: " + e);
-          });
+        })
     } else {
         requestVoos(idVooIda)
         .then((customResponse) => {
@@ -159,13 +214,15 @@ function mostrarValor() {
               // tratar corretamente o erro... (melhorar...)
               console.log(customResponse.messagem);
             }
-          })
-          .catch((e) => {
-            showStatusMessage("Não foi possível exibir: " + e);
-          });
+        })
     }
 }
 
+/**
+ * Função que verifica se todos os campos foram preenchidos e faz
+ * a requisição de inserir cliente, reservar e atualizar o mapa de assentos.
+ * @returns 
+ */
 function confirmarPagamento() {
     // Obtenha a string da consulta da URL
     const queryString = window.location.search;
@@ -174,15 +231,14 @@ function confirmarPagamento() {
     const urlParams = new URLSearchParams(queryString);
 
     // Obtenha os valores dos parâmetros da URL
-    var numPassageiros = urlParams.get('numPassageiros');
     var assentosIda = urlParams.get('assentosIda');
     var assentosVolta = urlParams.get('assentosVolta');
     var tipoVoo = urlParams.get('tipoVoo');
     var idVooIda = urlParams.get('idVooIda');
     var idVooVolta = urlParams.get('idVooVolta');
     
-    var arrayIdAssentos = assentosIda.split(",");
-    var arrayIdAssentos = assentosVolta.split(",");
+    if (assentosIda !== null) var arrayIdAssentosIda = assentosIda.split(",");
+    if (assentosVolta !== null) var arrayIdAssentosVolta = assentosVolta.split(",");    
     
     if(!preencheuCpf()){
         showStatusMessage("Preencha o CPF", true);
@@ -209,6 +265,67 @@ function confirmarPagamento() {
         showStatusMessage("", false);
     }
 
+    var tipoPagamento = formaPagamento();
+
+    const cpf = document.getElementById("cpfInput").value;
+    const nome = document.getElementById("nomeCompletoInput").value;
+    const email = document.getElementById("emailInput").value;
+
+    fetchInserirCliente({
+        cpfCliente: cpf,
+        nomeCliente: nome,
+        emailCliente: email,
+        formaPagamento: tipoPagamento,
+    })
+    .then((resultadoCliente) => {
+        if (resultadoCliente.status === "SUCCESS") {
+            if (tipoVoo === "ida") {
+                fetchInserirReserva(cpf, idVooIda)
+                .then((resultadoReserva) => {
+                    for (let i = 0; i < arrayIdAssentosIda.length; i++) {
+                        fetchInserirAlterarMapa(resultadoReserva.payload, arrayIdAssentosIda[i], idVooIda)
+                    
+                    }
+                    var rootContainer = document.getElementById("rootContainer");
+                    rootContainer.style.display = "none";
+
+                    var alertView = document.getElementById("alertView");
+                    alertView.className = "d-block container";
+                })
+                .catch((e) => {
+                    showStatusMessage(e, true);
+                });
+            } else {
+                fetchInserirReserva(cpf, idVooIda)
+                .then((resultadoReservaVolta) => {
+                    for (let i = 0; i < arrayIdAssentosIda.length; i++) {
+                        fetchInserirAlterarMapa(resultadoReservaVolta.payload, arrayIdAssentosIda[i], idVooIda)
+                    }
+                })
+                .catch((e) => {
+                    showStatusMessage(e, true);
+                });
+                // Aqui, você provavelmente quer chamar a reserva de volta
+                fetchInserirReserva(cpf, idVooVolta)
+                .then((resultadoReservaVolta) => {
+                    for (let i = 0; i < arrayIdAssentosVolta.length; i++) {
+                        fetchInserirAlterarMapa(resultadoReservaVolta.payload, arrayIdAssentosVolta[i], idVooVolta);
+                    }
+                    // Ações comuns após a inserção do cliente
+                    var rootContainer = document.getElementById("rootContainer");
+                    rootContainer.style.display = "none";
+
+                    var alertView = document.getElementById("alertView");
+                    alertView.className = "d-block container";
+                })
+                .catch((e) => {
+                    showStatusMessage(e, true);
+                });
+            }
+        } else {
+            showStatusMessage(resultadoCliente.messagem, true);
+        }
+    })
 }
 
-mostrarValor()
+mostrarValor();

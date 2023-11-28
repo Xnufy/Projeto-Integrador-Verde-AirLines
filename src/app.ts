@@ -1148,7 +1148,7 @@ app.get("/reservaAssento/:idVoo",async (req, res) => {
         JOIN AERONAVES aviao on v.NUMERO_AVIAO = aviao.ID_AERONAVE
       WHERE
         ma.NUM_VOO = '${idVoo}'
-      ORDER BY ID_ASSENTO_MAPA ASC`
+      ORDER BY NUM_ASSENTO_CLIENTE ASC`
     );
     
     const rowFetched = rowsToListarAssentos(resultadoConsulta.rows);
@@ -1200,7 +1200,7 @@ app.put("/inserirReserva/:cpf", async (req, res) => {
     const idClienteFetched = rowsToReserva(idClienteSelect.rows);
     const sequeceFetched = rowsToReserva(selectSequence.rows);
     const idReserva = sequeceFetched[0].sequence;
-    const idCliente = idClienteFetched[0].cpfCliente;
+    const idCliente = idClienteFetched[0].idCliente;
 
 
     const inserirReserva = `INSERT INTO reservas (id_reserva, NUMERO_ID_VOO, id_cliente)
@@ -1262,45 +1262,45 @@ app.put("/inserirCliente", async (req, res) => {
       if (connection !== undefined) await connection.close();
       res.send(cr);
     }
-  });
+});
 
-  app.put("/alterarMapaAssento/:idTicket", async (req, res) => {
-    const idTicket = req.params.idTicket;
-    const refAssento = req.query.refAssento;
-    const idVoo = req.query.idVoo;
+app.put("/alterarMapaAssento/:idTicket", async (req, res) => {
+  const idTicket = req.params.idTicket;
+  const refAssento = req.query.refAssento;
+  const idVoo = req.query.idVoo;
 
-    let cr: CustomResponse = {
-      status: "ERROR",
-      messagem: "",
-      payload: undefined,
-    };
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined,
+  };
 
-    const cliente: Cliente = req.body as Cliente;
+  const cliente: Cliente = req.body as Cliente;
 
-      let connection;
+    let connection;
 
-      try {
-        connection = await oracledb.getConnection(oraConnAttribs);
+    try {
+      connection = await oracledb.getConnection(oraConnAttribs);
 
-        const alterarMapa = `UPDATE MAPA_ASSENTO SET STATUS = 'ocupado', TICKET = ${idTicket} WHERE REF_ASSENTO = ${refAssento} AND NUM_VOO = ${idVoo};`;
+      const alterarMapa = `UPDATE MAPA_ASSENTO SET STATUS = 'ocupado', TICKET = ${idTicket} WHERE REF_ASSENTO = '${refAssento}' AND NUM_VOO = ${idVoo}`;
 
-        let resUpdate = await connection.execute(alterarMapa);
+      let resUpdate = await connection.execute(alterarMapa);
 
-        // COMMIT DA ATUALIZAÇÃO DE DADOS
-        await connection.commit();
+      // COMMIT DA ATUALIZAÇÃO DE DADOS
+      await connection.commit();
 
-        const rowsUpdated = resUpdate.rowsAffected;
-        if (rowsUpdated !== undefined && rowsUpdated === 1) {
-          cr.status = "SUCCESS";
-          cr.messagem = "Mapa alterado.";
-          console.log("Mapa atualizado.");
-        } else cr.messagem = "Mapa não alterado.";
-      } catch (e) {
-        if (e instanceof Error) {
-          console.log(e.message);
-        } else cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
-      } finally {
-        if (connection !== undefined) await connection.close();
-        res.send(cr);
-      }
-  });
+      const rowsUpdated = resUpdate.rowsAffected;
+      if (rowsUpdated !== undefined && rowsUpdated === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Mapa alterado.";
+        console.log("Mapa atualizado.");
+      } else cr.messagem = "Mapa não alterado.";
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      } else cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+    } finally {
+      if (connection !== undefined) await connection.close();
+      res.send(cr);
+    }
+});

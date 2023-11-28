@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="styles/home.css" />
     <link rel="stylesheet" href="styles/listarPassagens.css" />
     <link rel="stylesheet" href="styles/pagamento.css" />
+    
 
     <title>Pagamento</title>
   </head>
@@ -58,7 +59,7 @@
       </div>
     </nav>
     <!--Conteúdo Pagamento-->
-    <div class="container-sm container-md container-lg">
+    <div id="rootContainer" class="container-sm container-md container-lg">
       <div class="row d-flex flex-column flex-lg-row">
         <div class="col-lg">
           <form>
@@ -136,6 +137,14 @@
       id="btn-submit"
       onclick="confirmarPagamento();">Confirmar</button>
       <p id="status" class="statusError"></p>
+    </div>
+    <div class="d-none container" id="alertView">
+      <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Seu pagamento foi aprovado!</h4>
+        <p>Sua compra foi processada, enviaremos para seu e-mail um link com sua passagem (Verifique a caixa de spam)</p>
+        <hr>
+        <p class="mb-0">Obrigado pela preferencia!</p>
+      </div>
     </div>
     <!--Roda pé-->
     <footer class="container-footer">
