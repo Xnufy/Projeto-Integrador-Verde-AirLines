@@ -1,3 +1,4 @@
+// função que faz a requisição das aeronaves
 function requestListaDeAeronave(idAeronave) {
     const requestOptions = {
         method: 'GET',
@@ -6,7 +7,7 @@ function requestListaDeAeronave(idAeronave) {
     return fetch(`http://localhost:3000/listarAeronave/${idAeronave}`, requestOptions)
         .then((response) => response.json());
 }
-
+// função que verifica se há ao menos 1 aeronave na lista e preenche a tabela com as informações da primeira aeronave
 function preencherInput(aeronaves) {
     if (aeronaves.length > 0) {
         var inputModelo = document.getElementById("modelo");
@@ -26,7 +27,7 @@ function preencherInput(aeronaves) {
         inputNumColuna.value = primeiraAeronave.colunasAssentos;
     }
 }
-
+// função que exibe detalhrs da aeronave baseado no ID dela
 function exibirAeronave() {
         const url = new URL(window.location.href);
         const idAeronave = url.searchParams.get("idAeronave");

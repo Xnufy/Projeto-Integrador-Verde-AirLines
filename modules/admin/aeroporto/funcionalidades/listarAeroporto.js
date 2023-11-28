@@ -1,6 +1,4 @@
-/***
- * Função que busca os aeroportos chamando o serviço.
- */
+//Função que busca os aeroportos chamando o serviço.
 function requestListaDeAeroportos() {
     const requestOptions = {
     method: 'GET',
@@ -10,10 +8,8 @@ function requestListaDeAeroportos() {
     .then(T => T.json())
 }
 
-/*** 
-Função que requisita a exclusão de um Aeroporto
-*/
 
+//Função que requisita a exclusão de um Aeroporto
 function requestExcluirAeroporto(body) {
     const requestOptions = {
         method: 'DELETE',
@@ -24,7 +20,7 @@ function requestExcluirAeroporto(body) {
     .then(T => T.json())
 }
 
-
+//função que printa no terminal o status da exclusão de um aeroporto
 function excluirAeroporto(idAeroporto) {
     console.log('Clicou no excluir aeroporto: ' + idAeroporto);
     requestExcluirAeroporto({idAeroporto: idAeroporto})
@@ -39,17 +35,19 @@ function excluirAeroporto(idAeroporto) {
         })
 }
 
+//redireciona para a página de alterar aeroporto 
 function redirecionaParaAlterar(idAeroporto) {
     const alterarAeroportoHTML = `alterarAeroporto.html?idAeroporto=${idAeroporto}`;
 
     window.location.href = alterarAeroportoHTML;
 }
 
+//preenche a tabela com as informações dos aeroportos
 function preencherTabela(aeroportos) {
     var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
     let numeroAeroportos = aeroportos.length;
-    document.getElementById("titlePage").innerHTML = `<h1>Listar Aeroporto (Qtde:${numeroAeroportos})</h1>`;
+    document.getElementById("titlePage").innerHTML = <h1>Listar Aeroporto (Qtde:${numeroAeroportos})</h1>;
 
     if(numeroAeroportos > 0) {
         rowCabecalho.innerHTML += "<th>ID Aeroporto</th>";
@@ -60,16 +58,14 @@ function preencherTabela(aeroportos) {
         rowCabecalho.innerHTML += "<th>Excluir</th>";
         rowCabecalho.innerHTML += "<th>Alterar</th>";
     }
-    // acessando a referencia pelo id do tbody
     const tblBody = document.getElementById("aeroportos-list");
 
     let aeroporto = "";
-    // creating all cells
+    //for das informações da tabela
     for (let i = 0; i < aeroportos.length; i++) {
 
         aeroporto = aeroportos[i];
         console.log("Dados do aeroporto: " + aeroporto);
-        // row representa a linha da tabela (um novo tr)
         const row = document.createElement("tr");
 
         if (i % 2 == 0)
@@ -77,6 +73,7 @@ function preencherTabela(aeroportos) {
         else
             row.className = "oddRow";
 
+        //preenche as informações junto com os ícones de alterar e deletar
         row.innerHTML = 
             `<td>${aeroporto.idAeroporto}</td>
             <td>${aeroporto.sigla}</td>
@@ -100,23 +97,21 @@ function preencherTabela(aeroportos) {
     }
 }
 
+//exibe os status das operaçõs pelo terminal
 function exibirAeroporto() {
+    console.log('Entrou no exibir...')
     requestListaDeAeroportos()
     .then(customResponse => {
-        // obteve resposta, vamos simplesmente exibir como mensagem:
         if(customResponse.status === "SUCCESS"){
-            // vamos obter o que está no payload e chamar a função .
-            // agora chamar a função de exibição dos dados em tabela... 
-            // no payload voltou o Array com as aeroportos. 
-            // DEVEMOS antes, conferir se o ARRAY não está vazio. Faça essa mudança.
+            console.log("Deu certo a busca de aeroportos");
+            console.log('Payload:' + JSON.stringify(customResponse.payload));
+            console.log(customResponse.payload);
             preencherTabela(JSON.parse(JSON.stringify(customResponse.payload)))
         }else{
-            // tratar corretamente o erro... (melhorar...)
             console.log(customResponse.messagem);
         }
         })
     .catch((e)=>{
-    // FAZER O TRATAMENTO...
     console.log("Não foi possível exibir." + e);
     });
 }

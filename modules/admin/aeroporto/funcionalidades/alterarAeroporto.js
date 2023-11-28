@@ -1,3 +1,4 @@
+//faz a requisição dos aeroportos
 function requestListaDeAeroportos() {
     const url = new URL(window.location.href);
     const idAeroporto = url.searchParams.get("idAeroporto");
@@ -11,6 +12,7 @@ function requestListaDeAeroportos() {
     .then(response => response.json());
 }
 
+//função para preencher os valores do aeroporto a serem mudados
 function preencherInput(aeroportos) {
     if (aeroportos.length > 0) {
         var inputNomeAeroporto = document.getElementById("nomeAeroporto");
@@ -27,6 +29,7 @@ function preencherInput(aeroportos) {
     }
 }
 
+//Exibe o status da operação pelo terminal
 function exibirAeroporto() {
     requestListaDeAeroportos()
     .then(customResponse => {
@@ -41,26 +44,31 @@ function exibirAeroporto() {
     });
 }
 
+//preencher o nome do aeroporto a ser alterado
 function preencheuAeroporto() {
     var nomeAeroporto = document.getElementById('nomeAeroporto').value;
     return nomeAeroporto.length > 0;
 }
 
+//preencher a sigla do aeroporto a ser alterado
 function preencheuSigla() {
     var sigla = document.getElementById('sigla').value;
     return sigla.length > 0;
 }
 
+//preencher a cidade do aeroporto a ser alterado
 function preencheuCidade() {
     var cidade = document.getElementById('cidade').value;
     return cidade.length > 0;
 }
 
+//preencher o uf do aeroporto a ser alterado 
 function preencheuUf() {
     var uf = document.getElementById('uf').value;
     return uf.length === 2;
 }
 
+//função da mensagem de status da operação
 function showStatusMessage(msg, error) {
     var pStatus = document.getElementById("status");
     if (error === true)
@@ -70,6 +78,7 @@ function showStatusMessage(msg, error) {
     pStatus.textContent = msg;
 }
 
+//faz a requisição dos aeroportos para alterar
 function fetchInserir(body) {
     const url = new URL(window.location.href);
     const idAeroporto = url.searchParams.get("idAeroporto");
@@ -84,6 +93,8 @@ function fetchInserir(body) {
     .then(response => response.json());
 }
 
+
+//função que faz a alteração do aeroporto chamando as demais funções
 function alterarAeroporto() {
     if(!preencheuAeroporto()) {
         showStatusMessage("Preencha o nome do aeroporto...", true);
@@ -121,6 +132,7 @@ function alterarAeroporto() {
         nomeCidade: cidade,
         uf: uf
     })
+    //printa o status da operação
     .then(resultado => {
         if (resultado.status === "SUCCESS") {
             showStatusMessage("Aeroporto atualizado com sucesso.", false);

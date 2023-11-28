@@ -1,15 +1,14 @@
+// função que verifica se preencheu o id do trecho
 function preencheuIdTrecho() {
   let resultado = false;
   var listarAeroportos = document.getElementById("comboTrecho");
   var valorSelecionado = listarAeroportos.value;
-  // se quiséssemos obter o TEXTO selecionado.
-  // var text = listaOrigens.options[listaOrigens.selectedIndex].text;
   if (valorSelecionado !== "0") {
     resultado = true;
   }
   return resultado;
 }
-// funcao para verificar se preencheu o registro de referencia.
+// funcao para verificar se preencheu a data da partida do voo
 function preencheuDataPartida() {
   let resultado = false;
   const registro = document.getElementById("dataPartida").value;
@@ -18,7 +17,7 @@ function preencheuDataPartida() {
   }
   return resultado;
 }
-
+// função que verifica se preencheu a hora da partida do voo
 function preencheuHoraPartida() {
   let resultado = false;
   const registro = document.getElementById("horaPartida").value;
@@ -27,7 +26,7 @@ function preencheuHoraPartida() {
   }
   return resultado;
 }
-
+// função que verifica se preencheu a data da chegada do voo
 function preencheuDataChegada() {
   let resultado = false;
   const registro = document.getElementById("dataChegada").value;
@@ -36,7 +35,7 @@ function preencheuDataChegada() {
   }
   return resultado;
 }
-
+// função que verifica se preencheu a hora da chegada do voo
 function preencheuHoraChegada() {
   let resultado = false;
   const registro = document.getElementById("horaChegada").value;
@@ -45,7 +44,7 @@ function preencheuHoraChegada() {
   }
   return resultado;
 }
-
+// função que verifica se preencheu o id da aeronave
 function preencheuIdAeronave() {
   let resultado = false;
   const registro = document.getElementById("comboAeronaves").value;
@@ -55,20 +54,18 @@ function preencheuIdAeronave() {
   return resultado;
 }
 
-// funcao que verifica se selecionou ou não o fabricante.
+// funcao que verifica se preencheu o valor do voo
 function preencheuValor() {
   let resultado = false;
   var listaAeroportos = document.getElementById("preco");
   var valorSelecionado = listaAeroportos.value;
-  // se quiséssemos obter o TEXTO selecionado.
-  // var text = listaFabricantes.options[listaFabricantes.selectedIndex].text;
   if (valorSelecionado.length > 0) {
     resultado = true;
   }
   return resultado;
 }
 
-// funcao para exibir mensagem de status... seja qual for.
+// funcao para exibir mensagem de status (ERRO ou NÃO)
 function showStatusMessage(msg, error) {
   var pStatus = document.getElementById("status");
   if (error === true) {
@@ -78,7 +75,7 @@ function showStatusMessage(msg, error) {
   }
   pStatus.textContent = msg;
 }
-
+// função que faz a requisição baseado no id do voo
 function fetchInserir(body) {
   const url = new URL(window.location.href);
   const idVoo = url.searchParams.get("idVoo");
@@ -89,11 +86,10 @@ function fetchInserir(body) {
     body: JSON.stringify(body),
   };
 
-  return fetch(
-    `http://localhost:3000/alterarVoo/${idVoo}`, requestOptions
+  return fetch(`http://localhost:3000/alterarVoo/${idVoo}`, requestOptions
   ).then((response) => response.json());
 }
-
+// função que verifica se os campos foram preenchidos
 function alterarVoo() {
   if (!preencheuIdTrecho()) {
     showStatusMessage("Preencha o Trecho...", true);
@@ -130,7 +126,7 @@ function alterarVoo() {
     return;
   } else showStatusMessage("", false);
 
-  // obtendo os dados:
+  // obtendo os dados
   const id_trecho = document.getElementById("comboTrecho").value;
   const dataPartida = document.getElementById("dataPartida").value;
   const horaPartida = document.getElementById("horaPartida").value;
@@ -139,7 +135,7 @@ function alterarVoo() {
   const id_aeronave = document.getElementById("comboAeronaves").value;
   const preco = document.getElementById("preco").value;
 
-  // ESTUDAR O CONCEITO DE PROMISES.
+  // colocando os dados no sistema
   fetchInserir({
     trecho: id_trecho,
     data_partida: dataPartida,
@@ -149,6 +145,7 @@ function alterarVoo() {
     idAeronave: id_aeronave,
     valor: Number(preco),
   })
+// verificação de erro 
     .then((resultado) => {
       if (resultado.status === "SUCCESS") {
         showStatusMessage("Voo atualizado com sucesso.", false);
@@ -163,5 +160,5 @@ function alterarVoo() {
         true
       );
       console.log("Falha grave ao atualizar o voo");
-    });
+    });
 }

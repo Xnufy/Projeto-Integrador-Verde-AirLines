@@ -1,45 +1,45 @@
+//pega os valores dos combo box de destino e origem
 var selectElementComboOrigem = document.getElementById("comboAeroportos");
 var selectElementComboDestino = document.getElementById("comboAeroportosDestino");
 var responseAeroportos;
 
+//pega o valor da combo box de origem selecionada 
 selectElementComboOrigem.addEventListener("change", function () {
-  // Obtém o valor da opção selecionada
   var selectedOption =
     selectElementComboOrigem.options[selectElementComboOrigem.selectedIndex]
       .value;
 
-  // Exibe um alerta com a opção selecionada
-  // alert("Você escolheu: " + selectedOption);
   preencherComboBoxDestino(
     JSON.parse(JSON.stringify(responseAeroportos)),
     selectedOption
   );
 });
 
+//pega o valor da combo box de destino selecionada
 selectElementComboDestino.addEventListener("change", function () {
-  // Obtém o valor da opção selecionada
   var selectedOption =
     selectElementComboDestino.options[selectElementComboDestino.selectedIndex]
       .value;
 
   // Exibe um alerta com a opção selecionada
-  // alert("Você escolheu: " + selectedOption);
   preencherComboBox(
     JSON.parse(JSON.stringify(responseAeroportos)),
     selectedOption
   );
 });
 
+//faz a requisição dos aeroportos para o combo box
 function requestListaDeAeroportos() {
   const requestOptions = {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   };
-  return fetch("http://localhost:3000/listarAeroportos", requestOptions).then(
+  return fetch(`http://localhost:3000/listarAeroportos`, requestOptions).then(
     (response) => response.json()
   );
 }
 
+//função para prencher o combo box do aeroporto de origem
 function preencherComboBox(aeroportos, idAeroportoDestino) {
   var comboBox = document.querySelector("#comboAeroportos");
   var selectedOption =
@@ -48,9 +48,9 @@ function preencherComboBox(aeroportos, idAeroportoDestino) {
   comboBox.innerHTML = "";
 
   let aeroporto = "";
-  // creating all cells
   for (let i = 0; i < aeroportos.length; i++) {
     aeroporto = aeroportos[i];
+    //ignora o aeroporto de destino selecionado
     if (aeroporto.idAeroporto != idAeroportoDestino) {
       const option = document.createElement("option");
       option.value = aeroporto.idAeroporto;
@@ -66,15 +66,17 @@ function preencherComboBox(aeroportos, idAeroportoDestino) {
   }
 }
 
+//função para preencher o combo box do aeroporto de destino
 function preencherComboBoxDestino(aeroportos, idAeroportoOrigem) {
   var comboBoxDestino = document.querySelector("#comboAeroportosDestino");
-  var selectedOption = comboBoxDestino.options[comboBoxDestino.selectedIndex].value;
+   var selectedOption = comboBoxDestino.options[comboBoxDestino.selectedIndex].value;
   comboBoxDestino.innerHTML = "";
 
   let aeroporto = "";
-  // creating all cells
+
   for (let i = 0; i < aeroportos.length; i++) {
     aeroporto = aeroportos[i];
+    //ignora o aeroporto de origem selecionado
     if (aeroporto.idAeroporto != idAeroportoOrigem) {
       const option = document.createElement("option");
       option.value = aeroporto.idAeroporto;
@@ -90,6 +92,7 @@ function preencherComboBoxDestino(aeroportos, idAeroportoOrigem) {
   }
 }
 
+//função para preencher os aeroportos no combo box
 function exibirAeroportos() {
   return requestListaDeAeroportos().then((customResponse) => {
     if (customResponse.status === "SUCCESS") {
@@ -102,17 +105,18 @@ function exibirAeroportos() {
   });
 }
 
+//faz a requisição dos trechos
 function requestListaDeTrecho(idTrecho) {
   const requestOptions = {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   };
-  return fetch(
-    `http://localhost:3000/listarTrechos/${idTrecho}`,
+return fetch(`http://localhost:3000/listarTrechos/${idTrecho}`,
     requestOptions
   ).then((response) => response.json());
 }
 
+//função para remover um trecho
 function preencherInput(trechos) {
   if (trechos.length > 0) {
     var selectOrigem = document.getElementById("comboAeroportos");
@@ -138,6 +142,7 @@ function preencherInput(trechos) {
   }
 }
 
+//função que exibe pelo terminal status da operação
 function exibirTrecho() {
   return exibirAeroportos().then(() => {
     const url = new URL(window.location.href);

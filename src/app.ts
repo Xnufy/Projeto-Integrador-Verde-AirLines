@@ -8,10 +8,11 @@ import { CustomResponse } from "./CustomResponse";
 import { Aeroporto } from "./Aeroporto";
 import { Aeronave } from "./Aeronave";
 import { Trecho } from "./Trecho";
+import { Cliente } from "./Cliente";
 
 import { oraConnAttribs } from "./conexaoOracle";
 
-import { rowsToAeronaves, rowsToAeroportos, rowsToTrecho, rowsToListarTrecho, rowsToListarVoos, rowsToListarAssentos } from "./Conversores";
+import { rowsToAeronaves, rowsToAeroportos, rowsToTrecho, rowsToListarTrecho, rowsToListarVoos, rowsToListarAssentos, rowsToReserva } from "./Conversores";
 
 import { aeroportoValida, aeroportoVoo, trechoValido } from "./Validadores";
 import { aeronaveValida } from "./Validadores";
@@ -1178,3 +1179,128 @@ app.get("/reservaAssento/:idVoo",async (req, res) => {
 app.listen(port, () => {
   console.log("Servidor HTTP rodando...");
 });
+
+app.put("/inserirReserva/:cpf", async (req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined,
+  };
+
+  const idVoo = req.query.idVoo;
+  const cpf = req.params.cpf;
+
+  let connection;
+  try {
+    connection = await oracledb.getConnection(oraConnAttribs);
+
+    const selectSequence = await connection.execute(`SELECT SEQ_RESERVA.nextval AS numSeq FROM seq`);
+    const idClienteSelect = await connection.execute(`SELECT ID_CLIENTE FROM CLIENTES WHERE cpf = ${cpf}`);
+
+    const idClienteFetched = rowsToReserva(idClienteSelect.rows);
+    const sequeceFetched = rowsToReserva(selectSequence.rows);
+    const idReserva = sequeceFetched[0].sequence;
+    const idCliente = idClienteFetched[0].cpfCliente;
+
+
+    const inserirReserva = `INSERT INTO reservas (id_reserva, NUMERO_ID_VOO, id_cliente)
+    values (${idReserva}, ${idVoo}, ${idCliente})`;
+
+    let resInsert = await connection.execute(inserirReserva);
+
+    // COMMIT DA INSERÇÃO DE DADOS
+    await connection.commit();
+
+    const rowsInserted = resInsert.rowsAffected;
+    if (rowsInserted !== undefined && rowsInserted === 1) {
+      cr.status = "SUCCESS";
+      cr.messagem = "Passagem Inserida";
+      cr.payload = idReserva;
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      cr.messagem = e.message;
+      console.log(e.message);
+    } else 
+      cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+  } finally {
+    if (connection !== undefined) await connection.close();
+    res.send(cr);
+  }
+});
+
+app.put("/inserirCliente", async (req, res) => {
+  let cr: CustomResponse = {
+    status: "ERROR",
+    messagem: "",
+    payload: undefined,
+  };
+
+  const cliente: Cliente = req.body as Cliente;
+    let connection;
+    try {
+      const inserirClientes = `INSERT INTO CLIENTES (ID_CLIENTE, CPF, NOME, EMAIL, FORMA_PAGAMENTO) VALUES (SEQ_CLIENTE.nextval, :1 ,:2, :3, :4)`;
+
+      const dados = [cliente.cpfCliente, cliente.nomeCliente, cliente.emailCliente, cliente.formaPagamento];
+
+      connection = await oracledb.getConnection(oraConnAttribs);
+      let resInsert = await connection.execute(inserirClientes, dados);
+
+      // COMMIT DA INSERÇÃO DE DADOS
+      await connection.commit();
+
+      const rowsInserted = resInsert.rowsAffected;
+      if (rowsInserted !== undefined && rowsInserted === 1) {
+        cr.status = "SUCCESS";
+        cr.messagem = "Cliente Inserido";
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      } else cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+    } finally {
+      if (connection !== undefined) await connection.close();
+      res.send(cr);
+    }
+  });
+
+  app.put("/alterarMapaAssento/:idTicket", async (req, res) => {
+    const idTicket = req.params.idTicket;
+    const refAssento = req.query.refAssento;
+    const idVoo = req.query.idVoo;
+
+    let cr: CustomResponse = {
+      status: "ERROR",
+      messagem: "",
+      payload: undefined,
+    };
+
+    const cliente: Cliente = req.body as Cliente;
+
+      let connection;
+
+      try {
+        connection = await oracledb.getConnection(oraConnAttribs);
+
+        const alterarMapa = `UPDATE MAPA_ASSENTO SET STATUS = 'ocupado', TICKET = ${idTicket} WHERE REF_ASSENTO = ${refAssento} AND NUM_VOO = ${idVoo};`;
+
+        let resUpdate = await connection.execute(alterarMapa);
+
+        // COMMIT DA ATUALIZAÇÃO DE DADOS
+        await connection.commit();
+
+        const rowsUpdated = resUpdate.rowsAffected;
+        if (rowsUpdated !== undefined && rowsUpdated === 1) {
+          cr.status = "SUCCESS";
+          cr.messagem = "Mapa alterado.";
+          console.log("Mapa atualizado.");
+        } else cr.messagem = "Mapa não alterado.";
+      } catch (e) {
+        if (e instanceof Error) {
+          console.log(e.message);
+        } else cr.messagem = "Erro ao conectar ao oracle. Sem detalhes.";
+      } finally {
+        if (connection !== undefined) await connection.close();
+        res.send(cr);
+      }
+  });

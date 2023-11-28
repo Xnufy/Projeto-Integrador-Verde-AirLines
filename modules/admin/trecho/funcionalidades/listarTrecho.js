@@ -1,26 +1,25 @@
-/***
- * Função que busca os trechos chamando o serviço.
- */
+//faz a requisição dos valores dos trechos
 function requestListaDeTrecho() {
     const requestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
     };
-    return fetch('http://localhost:3000/listarTrecho', requestOptions)
+    return fetch(`http://localhost:3000/listarTrecho`, requestOptions)
     .then(T => T.json())
 }
 
+//faz requisição dos trechos para excluir um trecho
 function requestExcluirTrecho(body) {
     const requestOptions = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
     };
-    return fetch('http://localhost:3000/excluirTrecho', requestOptions)
+    return fetch(`http://localhost:3000/excluirTrecho`, requestOptions)
     .then(T => T.json())
 }
 
-
+//função para excluir um trecho ao clicar no botão de excluir
 function excluirTrecho(idTrecho) {
     console.log('Clicou no excluir trecho: ' + idTrecho);
     requestExcluirTrecho({idTrecho: idTrecho})
@@ -35,17 +34,20 @@ function excluirTrecho(idTrecho) {
         })
 }
 
+//funçãp que redireciona ao clicar no botão de alterar
+//faz a busca do trecho pelo id
 function redirecionaParaAlterar(idTrecho) {
     const alterarTrechoHTML = `alterarTrecho.html?idTrecho=${idTrecho}`;
 
     window.location.href = alterarTrechoHTML;
 }
 
+//função que preenche a tabela 
 function preencherTabela(trechos) {
     var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
     let numeroTrecho = trechos.length;
-    document.getElementById("titlePage").innerHTML = `<h1>Listar Trechos (Qtde:${numeroTrecho})</h1>`;
+    document.getElementById("titlePage").innerHTML = <h1>Listar Trecho (Qtde:${numeroTrecho})</h1>;
 
     if(numeroTrecho > 0) {
         rowCabecalho.innerHTML += "<th>ID Trecho</th>";
@@ -58,7 +60,7 @@ function preencherTabela(trechos) {
     const tblBody = document.getElementById("trecho-list");
 
     let trecho = "";
-    // creating all cells
+    //cria a tabela baseada no comprimento
     for (let i = 0; i < trechos.length; i++) {
 
         trecho = trechos[i];
@@ -71,6 +73,7 @@ function preencherTabela(trechos) {
         else
             row.className = "oddRow";
 
+        //preenche as informações na tabela junto com os ícones de alterar e deletar
         row.innerHTML = 
             `<td>${trecho.idTrecho}</td>
             <td>${trecho.nomeAeroportoOrigem}</td>
@@ -92,26 +95,21 @@ function preencherTabela(trechos) {
     }
 }
 
+//função que exibe os status das operações de busca
 function exibirTrecho() {
+    console.log('Entrou no exibir...')
     requestListaDeTrecho()
     .then(customResponse => {
-        // obteve resposta, vamos simplesmente exibir como mensagem:
         if(customResponse.status === "SUCCESS"){
-            // vamos obter o que está no payload e chamar a função .
             console.log("Deu certo a busca de trechos");
-            // agora chamar a função de exibição dos dados em tabela... 
-            // no payload voltou o Array com os trechos. 
-            // DEVEMOS antes, conferir se o ARRAY não está vazio. Faça essa mudança.
             console.log('Payload:' + JSON.stringify(customResponse.payload));
             console.log(customResponse.payload);
             preencherTabela(JSON.parse(JSON.stringify(customResponse.payload)))
         }else{
-            // tratar corretamente o erro... (melhorar...)
             console.log(customResponse.messagem);
         }
         })
     .catch((e)=>{
-    // FAZER O TRATAMENTO...
     console.log("Não foi possível exibir." + e);
     });
 }

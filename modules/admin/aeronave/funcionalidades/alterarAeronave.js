@@ -13,8 +13,7 @@ function selecionouFabricante(){
     let resultado = false; 
     var listaFabricantes = document.getElementById("comboFabricantes");
     var valorSelecionado = listaFabricantes.value;
-    // se quiséssemos obter o TEXTO selecionado. 
-    // var text = listaFabricantes.options[listaFabricantes.selectedIndex].text;
+    
     if (valorSelecionado !== "0"){
         resultado = true;
     }
@@ -34,7 +33,6 @@ function preencheuRegistro(){
 // verifica se o ano é valido
 function anoFabricacaoValido(){
     let resultado = false;
-    // obter o texto preenchido no campo anoFab
     var strAno = document.getElementById("anoFabricacao").value;
     const ano = parseInt(strAno);
     console.log("Ano aeronave: " + ano.toString());
@@ -44,7 +42,7 @@ function anoFabricacaoValido(){
     return resultado; 
 }
 
-// verifica se o campo linhas assentos é numerico e válido
+// verifica se o campo linhas dos assentos é numerico e válido
 function assentoLinhaValido(){
     let resultado = false;
     const strNumLinha = document.getElementById("num_linha").value;
@@ -55,7 +53,7 @@ function assentoLinhaValido(){
     return resultado; 
 }
 
-// verifica se o campo colunas assentos é numérico e válido
+// verifica se o campo das colunas assentos é numérico e válido
 function assentoColunaValido(){
     let resultado = false;
     const strNumColuna = document.getElementById("num_coluna").value;
@@ -66,7 +64,7 @@ function assentoColunaValido(){
     return resultado; 
 }
 
-// funcao para exibir mensagem de status... seja qual for. 
+// função para exibir mensagem de status (ERRO OU NÃO) 
 function showStatusMessage(msg, error) {
     var pStatus = document.getElementById("status");
     if (error === true)
@@ -75,7 +73,7 @@ function showStatusMessage(msg, error) {
         pStatus.className = "statusSuccess";
     pStatus.textContent = msg;
 }
-
+// requisição dos dados da aeronave
 function fetchInserir(body) {
     const url = new URL(window.location.href);
     const idAeronave = url.searchParams.get("idAeronave");
@@ -89,7 +87,7 @@ function fetchInserir(body) {
     return fetch(`http://localhost:3000/alterarAeronave/${idAeronave}`, requestOptions)
     .then(response => response.json());
 }
-
+// verificação se os campos foram preenchidos 
 function alterarAeronave() {
     if(!preencheuModelo()){
         showStatusMessage("Preencha o modelo...", true);
@@ -127,8 +125,7 @@ function alterarAeronave() {
     } else
     showStatusMessage("", false);
 
-    // se chegou até aqui a execução do código, vamos cadastrar a aeronave. 
-    // obtendo os dados: 
+    // obtenção dos dados e cadastro da aeronave
     const modelo = document.getElementById("modelo").value;
     const fabricante = document.getElementById("comboFabricantes").value;
     const registro = document.getElementById("registro").value;
@@ -154,5 +151,5 @@ function alterarAeronave() {
     .catch(() => {
         showStatusMessage("Erro técnico ao atualizar a aeronave. Contate o suporte.", true);
         console.log("Falha grave ao atualizar a aeronave");
-    });
+    });
 }

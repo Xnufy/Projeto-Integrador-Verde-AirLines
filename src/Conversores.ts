@@ -4,6 +4,8 @@ import { ListarVoo } from "./ListarVoos";
 import { Trecho } from "./Trecho"
 import { ListarTrecho } from "./ListarTrecho"
 import { ListarAssentos } from "./ListarMapaAssentos";
+import { Reserva } from "./Reserva";
+import { Cliente } from "./Cliente";
 
 export function rowsToAeronaves(oracleRows: unknown[] | undefined): Array<Aeronave> {
     let aeronaves: Array<Aeronave> = [];
@@ -138,4 +140,42 @@ export function rowsToListarAssentos(oracleRows: unknown[] | undefined): Array<L
         });
     }
     return listarAssentos;
+}
+
+export function rowsToReserva(oracleRows: unknown[] | undefined): Array<Reserva> {
+  let reservas: Array<Reserva> = [];
+  let reserva;
+  if (oracleRows !== undefined) {
+    oracleRows.forEach((registro: any) => {
+      reserva = {
+        sequence: registro.NUMSEQ,
+        idCliente: registro.ID_CLIENTE,
+      } as Reserva;
+
+      reservas.push(reserva);
+    });
+  }
+  return reservas;
+}
+
+
+export function rowsToCliente(
+  oracleRows: unknown[] | undefined
+): Array<Reserva> {
+  let clientes: Array<Cliente> = [];
+  let cliente;
+  if (oracleRows !== undefined) {
+    oracleRows.forEach((registro: any) => {
+      cliente = {
+        idCliente: registro.ID_CLIENTE,
+        cpfCliente: registro.CPF,
+        nomeCliente: registro.NOME,
+        emailCliente: registro.EMAIL,
+        formaPagamento: registro.FORMA_PAGAMENTO,
+      } as Cliente;
+
+      clientes.push(cliente);
+    });
+  }
+  return clientes;
 }

@@ -1,30 +1,74 @@
-// funcao que verifica se selecionou ou não o fabricante.
-function selecionouOrigem(){
-    let resultado = false; 
-    var listaOrigens = document.getElementById("comboAeroportos");
-    var valorSelecionado = listaOrigens.value;
-    // se quiséssemos obter o TEXTO selecionado. 
-    // var text = listaFabricantes.options[listaFabricantes.selectedIndex].text;
-    if (valorSelecionado !== "0"){
-        resultado = true;
-    }
-    return resultado;
+//faz a requisição dos aeroportos
+function requestListaDeAeroportos() {
+    const url = new URL(window.location.href);
+    const idAeroporto = url.searchParams.get("idAeroporto");
+    console.log("Valor de idAeroporto: " + idAeroporto);
+    
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    };
+    return fetch(`http://localhost:3000/listarAeroporto/${idAeroporto}`, requestOptions)
+    .then(response => response.json());
 }
 
-// funcao que verifica se selecionou ou não o fabricante.
-function selecionouDestino(){
-    let resultado = false; 
-    var listaDestinos = document.getElementById("comboAeroportosDestino");
-    var valorSelecionado = listaDestinos.value;
-    // se quiséssemos obter o TEXTO selecionado. 
-    // var text = listaFabricantes.options[listaFabricantes.selectedIndex].text;
-    if (valorSelecionado !== "0"){
-        resultado = true;
+//função para preencher os valores do aeroporto a serem mudados
+function preencherInput(aeroportos) {
+    if (aeroportos.length > 0) {
+        var inputNomeAeroporto = document.getElementById("nomeAeroporto");
+        var inputSigla = document.getElementById("sigla");
+        var inputNomeCidade = document.getElementById("cidade");
+        var inputUf = document.getElementById("uf");
+
+        const primeiroAeroporto = aeroportos[0];
+
+        inputSigla.value = primeiroAeroporto.sigla;
+        inputNomeAeroporto.value = primeiroAeroporto.nomeAeroporto;
+        inputNomeCidade.value = primeiroAeroporto.nomeCidade;
+        inputUf.value = primeiroAeroporto.uf;
     }
-    return resultado;
 }
 
-// funcao para exibir mensagem de status... seja qual for. 
+//Exibe o status da operação pelo terminal
+function exibirAeroporto() {
+    requestListaDeAeroportos()
+    .then(customResponse => {
+        if (customResponse.status === "SUCCESS") {
+            preencherInput(customResponse.payload);
+        } else {
+            console.log(customResponse.message);
+        }
+    })
+    .catch((e) => {
+        console.log("Não foi possível exibir: " + e);
+    });
+}
+
+//preencher o nome do aeroporto a ser alterado
+function preencheuAeroporto() {
+    var nomeAeroporto = document.getElementById('nomeAeroporto').value;
+    return nomeAeroporto.length > 0;
+}
+
+//preencher a sigla do aeroporto a ser alterado
+function preencheuSigla() {
+    var sigla = document.getElementById('sigla').value;
+    return sigla.length > 0;
+}
+
+//preencher a cidade do aeroporto a ser alterado
+function preencheuCidade() {
+    var cidade = document.getElementById('cidade').value;
+    return cidade.length > 0;
+}
+
+//preencher o uf do aeroporto a ser alterado 
+function preencheuUf() {
+    var uf = document.getElementById('uf').value;
+    return uf.length === 2;
+}
+
+//função da mensagem de status da operação
 function showStatusMessage(msg, error) {
     var pStatus = document.getElementById("status");
     if (error === true)
@@ -34,9 +78,10 @@ function showStatusMessage(msg, error) {
     pStatus.textContent = msg;
 }
 
+//faz a requisição dos aeroportos para alterar
 function fetchInserir(body) {
     const url = new URL(window.location.href);
-    const idTrecho = url.searchParams.get("idTrecho");
+    const idAeroporto = url.searchParams.get("idAeroporto");
 
     const requestOptions = {
         method: 'PUT',
@@ -44,42 +89,63 @@ function fetchInserir(body) {
         body: JSON.stringify(body)
     };
 
-    return fetch(`http://localhost:3000/alterarTrecho/${idTrecho}`, requestOptions)
+    return fetch(`http://localhost:3000/alterarAeroporto/${idAeroporto}`, requestOptions)
     .then(response => response.json());
 }
 
-function alterarTrecho() {
-    if(!selecionouOrigem()){
-    showStatusMessage("Selecione a Origem...", true);  
-    return;
-    } else
-    showStatusMessage("", false);
 
-    if(!selecionouDestino()) {
-        showStatusMessage("Selecione o Destino...", true);
-        return
+//função que faz a alteração do aeroporto chamando as demais funções
+function alterarAeroporto() {
+    if(!preencheuAeroporto()) {
+        showStatusMessage("Preencha o nome do aeroporto...", true);
+        return;
+    } else
+        showStatusMessage("", false);
+        
+    if(!preencheuSigla()) {
+        showStatusMessage("Preencha a sigla...", true);
+        return;
     } else
         showStatusMessage("", false);
 
-    // se chegou até aqui a execução do código, vamos cadastrar a aeronave. 
-    // obtendo os dados: 
-    const origem = document.getElementById("comboAeroportos").value;
-    const destino = document.getElementById("comboAeroportosDestino").value;
+    if(!preencheuCidade()) {
+        showStatusMessage("Preencha o nome da cidade...", true);
+        return;
+    } else
+        showStatusMessage("", false);
+
+    if(!preencheuUf()) {
+        showStatusMessage("Preencha o nome da UF cidade...", true);
+        return;
+    } else
+        showStatusMessage("", false);
+        
+
+    const sigla = document.getElementById("sigla").value;
+    const nomeAeroporto = document.getElementById("nomeAeroporto").value;
+    const cidade = document.getElementById("cidade").value;
+    const uf = document.getElementById("uf").value;
 
     fetchInserir({
-        origem: origem, 
-        destino: destino
+        sigla: sigla,
+        nomeAeroporto: nomeAeroporto,
+        nomeCidade: cidade,
+        uf: uf
     })
+    //printa o status da operação
     .then(resultado => {
-        if(resultado.status === "SUCCESS") {
-            showStatusMessage("Trecho atualizado.", false);
-        } else if (resultado.status === "ERROR") {
-            showStatusMessage(resultado.messagem, true);
+        if (resultado.status === "SUCCESS") {
+            showStatusMessage("Aeroporto atualizado com sucesso.", false);
+        } else {
+            showStatusMessage("Erro ao atualizar o aeroporto: " + resultado.message, true);
+            console.log(resultado.message);
         }
     })
-    .catch((e) => {
-        showStatusMessage("Falha grave ao cadastrar. Verifique sua conexão ou tente novamente mais tarde.", true);
-        console.log("Falha grave ao cadastrar", e);
-        }
-    );
+    .catch(() => {
+        showStatusMessage("Erro técnico ao atualizar o aeroporto. Contate o suporte.", true);
+        console.log("Falha grave ao atualizar o aeroporto");
+    });
 }
+
+
+exibirAeroporto();
