@@ -47,7 +47,7 @@ function preencherTabela(trechos) {
     var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
     let numeroTrecho = trechos.length;
-    document.getElementById("titlePage").innerHTML = <h1>Listar Trecho (Qtde:${numeroTrecho})</h1>;
+    document.getElementById("titlePage").innerHTML = `<h1>Listar Trecho (Qtde:${numeroTrecho})</h1>`;
 
     if(numeroTrecho > 0) {
         rowCabecalho.innerHTML += "<th>ID Trecho</th>";

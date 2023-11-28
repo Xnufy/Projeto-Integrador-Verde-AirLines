@@ -47,7 +47,7 @@ function preencherTabela(aeroportos) {
     var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
     let numeroAeroportos = aeroportos.length;
-    document.getElementById("titlePage").innerHTML = <h1>Listar Aeroporto (Qtde:${numeroAeroportos})</h1>;
+    document.getElementById("titlePage").innerHTML = `<h1>Listar Aeroporto (Qtde:${numeroAeroportos})</h1>`;
 
     if(numeroAeroportos > 0) {
         rowCabecalho.innerHTML += "<th>ID Aeroporto</th>";

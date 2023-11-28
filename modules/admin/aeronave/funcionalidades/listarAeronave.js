@@ -45,7 +45,7 @@ function preencherTabela(aeronaves) {
     var rowCabecalho = document.querySelector("#cabecalhoTabela");
 
     let numeroAeronaves = aeronaves.length;
-    document.getElementById("titlePage").innerHTML = <h1>Listar Aeronave (Qtde:${numeroAeronaves})</h1>;
+    document.getElementById("titlePage").innerHTML = `<h1>Listar Aeronave (Qtde:${numeroAeronaves})</h1>`;
 
     if(numeroAeronaves > 0) {
         rowCabecalho.innerHTML += "<th>ID Aeronave</th>";
